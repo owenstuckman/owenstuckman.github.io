@@ -14,9 +14,15 @@ AdaptiveSpec Logisticsv2 - Bringing a hackathon idea past MVP. Specialized logis
 
 Website Creation: Markdown + Obsidian
 
-AdaptiveSpec Logistics: Scrapy + Python + Supabase
+AdaptiveSpec Logistics: Web scraper and data storage: Scrapy + Python + Supabase
 
-Archimedes: Flutter
+Archimedes: Microsoft Imagine Cup: Flutter
+
+SeeFood: AI Cooking Assistant : in Unity MR
+
+CS50: Harvard's Intro to CS: C, Python, SQL
+
+Sprklii LLC: Date ideas personalized: Flutter + Supabase
 
 ---
 
@@ -82,9 +88,12 @@ Project Began: August 2024
 
 Personal Project
 
-Skills: C, General CS topics
+Skills: C, Python, SQL, General CS topics
 
 Link: Feel free to check CS50/owenstuckman
+
+# Planes Moving and Storage
+The following subset of projects all were done Summer 2024 at Planes Moving and Storage
 
 ## Sprklii LLC
 Business Venture
