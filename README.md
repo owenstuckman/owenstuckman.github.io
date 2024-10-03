@@ -3,7 +3,7 @@ Seeing if things want to work.
 
 
 
-[[Projects]]
+[[Projects]](/Projects.md/)
 
 I am a undergraduate student pursuing computer science at Virginia Tech.  
   
