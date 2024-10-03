@@ -32,39 +32,44 @@ TLDR;
 
 ---
 
-More Information
-
-Format is:
-Language/Concept : Specific Application
-
 In no particular order:
 
 Java 
 - Android Applications: particularly for FTC Robotics
+
 C++ 
 - Mainly Arduino projects but have used in other applications.
+
 Dart 
 - Flutter Applications
+
 Python
 - My go to for a quick script. 
 - Scrapy web scraping, OpenCV image converting, lots of small projects. 
+
 Markdown
 - Obsidian
 - I love notetaking in markdown and using obsidian.
+
 Power Platform 
 - Especially Dataverse, Power Apps, Power Automate. 
 - PL-900 Certified: Working on PL-200 and PL-400
+
 SQL
 - SSMS, Sql Server 2016
+
 PostgreSQL
 - Supabase(firebase but better)
 - my go-to for a cloud database
+
 Game Dev
 - Unity
 - Developed a few games for fun
 - Took a class and developed 3 games for that.
+
 AR/VR
 - Unity. Hackathons.
+
 Fusion360
 - go to CAD.
 
