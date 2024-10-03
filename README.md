@@ -2,15 +2,15 @@
 
 [Projects](./Projects.md) | [Contact Me](./ContactMe.md)
 
-This is my personal projects site - I wanted to get as bare bones as possible for a change, so this entire site is just markdown, nothing fancy and straight to the point.
+This is my personal projects site - I wanted to go as bare bones as possible for a change, so this entire site is just markdown, nothing fancy and straight to the point.
 
 ---
 
 ## A Little Bit About Me:
 
-I am a undergraduate student pursuing computer science at Virginia Tech.  
+I am an undergraduate student pursuing computer science at Virginia Tech.  
   
-My interest is primarily focused on automation, be it cloud based or desktop based robotic process automation. I have an interest in process, creating and improving process so people can spend time on things that matter rather than an inefficiency or manual analog.  
+My interest is primarily focused on automation, be it cloud based, or desktop based robotic process automation. I have an interest in process, creating and improving process so people can spend time on things that matter rather than an inefficiency or manual analog.  
   
 My experience lies with an internship and seasonal employment at Planes, where I more or less worked on the interest described above. I also Co-Founded and Co-Own a business, Sprklii LLC, where we actively have our product on the app store.  
   
@@ -28,14 +28,14 @@ TLDR;
 - SQL and PostgreSQL
 - OpenCV Computer Vision
 - Python, Java, C++, C# in a wide variety of applications. 
-- Used completely random stuff on an as need basis.
+- Whatever I need to get the job done. 
 
 ---
 
 In no particular order:
 
 Java 
-- Android Applications: particularly for FTC Robotics
+- Android Applications: primarily for FTC Robotics
 
 C++ 
 - Mainly Arduino projects but have used in other applications.
@@ -71,7 +71,7 @@ AR/VR
 - Unity. Hackathons.
 
 Fusion360
-- go to CAD.
+- go-to CAD software.
 
 And More. I listed what I have significant experience with / actually completed a project with. 
 
