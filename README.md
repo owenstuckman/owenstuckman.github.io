@@ -1,7 +1,4 @@
-Seeing if things want to work.
-
-
-
+# Hi! I am Owen!
 
 [[Projects]](/Projects.md/)
 
