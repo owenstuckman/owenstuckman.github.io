@@ -2,6 +2,8 @@
 
 [Projects](./Projects.md) | [Contact Me](./ContactMe.md)
 
+[Testing](./testing.md)
+
 This is my personal projects site - I wanted to go as bare bones as possible for a change, so this entire site is just markdown, nothing fancy and straight to the point.
 
 ---
