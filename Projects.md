@@ -2,8 +2,6 @@
 
 [About Me](./README.md) | [Contact Me](./ContactMe.md) | [Work Experience](./WorkExperience.md)
 
-[ProjectTest](./projecttest.md)
-
 <style>
   .projects-section {
     font-family: Arial, sans-serif;
@@ -101,49 +99,49 @@
 
 # Extended Information - Card Form
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 20px;
-        }
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            transition: transform 0.3s;
-        }
-        .card:hover {
-            transform: scale(1.05);
-        }
-        .card h2 {
-            margin-top: 0;
-        }
-        .card p {
-            margin: 10px 0;
-        }
-        .card a {
-            color: #3498db;
-            text-decoration: none;
-        }
-        .card a:hover {
-            text-decoration: underline;
-        }
-    </style>
-    <title>Project Cards</title>
-</head>
-<body>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+    .container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+    .card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.3s;
+        height: 300px; /* Set a fixed height */
+        display: flex; /* Use flexbox for card content */
+        flex-direction: column; /* Stack children vertically */
+        justify-content: space-between; /* Distribute space */
+    }
+    .card:hover {
+        transform: scale(1.05);
+    }
+    .card h2 {
+        margin-top: 0;
+    }
+    .card p {
+        margin: 10px 0;
+        flex-grow: 1; /* Allow paragraphs to grow to fill space */
+    }
+    .card a {
+        color: #3498db;
+        text-decoration: none;
+    }
+    .card a:hover {
+        text-decoration: underline;
+    }
+</style>
+
     <div class="container">
         <!-- Extended Information -->
 <div class="card">
@@ -318,7 +316,6 @@
     <p><strong>Link:</strong> Lost in old google accounts</p>
     <p>Learned the basics to html and css as a great starting project to make a food blog with a friend. I had a ton of fun, and it taught me a lot about basic programming practices. Used google docs as version control, and I made a ton of mistakes but learned a lot!</p>
 </div>
-</body>
 
 
 # Written Form

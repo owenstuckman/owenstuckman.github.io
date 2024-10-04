@@ -60,7 +60,7 @@
 
   <div class="experience-list">
     <div class="experience-item">
-      <a href="./images/swePP1.png">
+      <a href="./images/partyhost.png">
         <img src="./images/partyhost.png" alt="Software Engineer">
       </a>
       <div class="experience-item-title">Party Host</div>
