@@ -1,3 +1,6 @@
+
+[About Me](./README.md) | [Projects](./Projects.md) | [Work Experience](./WorkExperience.md)
+
 <section id="contact">
   <div class="contact-container">
     <h1>Contact</h1>
