@@ -61,7 +61,7 @@
   <div class="experience-list">
     <div class="experience-item">
       <a href="./images/partyhost.png">
-        <img src="./images/partyhost.png" alt="Software Engineer">
+        <img src="./images/partyhost.png" alt="Party Host">
       </a>
       <div class="experience-item-title">Party Host</div>
       <div class="experience-item-subtitle">Party Host at The Web (May 2022 - August 2022)</div>
