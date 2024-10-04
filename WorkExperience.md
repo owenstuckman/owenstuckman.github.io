@@ -1,16 +1,91 @@
-# Professional Experience 
+<style>
+  .experience-section {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f7f7f7;
+  }
 
-```mermaid
-graph TD;
-    A[Party Host at The Web (May 2022 - August 2022)] --> B[IT Intern at Planes Moving and Storage (May 2023 - August 2023)];
-    B --> C[Founder and CTO of Sprklii LLC (Jan 2023 - Current)];
-    B --> D[Seasonal Software Engineer at Planes Moving and Storage (May 2024 - Current)];
+  .experience-header {
+    text-align: center;
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+  }
 
-```
+  .experience-list {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
 
-### Information as per LinkedIn:
+  .experience-item {
+    margin: 15px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.2s;
+    width: 200px; /* Adjust width as needed */
+  }
 
-[SWE](./images/swePP1.png)
-[Sprklii](./Images/itintern.png)
-[IT Intern](./Images/itintern.png)
-[Party Host](./Images/partyhost.png)
+  .experience-item:hover {
+    transform: scale(1.05);
+  }
+
+  .experience-item img {
+    width: 100%;
+    height: auto;
+  }
+
+  .experience-item-title {
+    font-size: 1.2em;
+    color: #007BFF;
+    margin: 10px 0;
+  }
+
+  .experience-item-subtitle {
+    font-size: 1em;
+    color: #555;
+  }
+</style>
+
+<div class="experience-section">
+  <div class="experience-header">Professional Experience</div>
+
+  <div class="experience-list">
+    <div class="experience-item">
+      <a href="./images/swePP1.png">
+        <img src="./images/swePP1.png" alt="Software Engineer">
+      </a>
+      <div class="experience-item-title">SWE</div>
+      <div class="experience-item-subtitle">Party Host at The Web (May 2022 - August 2022)</div>
+    </div>
+
+    <div class="experience-item">
+      <a href="./Images/itintern.png">
+        <img src="./Images/itintern.png" alt="IT Intern">
+      </a>
+      <div class="experience-item-title">IT Intern</div>
+      <div class="experience-item-subtitle">IT Intern at Planes Moving and Storage (May 2023 - August 2023)</div>
+    </div>
+
+    <div class="experience-item">
+      <a href="./Images/itintern.png">
+        <img src="./Images/itintern.png" alt="Sprklii">
+      </a>
+      <div class="experience-item-title">Sprklii</div>
+      <div class="experience-item-subtitle">Founder and CTO of Sprklii LLC (Jan 2023 - Current)</div>
+    </div>
+
+    <div class="experience-item">
+      <a href="./Images/partyhost.png">
+        <img src="./Images/partyhost.png" alt="Seasonal Software Engineer">
+      </a>
+      <div class="experience-item-title">Seasonal Software Engineer</div>
+      <div class="experience-item-subtitle">Seasonal Software Engineer at Planes Moving and Storage (May 2024 - Current)</div>
+    </div>
+  </div>
+</div>

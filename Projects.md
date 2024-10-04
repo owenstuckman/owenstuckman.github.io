@@ -289,8 +289,7 @@ Skills: HTML, CSS, JS
 
 Link: Lost in old google accounts. 
 
-
-
+# Extended Project Info
 
 <head>
     <meta charset="UTF-8">
@@ -384,10 +383,11 @@ Link: Lost in old google accounts.
     <p><strong>Link:</strong> Check CS50/owenstuckman</p>
     <p>Personal Development. Working to strengthen foundational Computer Science concepts. Following along with the phenomenal lectures from David J. Malan, and completing the problem sets to earn my CS50 completion certificate.</p>
 </div>
-
+</body>
 # Planes Moving and Storage - Seasonal Software Engineer
 The following subset of projects all were done Summer 2024 at Planes Moving and Storage on my own, with a few that I used to help teach others by having them work on a project. 
 
+<body>
 <!-- Mover's Suite API Connection -->
 <div class="card">
     <h2>Mover's Suite API Connection</h2>
@@ -480,10 +480,14 @@ The following subset of projects all were done Summer 2024 at Planes Moving and 
     <p><strong>Link:</strong> All repos are private, some samples are on my github.</p>
     <p>Lead software team at Robot-X for three years, with around three members working for me on the subteam. Worked to introduce agile practices into our workflow, and saw efficiency increases due to it. Got a large amount of experience working as both a PM and working directly on some of the more challenging software we needed to write.</p>
 </div>
+</body>
+
 
 # Planes Moving and Storage - IT Intern 
 All done Summer of 2022.
 
+
+<body>
 <!-- Warehouse Time Tracking App -->
 <div class="card">
     <h2>Warehouse Time Tracking App</h2>
@@ -519,3 +523,4 @@ All done Summer of 2022.
     <p><strong>Link:</strong> Lost in old google accounts</p>
     <p>Learned the basics to html and css as a great starting project to make a food blog with a friend. I had a ton of fun, and it taught me a lot about basic programming practices. Used google docs as version control, and I made a ton of mistakes but learned a lot!</p>
 </div>
+</body>
