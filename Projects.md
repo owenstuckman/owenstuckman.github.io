@@ -108,7 +108,7 @@
 
     .container {
         display: grid;
-        grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+        grid-template-columns: 8ch auto; /* Three equal columns */
         gap: 20px; /* Space between cards */
         padding: 20px;
     }
