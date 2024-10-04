@@ -98,7 +98,6 @@
 ---
 
 # Extended Information - Card Form
-
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -106,44 +105,49 @@
         margin: 0;
         padding: 0;
     }
+
     .container {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
+        grid-template-columns: repeat(3, 1fr); /* Three equal columns */
+        gap: 20px; /* Space between cards */
         padding: 20px;
     }
+
     .card {
         background-color: white;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         padding: 20px;
         transition: transform 0.3s;
-        height: 300px; /* Set a fixed height */
-        display: flex; /* Use flexbox for card content */
-        flex-direction: column; /* Stack children vertically */
-        justify-content: space-between; /* Distribute space */
+        display: flex; /* Use flexbox to make cards equal height */
+        flex-direction: column; /* Align children in a column */
+        height: 100%; /* Make cards stretch to fill the container */
     }
+
     .card:hover {
         transform: scale(1.05);
     }
+
     .card h2 {
         margin-top: 0;
     }
+
     .card p {
         margin: 10px 0;
-        flex-grow: 1; /* Allow paragraphs to grow to fill space */
+        flex-grow: 1; /* Allow paragraphs to grow, making space for other elements */
     }
+
     .card a {
         color: #3498db;
         text-decoration: none;
     }
+
     .card a:hover {
         text-decoration: underline;
     }
 </style>
 
-    <div class="container">
-        <!-- Extended Information -->
+
 <div class="card">
     <h2>Extended Information</h2>
     <p><strong>Date of Project:</strong> October 2024</p>
