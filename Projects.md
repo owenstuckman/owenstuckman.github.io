@@ -92,8 +92,42 @@ Skills: C, Python, SQL, General CS topics
 
 Link: Feel free to check CS50/owenstuckman
 
-# Planes Moving and Storage
-The following subset of projects all were done Summer 2024 at Planes Moving and Storage
+---
+
+# Planes Moving and Storage - Seasonal Software Engineer
+The following subset of projects all were done Summer 2024 at Planes Moving and Storage on my own, with a few that I used to help teach others by having them work on a project. 
+
+### Mover's Suite API Connection
+Connect to Mover's Suites outdated API so data can be passed back and forth in an automated manner. Previously had no way to pass data between Mover's Suite and company SQL Server, so this was major in data control and automation for Planes
+
+Skills: Python, TKinter, APIs & http requests
+
+Link: https://github.com/owenstuckman/PlanesReferences/tree/main/References-24/References-24/MSAPI
+
+### Mover's Suite Automated Status Updates
+Created a desktop RPA using Power Automate Desktop to automate the manual task of changing statuses in Mover's Suite. Prior to this RPA, this was a task that had to be done manually.
+
+Skills: Power Automate Desktop
+
+Link: On Physical Device
+
+### Employee Education
+Taught peers about multiple topics: Application Lifecycle Management, Microsoft Dataverse, Git and Github, Exporting from Power BI, Power Platform, SQL Server and SQL, Cloud Based Storage. Worked to generally educate peers to form citizen developers, and to have a better understanding of computer science topics.
+
+Link: Contact me for the particular presentations.
+
+### XPM to Smartsheet Data Connection
+Created a cloud automation to pass data between two of our systems, XPM and smartsheet. Prior to this Project Coordinators would have to manually copy and paste data over, and the automation saved them from having to do so.
+
+Skills: Smartsheet, Power Automate Cloud
+
+Link: https://github.com/owenstuckman/PlanesReferences/blob/main/References-24/References-24/Screenshot%202024-08-12%20145246.png
+
+## 
+
+
+
+---
 
 ## Sprklii LLC
 Business Venture
