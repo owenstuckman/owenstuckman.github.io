@@ -101,10 +101,9 @@ TLDR;
   <div class="skill-category">Python</div>
   <div class="skill-item">
     - My go-to for a quick script. 
-    <ul>
-      <li>Scrapy web scraping</li>
-      <li>OpenCV image converting</li>
-      <li>Lots of small projects.</li>
+    - Scrapy web scraping
+    - OpenCV image converting
+    - Lots of small projects.
     </ul>
   </div>
 
@@ -118,10 +117,8 @@ TLDR;
   <div class="skill-category">Power Platform</div>
   <div class="skill-item">
     - Especially Dataverse, Power Apps, Power Automate. 
-    <ul>
-      <li>PL-900 Certified</li>
-      <li>Working on PL-200 and PL-400</li>
-    </ul>
+    - PL-900 Certified
+    - Working on PL-200 and PL-400
   </div>
 
   <div class="skill-category">SQL</div>
@@ -141,10 +138,8 @@ TLDR;
   <div class="skill-category">Game Dev</div>
   <div class="skill-item">
     - Unity
-    <ul>
-      <li>Developed a few games for fun</li>
-      <li>Took a class and developed 3 games for that.</li>
-    </ul>
+      - Developed a few games for fun
+      - Took a class and developed 3 games for that.
   </div>
 
   <div class="skill-category">AR/VR</div>
