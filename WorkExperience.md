@@ -1,3 +1,6 @@
+
+[About Me](./README.md) | [Contact Me](./ContactMe.md) | [Projects](./Projects.md)
+
 <style>
   .experience-section {
     font-family: Arial, sans-serif;
@@ -58,9 +61,9 @@
   <div class="experience-list">
     <div class="experience-item">
       <a href="./images/swePP1.png">
-        <img src="./images/swePP1.png" alt="Software Engineer">
+        <img src="./images/partyhost.png" alt="Software Engineer">
       </a>
-      <div class="experience-item-title">SWE</div>
+      <div class="experience-item-title">Party Host</div>
       <div class="experience-item-subtitle">Party Host at The Web (May 2022 - August 2022)</div>
     </div>
 
@@ -73,16 +76,16 @@
     </div>
 
     <div class="experience-item">
-      <a href="./Images/itintern.png">
-        <img src="./Images/itintern.png" alt="Sprklii">
+      <a href="./Images/sprklii.png">
+        <img src="./Images/sprklii.png" alt="Sprklii">
       </a>
       <div class="experience-item-title">Sprklii</div>
       <div class="experience-item-subtitle">Founder and CTO of Sprklii LLC (Jan 2023 - Current)</div>
     </div>
 
     <div class="experience-item">
-      <a href="./Images/partyhost.png">
-        <img src="./Images/partyhost.png" alt="Seasonal Software Engineer">
+      <a href="./Images/swePP1.png">
+        <img src="./Images/swePP1.png" alt="Seasonal Software Engineer">
       </a>
       <div class="experience-item-title">Seasonal Software Engineer</div>
       <div class="experience-item-subtitle">Seasonal Software Engineer at Planes Moving and Storage (May 2024 - Current)</div>
