@@ -2,8 +2,6 @@
 
 [Projects](./Projects.md) | [Contact Me](./ContactMe.md)
 
-[Testing](./testing.md)
-
 This is my personal projects site - I wanted to go as bare bones as possible for a change, so this entire site is just markdown, nothing fancy and straight to the point.
 
 ---
@@ -12,9 +10,9 @@ This is my personal projects site - I wanted to go as bare bones as possible for
 
 I am an undergraduate student pursuing computer science at Virginia Tech.  
   
-My interest is primarily focused on automation, be it cloud based, or desktop based robotic process automation. I have an interest in process, creating and improving process so people can spend time on things that matter rather than an inefficiency or manual analog.  
+My professional interest is currently focused on automation, be it cloud based, or desktop based robotic process automation. I enjoy creating and improving systems so people can spend time on things that matter rather than an inefficiency or manual analog.  
   
-My experience lies with an internship and seasonal employment at Planes, where I more or less worked on the interest described above. I also Co-Founded and Co-Own a business, Sprklii LLC, where we actively have our product on the app store.  
+My work experience is through an internship and seasonal employment at Planes, where I mainly worked on RPA. I also Co-Founded and Co-Own a business, Sprklii LLC, where we actively have our product on the app store.  
   
 In my free time, I like to run, play spikeball and pickleball, and to work on my personal projects and businesses. And backpack. A lot.
 
@@ -29,8 +27,8 @@ TLDR;
 - Microsoft Power Platform
 - SQL and PostgreSQL
 - OpenCV Computer Vision
-- Python, Java, C++, C# in a wide variety of applications. 
-- Whatever I need to get the job done. 
+- Python, Java, C++, C# in a wide variety of applications
+- Whatever I need to get the job done
 
 ---
 
@@ -47,18 +45,22 @@ Dart
 
 Python
 - My go to for a quick script. 
-- Scrapy web scraping, OpenCV image converting, lots of small projects. 
+- Scrapy web scraping
+- OpenCV image converting
+- Lots of small projects. 
 
 Markdown
 - Obsidian
-- I love notetaking in markdown and using obsidian.
+- I love notetaking in markdown and the utilitarianism of md.
 
 Power Platform 
 - Especially Dataverse, Power Apps, Power Automate. 
-- PL-900 Certified: Working on PL-200 and PL-400
+- PL-900 Certified
+- Working on PL-200 and PL-400
 
 SQL
-- SSMS, Sql Server 2016
+- SSMS
+- Sql Server 2016
 
 PostgreSQL
 - Supabase(firebase but better)
@@ -70,12 +72,13 @@ Game Dev
 - Took a class and developed 3 games for that.
 
 AR/VR
-- Unity. Hackathons.
+- Unity 
+- Hackathons
 
-Fusion360
-- go-to CAD software.
+CAD Software
+- Fusion360
 
-And More. I listed what I have significant experience with / actually completed a project with. 
+And More. 
 
 
 
