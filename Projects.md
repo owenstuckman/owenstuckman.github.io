@@ -79,19 +79,19 @@
 
 # Quick Summary
 
-| Project                     | Description                                                   | Tools/Technologies                              |
-|-----------------------------|---------------------------------------------------------------|-------------------------------------------------|
-| Website Creation             | Create Website in Markdown with some HTML                     | Markdown, Obsidian                              |
-| AdaptiveSpec Logistics       | Web scraper and data storage                                  | Scrapy, Python, Supabase                        |
-| Archimedes                   | Microsoft Imagine Cup                                         | Flutter                                         |
-| SeeFood                      | AI Cooking Assistant in Unity MR                              | Unity, MR                                       |
-| CS50                         | Harvard's Intro to CS                                         | C, Python, SQL                                  |
-| Planes SWE                   | RPA (Cloud+Desktop), Python Scripting + APIs, Power Platform  | RPA, Python, APIs, Power Platform               |
-| Sprklii LLC                  | Date ideas personalized                                       | Flutter, Supabase                               |
-| Robot-X                      | FTC Robotics                                                  | OpenCV, Java, Odometry                          |
-| Planes IT Intern             | WTT App and SOP Sharepoint                                    | Power Platform, MS Administration               |
-| Automatic Garage Closer      | Arduino                                                       | C++                                             |
-| Kids Like Food 2             | Food Blog                                                     | HTML, CSS, JS                                   |
+| Project                     | Description                                                  | Tools/Technologies                              |
+|-----------------------------|--------------------------------------------------------------|-------------------------------------------------|
+| Website Creation             | Create Website in Markdown with some HTML                    | Markdown, Obsidian                              |
+| AdaptiveSpec Logistics       | Web scraper and data storage (Startup Sprint)                | Scrapy, Python, Supabase                        |
+| Archimedes                   | Microsoft Imagine Cup                                        | Flutter                                         |
+| SeeFood                      | AI Cooking Assistant in Unity MR (VTHacks12)                 | Unity, MR                                       |
+| CS50                         | Harvard's Intro to CS                                        | C, Python, SQL                                  |
+| Planes SWE                   | RPA (Cloud+Desktop), Python Scripting + APIs, Power Platform | RPA, Python, APIs, Power Platform               |
+| Sprklii LLC                  | Date ideas personalized                                      | Flutter, Supabase                               |
+| Robot-X                      | FTC Robotics                                                 | OpenCV, Java, Odometry                          |
+| Planes IT Intern             | WTT App and SOP Sharepoint                                   | Power Platform, MS Administration               |
+| Automatic Garage Closer      | Arduino                                                      | C++                                             |
+| Kids Like Food 2             | Food Blog                                                    | HTML, CSS, JS                                   |
 
 
 
