@@ -62,9 +62,9 @@
   </div>
 
   <div class="project">
-    <div class="project-title">AdaptiveSpec Logisticsv2</div>
+    <div class="project-title">Project Torch</div>
     <div class="project-description">
-      Bringing a hackathon idea past MVP. Specialized logistics simplified.
+      Developer for non profit which creates websites for local businesses in the Blacksburg area.
     </div>
   </div>
 
@@ -77,14 +77,16 @@
 </div>
 
 
-# Quick Summary
+# Quick Summary (In Chronological Order)
 
 | Project                     | Description                                                  | Tools/Technologies                              |
 |-----------------------------|--------------------------------------------------------------|-------------------------------------------------|
+| Project Torch                | Develop websites for local businesses in blacksburg          | React, Javascript, Supabase
+| RoomReady                    | Connect locals and travelers, with AI suggestions (Code Fest)| Flutter, Supabase, ChatGPT 
 | Website Creation             | Create Website in Markdown with some HTML                    | Markdown, Obsidian                              |
 | AdaptiveSpec Logistics       | Web scraper and data storage (Startup Sprint)                | Scrapy, Python, Supabase                        |
 | Archimedes                   | Microsoft Imagine Cup                                        | Flutter                                         |
-| SeeFood                      | AI Cooking Assistant in Unity MR (VTHacks12)                 | Unity, MR                                       |
+| SeeFood                      | AI Cooking Assistant in Unity MR (VTHacks12)                 | Unity, MR, ChatGPT                              |
 | CS50                         | Harvard's Intro to CS                                        | C, Python, SQL                                  |
 | Planes SWE                   | RPA (Cloud+Desktop), Python Scripting + APIs, Power Platform | RPA, Python, APIs, Power Platform               |
 | Sprklii LLC                  | Date ideas personalized                                      | Flutter, Supabase                               |
@@ -147,10 +149,29 @@
     }
 </style>
 
+<div class="card">
+    <h2>Project Torch</h2>
+    <p><strong>Date of Project:</strong> Late October 2024</p>
+    <p><strong>Skills:</strong> React, Javascript, Supabase</p>
+    <p><strong>Link:</strong> <a href="https://github.com/JacobMartinage/TheBurgWebsite">Sample Website Created</a></p>
+    <p> Mainly assisted in building the framework to enable quick website creation for local businesses. This framework also allowed business owners to quickly change the items and other peices of their website, without having to use a tool like shopify which would become a reoccuring expense. Additionally, we took care of building out the websites and customizing them to their liking. </p>
+    <p>Done as a part of a non profit</p>
+</div>
 
 <div class="card">
-    <h2>Extended Information</h2>
-    <p><strong>Date of Project:</strong> October 2024</p>
+    <h2>RoomReady</h2>
+    <p><strong>Date of Project:</strong> Late October 2024</p>
+    <p><strong>Skills:</strong> Flutter, Supabase, ChatGPT</p>
+    <p><strong>Link:</strong> <a href="https://github.com/owenstuckman/RoomReady">Frontend</a></p>
+    <p><strong>Link:</strong> <a href="https://github.com/owenstuckman/RoomReadyBackend">Backend</a></p>
+    <p>Built a project for the inaugural Marriot Codefest where we connected travelers and locals via a chat application. This app also provided customized itineraries based off of the users inputs and preferences. The information from the chats fed making both the itineraries and a chat bot you could converse with if no locals were available at the time. /p>
+    <p>Team of four</p>
+</div>
+
+
+<div class="card">
+    <h2>Personal Website Development</h2>
+    <p><strong>Date of Project:</strong> Early October 2024</p>
     <p><strong>Skills:</strong> Markdown, Obsidian</p>
     <p><strong>Link:</strong> <a href="https://github.com/owenstuckman/owenstuckman.github.io">GitHub Repo</a></p>
     <p>Played around with a bunch of different options to make the website. Tried out jekyll, which I did not like, used Weebly on Porkbun to make it no-code (which felt clunky), and considered using Hugo. In the end, I decided to just go with plain old markdown, and maybe add a nicer looking theme at the completion of writing the raw markdown.</p>
