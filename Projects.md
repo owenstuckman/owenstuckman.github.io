@@ -164,7 +164,7 @@
     <p><strong>Skills:</strong> Flutter, Supabase, ChatGPT</p>
     <p><strong>Link:</strong> <a href="https://github.com/owenstuckman/RoomReady">Frontend</a></p>
     <p><strong>Link:</strong> <a href="https://github.com/owenstuckman/RoomReadyBackend">Backend</a></p>
-    <p>Built a project for the inaugural Marriot Codefest where we connected travelers and locals via a chat application. This app also provided customized itineraries based off of the users inputs and preferences. The information from the chats fed making both the itineraries and a chat bot you could converse with if no locals were available at the time. /p>
+    <p>Built a project for the inaugural Marriot Codefest where we connected travelers and locals via a chat application. This app also provided customized itineraries based off of the users inputs and preferences. The information from the chats fed making both the itineraries and a chat bot you could converse with if no locals were available at the time. </p>
     <p>Team of four</p>
 </div>
 
