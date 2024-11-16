@@ -81,8 +81,9 @@
 
 | Project                     | Description                                                  | Tools/Technologies                              |
 |-----------------------------|--------------------------------------------------------------|-------------------------------------------------|
-| Project Torch                | Develop websites for local businesses in blacksburg          | React, Javascript, Supabase
-| RoomReady                    | Connect locals and travelers, with AI suggestions (Code Fest)| Flutter, Supabase, ChatGPT 
+| Inflectors Project           | CIA Pilot Game, cryptography puzzles.                        | Cryptography techniques, technical knowledge    |
+| Project Torch                | Develop websites for local businesses in blacksburg          | React, Javascript, Supabase                     |
+| RoomReady                    | Connect locals and travelers, with AI suggestions (Code Fest)| Flutter, Supabase, ChatGPT                      |
 | Website Creation             | Create Website in Markdown with some HTML                    | Markdown, Obsidian                              |
 | AdaptiveSpec Logistics       | Web scraper and data storage (Startup Sprint)                | Scrapy, Python, Supabase                        |
 | Archimedes                   | Microsoft Imagine Cup                                        | Flutter                                         |
@@ -149,6 +150,14 @@
     }
 </style>
 
+<div class = "card">
+<h2>Project Torch</h2>
+    <p><strong>Date of Project:</strong> Late October 2024</p>
+    <p><strong>Skills:</strong> Cryptography techniques, technical knowledge</p>
+    <p> Competed in a CIA Pilot for a gameified program to get college studens involved and connected with the CIA. Completely daily cryptography puzzles over a series of three weeks that followed an overall storyline. The puzzles covered a wide range of cryptographic techniques and was extremely fun. Included some elements of physical objects and having to travel to various places on campus to gather clues to solve puzzles. Most puzzles took beyond multiple hours to solve or crack, and was a fun and exciting challenge. </p>
+    <p>Done completely for fun.</p>
+
+</div>
 <div class="card">
     <h2>Project Torch</h2>
     <p><strong>Date of Project:</strong> Late October 2024</p>
