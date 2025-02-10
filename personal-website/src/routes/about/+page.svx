@@ -1,7 +1,10 @@
-# Hi! I am Owen!
+---
+layout: false
+title: Hi! I am Owen!
+---
 
 
-This is my personal projects site - I wanted to go as bare bones as possible for a change, so this entire site is just markdown, nothing fancy and straight to the point.
+This is my personal projects site - built with mdsvex.
 
 ---
 
@@ -23,26 +26,26 @@ In my free time, I like to run, play spikeball and pickleball, work on my person
 
 - **Dart** (Flutter Applications)
 - **Python**
-  - General scripting
-  - Scrapy web scraping
-  - OpenCV image processing
-  - Various small projects
+	- General scripting
+	- Scrapy web scraping
+	- OpenCV image processing
+	- Various small projects
 - **Java**
-  - Android applications (FTC Robotics)
+	- Android applications (FTC Robotics)
 - **C++**
-  - Primarily Arduino projects
+	- Primarily Arduino projects
 - **C#**
-  - Unity (Game Development & AR/VR)
+	- Unity (Game Development & AR/VR)
 
 ### Platforms & Tools
 
 - **Microsoft Power Platform**
-  - Dataverse, Power Apps, Power Automate
-  - PL-900 Certified, working towards PL-200 and PL-400
+	- Dataverse, Power Apps, Power Automate
+	- PL-900 Certified, working towards PL-200 and PL-400
 - **SQL & Databases**
-  - SQL Server Management Studio (SSMS)
-  - SQL Server 2016
-  - PostgreSQL (Supabase for cloud databases)
+	- SQL Server Management Studio (SSMS)
+	- SQL Server 2016
+	- PostgreSQL (Supabase for cloud databases)
 - **Markdown** (Obsidian & documentation)
 
 ### Additional Skills & Interests

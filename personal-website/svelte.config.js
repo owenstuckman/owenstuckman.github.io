@@ -10,8 +10,10 @@ const config = {
 		adapter: adapter()
 	},
 
-	preprocess: [mdsvex()],
+	preprocess: [mdsvex({extensions : ['.svx']})],
 	extensions: ['.svelte', '.svx']
 };
+
+console.log(mdsvex);
 
 export default config;

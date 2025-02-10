@@ -3,6 +3,7 @@
 	let { children } = $props();
 </script>
 
+
 <div class="min-h-screen bg-white">
 	<nav class="p-4 border-b">
 		<div class="container mx-auto flex justify-between items-center">
@@ -15,6 +16,8 @@
 		</div>
 	</nav>
 
+	
+	
 	<main class="container mx-auto px-4 py-8">
 		{@render children()}
 	</main>
