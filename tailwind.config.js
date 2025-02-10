@@ -21,8 +21,9 @@ const config = {
 				background: 'hsl(var(--background) / <alpha-value>)',
 				foreground: 'hsl(var(--foreground) / <alpha-value>)',
 				primary: {
-					DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-					foreground: 'hsl(var(--primary-foreground) / <alpha-value>)'
+					DEFAULT: '#2563eb',
+					50: '#eff6ff',
+					...
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary) / <alpha-value>)',
@@ -55,14 +56,34 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans]
+				sans: ['Inter', ...fontFamily.sans],
+				display: ['Manrope', ...fontFamily.sans]
 			},
 			typography: {
 				DEFAULT: {
 					css: {
 						maxWidth: 'none',
-					},
-				},
+						color: '#334155',
+						h1: {
+							fontWeight: '800',
+							letterSpacing: '-0.025em'
+						},
+						h2: {
+							fontWeight: '700',
+							letterSpacing: '-0.025em'
+						},
+						h3: {
+							fontWeight: '600',
+							letterSpacing: '-0.025em'
+						},
+						'code::before': {
+							content: '""'
+						},
+						'code::after': {
+							content: '""'
+						}
+					}
+				}
 			},
 		}
 	},

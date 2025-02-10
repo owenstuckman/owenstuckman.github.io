@@ -27,5 +27,10 @@
 		"svelte": "^5.0.0",
 		"tailwindcss": "^4.0.0",
 		"vite": "^6.0.0"
+	},
+	"dependencies": {
+		"rehype-highlight": "^7.0.2",
+		"remark-emoji": "^5.0.1",
+		"remark-toc": "^9.0.0"
 	}
 }

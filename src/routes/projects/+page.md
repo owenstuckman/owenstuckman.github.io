@@ -1,8 +1,10 @@
+---
+layout: fancy
+title: Projects
 
+---
 
-# My Projects
-
-## Current Projects
+# Current Projects
 
 ### Sprklii
 A personalized date ideas app.

@@ -1,6 +1,6 @@
 ---
-layout: false
-title: Hi! I am Owen!
+layout: fancy
+title: About
 ---
 
 

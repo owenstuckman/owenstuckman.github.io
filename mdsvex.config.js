@@ -1,28 +1,14 @@
-import remarkGfm from 'remark-gfm';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import remarkToc from 'remark-toc';
-import rehypeHighlight from 'rehype-highlight';
-import remarkEmoji from 'remark-emoji';
+import { defineMDSveXConfig as defineConfig } from 'mdsvex';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-export const mdsvexOptions = {
-  extensions: ['.svx', '.md'],
-  smartypants: {
-    dashes: 'oldschool',
-    quotes: true,
-    ellipses: true
-  },
-  remarkPlugins: [
-    remarkGfm,
-    remarkToc,
-    remarkEmoji
-  ],
-  rehypePlugins: [
-    rehypeSlug,
-    rehypeAutolinkHeadings,
-    rehypeHighlight
-  ],
+const dirname = path.resolve(fileURLToPath(import.meta.url), '../');
+
+export const mdsvexOptions = defineConfig({
+  extensions: ['.md', '.svx'],
   layout: {
-    _: './src/lib/layouts/default.svelte'
+    default: path.join(dirname, './src/lib/components/layouts/default-layout.svelte'),
+    fancy: path.join(dirname, './src/lib/components/layouts/fancy-layout.svelte'), 
+    components: path.join(dirname, './src/lib/components/layouts/components-layout.svelte')
   }
-}; 
+});
