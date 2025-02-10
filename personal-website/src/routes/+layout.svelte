@@ -8,9 +8,9 @@
 		<div class="container mx-auto flex justify-between items-center">
 			<a href="/" class="text-xl font-bold">Owen Stuckman</a>
 			<div class="space-x-4">
+				<a href="/about" class="hover:text-gray-600">About</a>
 				<a href="/projects" class="hover:text-gray-600">Projects</a>
 				<a href="/contact" class="hover:text-gray-600">Contact Me</a>
-				<a href="/about" class="hover:text-gray-600">About</a>
 			</div>
 		</div>
 	</nav>

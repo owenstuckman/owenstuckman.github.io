@@ -1,7 +1,5 @@
 # My Projects
 
-[About Me](./README.md) | [Contact Me](./ContactMe.md) | [Work Experience](./WorkExperience.md)
-
 <style>
   .projects-section {
     font-family: Arial, sans-serif;
