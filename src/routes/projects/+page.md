@@ -1,6 +1,6 @@
 ---
 layout: fancy
-title: Current Projects
+title: Projects
 ---
 
 <script>
@@ -59,6 +59,7 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 			skills={project.skills}
 			additionalImages={project.additionalImages}
 			links={project.links}
+			date={project.date}
 		/>
 	{/each}
 </div>

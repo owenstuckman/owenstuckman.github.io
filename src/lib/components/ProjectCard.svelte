@@ -13,6 +13,7 @@
     export let size = "medium"; // Can be "small", "medium", or "large"
     export let skills = []; // Add skills prop
     export let additionalImages = []; // Array of additional images
+    export let date = ""; // Add date prop
     
     // Dispatch event when expanded changes so parent can handle closing others
     import { createEventDispatcher } from 'svelte';
@@ -185,6 +186,12 @@
       object-fit: cover;
       border-radius: 8px;
     }
+
+    .date {
+      color: #888;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
   </style>
   
   <div 
@@ -215,6 +222,9 @@
     <div class="modal" transition:scale>
       <span class="close-btn" on:click={toggleExpand}>✖</span>
       <h2>{title}</h2>
+      {#if date}
+        <div class="date">{date}</div>
+      {/if}
 
       {#if skills && skills.length > 0}
         <div class="skills-container">
