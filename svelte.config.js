@@ -13,12 +13,14 @@ const config = {
 			strict: true
 		}),
 		paths: {
-			base: process.env.NODE_ENV === 'production' ? '/personal-website' : ''
+			base: process.env.NODE_ENV === 'production' ? '/owenstuckman.github.io' : ''
 		}
 	},
 	extensions: ['.svelte', '.svx', '.md'],
 	preprocess: [
-		sveltePreprocess(),
+		sveltePreprocess({
+			postcss: true,
+		}),
 		mdsvex({
 			extensions: ['.svx', '.md']
 		})
