@@ -5,10 +5,14 @@
     export let image = "";
     export let title = "";
     export let description = "";
+    export let shortDescription = ""; // Added shortDescription
     export let techStack = [];
     export let link = "";
+    export let links = []; // Array of additional links
     export let expanded = false;
     export let size = "medium"; // Can be "small", "medium", or "large"
+    export let skills = []; // Add skills prop
+    export let additionalImages = []; // Array of additional images
     
     // Dispatch event when expanded changes so parent can handle closing others
     import { createEventDispatcher } from 'svelte';
@@ -25,15 +29,15 @@
     $: cardDimensions = {
       small: {
         width: "400px",
-        height: "250px"
+        height: "150px"  // Reduced from 250px
       },
       medium: {
         width: "600px", 
-        height: "400px"
+        height: "250px"  // Reduced from 400px
       },
       large: {
         width: "800px",
-        height: "500px"
+        height: "300px"  // Reduced from 500px
       }
     }[size];
   </script>
@@ -47,32 +51,43 @@
       border-radius: 12px;
       transition: all 0.2s ease-in-out;
       margin: 0 auto;
-      filter: grayscale(100%);
+      background: white;
+      border: 1px solid #e5e7eb;
     }
   
     .card:hover {
       transform: scale(1.02);
-      filter: grayscale(0%);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
   
     .image-container {
       width: 100%;
-      height: 100%;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      border-radius: 12px;
+      border-radius: 12px 12px 0 0;
+      filter: grayscale(100%);
+    }
+
+    .card:hover .image-container {
+      filter: grayscale(0%);
     }
   
-    .overlay {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.6);
+    .content {
       padding: 20px;
-      text-align: center;
-      color: white;
+    }
+
+    .title {
       font-size: 1.5rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 8px;
+    }
+
+    .short-description {
+      color: #4b5563;
+      font-size: 1rem;
+      line-height: 1.5;
     }
   
     .modal {
@@ -89,6 +104,17 @@
       color: white;
       max-height: 90vh;
       overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
     }
   
     .close-btn {
@@ -109,6 +135,45 @@
       width: 32px;
       height: 32px;
     }
+
+    .links-container {
+      margin-top: 20px;
+    }
+
+    .links-container a {
+      display: block;
+      color: cyan;
+      margin-bottom: 8px;
+    }
+
+    .skills-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .skill-tag {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      color: #fff;
+    }
+
+    .additional-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    .additional-images img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
   </style>
   
   <div 
@@ -116,20 +181,35 @@
     on:click={toggleExpand}
     style="max-width: {cardDimensions.width};"
   >
-    <div 
-      class="image-container" 
-      style="
-        background-image: url('{image}');
-        height: {cardDimensions.height};
-      "
-    ></div>
-    <div class="overlay">{title}</div>
+    {#if image}
+      <div 
+        class="image-container" 
+        style="
+          background-image: url('{image}');
+          height: {cardDimensions.height};
+        "
+      ></div>
+    {/if}
+    <div class="content">
+      <div class="title">{title}</div>
+      <div class="short-description">{shortDescription}</div>
+    </div>
   </div>
   
   {#if expanded}
+    <div class="modal-overlay" on:click={toggleExpand} transition:fade></div>
     <div class="modal" transition:scale>
       <span class="close-btn" on:click={toggleExpand}>✖</span>
       <h2>{title}</h2>
+
+      {#if skills && skills.length > 0}
+        <div class="skills-container">
+          {#each skills as skill}
+            <span class="skill-tag">{skill}</span>
+          {/each}
+        </div>
+      {/if}
+
       <p>{description}</p>
   
       {#if techStack.length > 0}
@@ -140,8 +220,21 @@
         </div>
       {/if}
   
-      {#if link}
-        <p><a href={link} target="_blank" style="color: cyan;">View Project</a></p>
+      <div class="links-container">
+        {#if link}
+          <a href={link} target="_blank">View Project</a>
+        {/if}
+        {#each links as additionalLink}
+          <a href={additionalLink} target="_blank">{additionalLink}</a>
+        {/each}
+      </div>
+
+      {#if additionalImages && additionalImages.length > 0}
+        <div class="additional-images">
+          {#each additionalImages as imgSrc}
+            <img src={imgSrc} alt="Additional project image" />
+          {/each}
+        </div>
       {/if}
     </div>
   {/if}
