@@ -1,35 +1,91 @@
 <script>
 	import '../app.css';
 	let { children } = $props();
-
-	function navigateTo(path) {
-		window.location.href = path;
-	}
 </script>
 
-<div class="min-h-screen bg-gray-50">
-	<nav class="bg-white shadow-lg fixed w-full top-0 z-50 border-b border-gray-200">
-		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style="background-color: white;">
-			<div class="flex justify-between items-center h-16">
-				<button onclick={() => navigateTo('/')} class="text-2xl font-bold text-gray-800 hover:text-primary transition-colors">Owen Stuckman</button>
-				<div class="flex space-x-6">
-					<button onclick={() => navigateTo('/about')} class="px-4 py-2 text-lg font-medium text-gray-700 hover:text-primary hover:bg-gray-50 transition-all duration-200">
-						About
-					</button>
-					<button onclick={() => navigateTo('/projects')} class="px-4 py-2 text-lg font-medium text-gray-700 hover:text-primary hover:bg-gray-50 transition-all duration-200">
-						Projects
-					</button>
-					<button onclick={() => navigateTo('/contact')} class="px-4 py-2 text-lg font-medium text-gray-700 hover:text-primary hover:bg-gray-50 transition-all duration-200">
-						Contact
-					</button>
-				</div>
-			</div>
+<div class="min-h-screen">
+	<nav style="--accent: var(--accent-3, #01c0f0);">
+		<a class="homepage-link" href="/">
+			<h1>Owen Stuckman</h1>
+		</a>
+		<div class="nav-links">
+			<a href="/about" title="About" data-sveltekit-preload-data="hover" style="--accent: var(--accent-2, #b45eff);">About</a>
+			<a href="/projects" title="Projects" data-sveltekit-preload-data="hover" style="--accent: var(--accent-3, #01c0f0);">Projects</a>
+			<a href="/contact" title="Contact" data-sveltekit-preload-data="hover" style="--accent: var(--accent-4, #1de691);">Contact</a>
+			<button class="open-theme-menu" title="Theme" data-ignore-outside-click="">🎨</button>
 		</div>
 	</nav>
-	<div class="h-16"></div>
-	<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-		<div class="bg-white rounded-lg shadow-lg p-8">
+	<main>
+		<div class="content">
 			{@render children()}
 		</div>
 	</main>
 </div>
+
+<style>
+	nav {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 1rem 2rem;
+		background: white;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+		position: fixed;
+		width: 100%;
+		top: 0;
+		z-index: 50;
+	}
+
+	.homepage-link {
+		text-decoration: none;
+	}
+
+	h1 {
+		font-size: 1.5rem;
+		font-weight: bold;
+		color: #333;
+		margin: 0;
+	}
+
+	.nav-links {
+		display: flex;
+		gap: 1.5rem;
+		align-items: center;
+	}
+
+	.nav-links a {
+		text-decoration: none;
+		color: #333;
+		font-weight: 500;
+		padding: 0.5rem 1rem;
+		border-radius: 0.25rem;
+		transition: all 0.2s;
+	}
+
+	.nav-links a:hover {
+		background: rgba(var(--accent), 0.1);
+		color: rgb(var(--accent));
+	}
+
+	.open-theme-menu {
+		background: none;
+		border: none;
+		cursor: pointer;
+		font-size: 1.25rem;
+		padding: 0.5rem;
+	}
+
+	main {
+		margin-top: 4rem;
+		padding: 2rem;
+	}
+
+	.content {
+		max-width: 1200px;
+		margin: 0 auto;
+		background: white;
+		padding: 2rem;
+		border-radius: 0.5rem;
+		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	}
+</style>

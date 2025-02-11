@@ -89,6 +89,17 @@
       font-size: 1rem;
       line-height: 1.5;
     }
+
+    .description-preview {
+      color: #4b5563;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-top: 8px;
+    }
   
     .modal {
       position: fixed;
@@ -193,6 +204,9 @@
     <div class="content">
       <div class="title">{title}</div>
       <div class="short-description">{shortDescription}</div>
+      {#if !image}
+        <div class="description-preview">{description}...</div>
+      {/if}
     </div>
   </div>
   

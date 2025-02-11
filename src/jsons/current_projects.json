@@ -1,0 +1,20 @@
+{
+  "current_projects": [
+    {
+      "title": "Sprklii",
+      "description": "A personalized date ideas app."
+    },
+    {
+      "title": "Archimedes", 
+      "description": "Microsoft Imagine Cup Competition."
+    },
+    {
+      "title": "Project Torch",
+      "description": "Developer for non-profit which creates websites for local businesses in the Blacksburg area."
+    },
+    {
+      "title": "CS50",
+      "description": "Building/Rebuilding Fundamentals of CS."
+    }
+  ]
+}

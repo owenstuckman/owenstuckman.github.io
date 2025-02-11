@@ -1,27 +1,27 @@
 ---
 layout: fancy
-title: Projects
-
+title: Current Projects
 ---
 
-# Current Projects
-
-### Sprklii
-A personalized date ideas app.
-
-### Archimedes
-Microsoft Imagine Cup Competition.
-
-### Project Torch
-Developer for non-profit which creates websites for local businesses in the Blacksburg area.
-
-### CS50
-Building/Rebuilding Fundamentals of CS.
-
 <script>
+import currentProjectsData from "$lib/../jsons/current_projects.json";
+import CurrentCard from "$lib/components/CurrentCard.svelte";
 import projectsData from "$lib/../jsons/projects.json";
 import ProjectCard from "$lib/components/ProjectCard.svelte";
 </script>
+
+<div class="current-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 800px; margin: 0 auto;">
+  {#each currentProjectsData.current_projects as project}
+	<CurrentCard
+	  title={project.title}
+	  description={project.description}
+	/>
+  {/each}
+</div>
+
+# Past Projects
+
+
 
 <style>
 	.masonry-grid {
@@ -41,7 +41,7 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 
 	@media (min-width: 1200px) {
 		.masonry-grid {
-			grid-template-columns: repeat(5, 1fr);
+			grid-template-columns: repeat(4, 1fr);
 		}
 	}
 </style>
@@ -83,5 +83,6 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 | Robot-X                      | FTC Robotics                                                 | OpenCV, Java, Odometry                          |
 | Planes IT Intern             | WTT App and SOP Sharepoint                                   | Power Platform, MS Administration               |
 | Automatic Garage Closer      | Arduino                                                      | C++                                             |
-| Kids Like Food 2             | Food Blog                                                    | HTML, CSS, JS       
+| Kids Like Food 2             | Food Blog                                                    | HTML, CSS, JS  
+	 
 </center>

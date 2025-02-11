@@ -3,8 +3,6 @@ layout: fancy
 title: Contact
 ---
 
-## Contact
-
 Feel free to reach out to me at [inquiries@owenstuckman.co](mailto:inquiries@owenstuckman.co)!
 
 If you would like an up-to-date resume, just shoot me an email, and I'll be happy to send you one!
