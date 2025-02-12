@@ -2,6 +2,8 @@
 layout: fancy
 title: Projects
 ---
+# Current Projects
+---
 
 <script>
 import currentProjectsData from "$lib/../jsons/current_projects.json";
@@ -20,7 +22,7 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 </div>
 
 # Past Projects
-
+---
 
 
 <style>
@@ -68,6 +70,7 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 <center>
 
 # Quick Summary (In Chronological Order)
+---
 
 | Project                     | Description                                                  | Tools/Technologies                              |
 |-----------------------------|--------------------------------------------------------------|-------------------------------------------------|

@@ -1,7 +1,7 @@
 {
   "current_projects": [
 	{
-	  "title": "Sparklii",
+	  "title": "Sparkli Beta",
 	  "description": "A personalized date ideas app. Co-Owner and Co-Founder of Sprklii LLC."
 	},
 	{
@@ -9,20 +9,12 @@
 		"description": "Creating a generalized quickstart for supabase auth, edge functions, and flutter.."
 	},
 	{
-		"title": "Personal Portfolio Website",
-		"description": "Moving website from md+html+css to mdsvex+svelte."
-	},
-	{
 	  "title": "Student Health Tracker", 
 	  "description": "Location based data driven application to assist in diagnosing and informing students or those in densely populated areas."
 	},
 	{
 	  "title": "Project Torch",
-	  "description": "Create wesbites for local businesses pro-bono as a part of the non-profit organization Project Torch."
-	},
-	{
-	  "title": "CS50",
-	  "description": "Rebuilding Fundamentals of CS through Harvard University."
+	  "description": "Create websites for local businesses pro-bono as a part of the non-profit organization Project Torch."
 	}
   ]
 }

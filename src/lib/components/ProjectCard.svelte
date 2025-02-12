@@ -29,16 +29,16 @@
     // Get card dimensions based on size
     $: cardDimensions = {
       small: {
-        width: "400px",
-        height: "150px"  // Reduced from 250px
+        width: "450px", // Increased from 400px
+        height: "180px"  // Increased from 150px
       },
       medium: {
-        width: "600px", 
-        height: "250px"  // Reduced from 400px
+        width: "650px", // Increased from 600px
+        height: "280px"  // Increased from 250px
       },
       large: {
-        width: "800px",
-        height: "300px"  // Reduced from 500px
+        width: "850px", // Increased from 800px
+        height: "330px"  // Increased from 300px
       }
     }[size];
   </script>
@@ -49,7 +49,7 @@
       width: 100%;
       cursor: pointer;
       overflow: hidden;
-      border-radius: 12px;
+      border-radius: 14px; /* Slightly larger radius */
       transition: all 0.2s ease-in-out;
       margin: 0 auto;
       background: white;
@@ -66,7 +66,7 @@
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      border-radius: 12px 12px 0 0;
+      border-radius: 14px 14px 0 0;
       filter: grayscale(100%);
     }
 
@@ -75,31 +75,31 @@
     }
   
     .content {
-      padding: 20px;
+      padding: 24px; /* Increased from 20px */
     }
 
     .title {
-      font-size: 1.5rem;
+      font-size: 1.7rem; /* Increased from 1.5rem */
       font-weight: bold;
       color: #1f2937;
-      margin-bottom: 8px;
+      margin-bottom: 10px; /* Increased from 8px */
     }
 
     .short-description {
       color: #4b5563;
-      font-size: 1rem;
+      font-size: 1.15rem; /* Increased from 1rem */
       line-height: 1.5;
     }
 
     .description-preview {
       color: #4b5563;
-      font-size: 0.9rem;
+      font-size: 1.05rem; /* Increased from 0.9rem */
       line-height: 1.4;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      margin-top: 8px;
+      margin-top: 10px; /* Increased from 8px */
     }
   
     .modal {
@@ -108,15 +108,16 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 95%;
-      max-width: 1000px;
+      max-width: 1100px; /* Increased from 1000px */
       background: #121212;
-      padding: 40px;
-      border-radius: 12px;
+      padding: 45px; /* Increased from 40px */
+      border-radius: 14px;
       box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
       color: white;
       max-height: 90vh;
       overflow-y: auto;
       z-index: 1000;
+      font-size: 1.15rem; /* Added larger base font size */
     }
 
     .modal-overlay {
@@ -134,63 +135,65 @@
       top: 20px;
       right: 25px;
       cursor: pointer;
-      font-size: 24px;
+      font-size: 28px; /* Increased from 24px */
     }
   
     .tech-icons {
       display: flex;
-      gap: 12px;
-      margin-top: 20px;
+      gap: 14px; /* Increased from 12px */
+      margin-top: 24px; /* Increased from 20px */
     }
   
     .tech-icons img {
-      width: 32px;
-      height: 32px;
+      width: 38px; /* Increased from 32px */
+      height: 38px; /* Increased from 32px */
     }
 
     .links-container {
-      margin-top: 20px;
+      margin-top: 24px; /* Increased from 20px */
     }
 
     .links-container a {
       display: block;
       color: cyan;
-      margin-bottom: 8px;
+      margin-bottom: 10px; /* Increased from 8px */
+      font-size: 1.15rem; /* Added larger font size */
     }
 
     .skills-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 20px;
+      gap: 10px; /* Increased from 8px */
+      margin-bottom: 24px; /* Increased from 20px */
     }
 
     .skill-tag {
       background: rgba(255, 255, 255, 0.1);
-      padding: 4px 12px;
-      border-radius: 16px;
-      font-size: 0.9rem;
+      padding: 6px 14px; /* Increased from 4px 12px */
+      border-radius: 18px; /* Increased from 16px */
+      font-size: 1.05rem; /* Increased from 0.9rem */
       color: #fff;
     }
 
     .additional-images {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-top: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Increased from 200px */
+      gap: 18px; /* Increased from 16px */
+      margin-top: 28px; /* Increased from 24px */
     }
 
     .additional-images img {
       width: 100%;
-      height: 200px;
+      height: 220px; /* Increased from 200px */
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 10px;
     }
 
     .date {
       color: #888;
-      font-size: 0.9rem;
-      margin-top: 8px;
+      font-size: 1.05rem; /* Increased from 0.9rem */
+      margin-top: -10px; /* Adjusted from -8px */
+      margin-bottom: 18px; /* Increased from 16px */
     }
   </style>
   
