@@ -16,12 +16,12 @@
 	  {
 		"title": "SteerClear",
 		"shortDescription": "Walking at night is dangerous - why not have waze for walking, using croudsourced reports?",
-		"description": "Created SteerClear to address the safety concerns of walking at night, particularly for college students aged 18-24. The app uses crowdsourced data to identify and recommend the safest walking routes, similar to how Waze works for driving. Features include an interactive map with community threat/safety markers, smart route planning, panic button, heat map of reported incidents, group walk system, college selection, and alternate transportation recommendations. Built with Expo React Native and styled with NativeWind, using Supabase for serverless backend and real-time database updates. Integrated MapBox for route visualization, Google Places API for location data, and OpenAI for dynamic threat analysis. The app aims to give everyone peace of mind while walking alone, especially in winter months when it gets dark earlier.",
+		"description": "Won 'Best Startup Hack' at Hackviolet. Created SteerClear to address the safety concerns of walking at night, particularly for college students aged 18-24. The app uses crowdsourced data to identify and recommend the safest walking routes, similar to how Waze works for driving. Features include an interactive map with community threat/safety markers, smart route planning, panic button, heat map of reported incidents, group walk system, college selection, and alternate transportation recommendations. Built with Expo React Native and styled with NativeWind, using Supabase for serverless backend and real-time database updates. Integrated MapBox for route visualization, Google Places API for location data, and OpenAI for dynamic threat analysis. The app aims to give everyone peace of mind while walking alone, especially in winter months when it gets dark earlier.",
 		"date": "February 2025",
 		"type": "Hackathon Project",
 		"skills": ["Expo", "React Native", "Supabase", "nativewind", "OpenAI", "Google-Places API", "MapBox API", "Serverless"],
 		"links": ["https://github.com/owenstuckman/SteerClear", "https://www.youtube.com/watch?v=P3OlZBgFtGw"],
-		"image": "/steerclear.png",
+		"image": "/steercleer.png",
 		"additionalImages": [],
 		"size": "small"
 	  },
