@@ -3,7 +3,7 @@
 	let { children } = $props();
 </script>
 
-<div class="min-h-screen">
+<div class="flex flex-col min-h-screen">
 	<div class="flex justify-center w-full">
 		<nav style="--accent: var(--accent-3, #01c0f0);">
 			<a class="homepage-link" href="/" style="margin-left: 2rem;">

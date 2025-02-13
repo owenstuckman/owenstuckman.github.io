@@ -261,7 +261,7 @@
 		"type": "Robotics Project",
 		"skills": ["OpenCV", "Java"],
 		"links": ["https://github.com/owenstuckman/FictileBot"],
-		"image": "",
+		"image": "/fictilebot.png",
 		"additionalImages": [],
 		"size": "small"
 	  },
