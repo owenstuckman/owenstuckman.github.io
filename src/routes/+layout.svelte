@@ -4,17 +4,18 @@
 </script>
 
 <div class="min-h-screen">
-	<nav style="--accent: var(--accent-3, #01c0f0);">
-		<a class="homepage-link" href="/">
-			<h1>Owen Stuckman</h1>
-		</a>
-		<div class="nav-links">
-			<a href="/about" title="About" data-sveltekit-preload-data="hover" style="--accent: var(--accent-2, #b45eff);">About</a>
-			<a href="/projects" title="Projects" data-sveltekit-preload-data="hover" style="--accent: var(--accent-3, #01c0f0);">Projects</a>
-			<a href="/contact" title="Contact" data-sveltekit-preload-data="hover" style="--accent: var(--accent-4, #1de691);">Contact</a>
-			<button class="open-theme-menu" title="Theme" data-ignore-outside-click="">🎨</button>
-		</div>
-	</nav>
+	<div class="flex justify-center w-full">
+		<nav style="--accent: var(--accent-3, #01c0f0);">
+			<a class="homepage-link" href="/" style="margin-left: 2rem;">
+				<h1>Owen Stuckman</h1>
+			</a>
+			<div class="nav-links">
+				<a href="/about" title="About" data-sveltekit-preload-data="hover" style="--accent: var(--accent-2, #b45eff);">About</a>
+				<a href="/projects" title="Projects" data-sveltekit-preload-data="hover" style="--accent: var(--accent-3, #01c0f0);">Projects</a>
+				<a href="/contact" title="Contact" data-sveltekit-preload-data="hover" style="--accent: var(--accent-4, #1de691);">Contact</a>
+			</div>
+		</nav>
+	</div>
 	<main>
 		<div class="content">
 			{@render children()}
