@@ -1,18 +1,30 @@
 {
 	"projects": [
-	
-	  {
-		"title": "Portfolio Website Revamp",
-		"shortDescription": "Personal portfolio website built with SvelteKit, Markdown, mdsvex, and TailwindCSS",
-		"description": "Created a modern portfolio website using SvelteKit for the framework, Markdown for content management, and TailwindCSS for styling. The site features a clean, responsive design with dark/light theme support and smooth page transitions. Built to showcase my projects and skills in an organized way.",
-		"date": "February 2025",
-		"type": "Personal Project",
-		"skills": ["SvelteKit", "Markdown", "TailwindCSS", "TypeScript", "svmdex"],
-		"links": ["https://owenstuckman.co"],
-		"image": "/os-logo.png",
-		"additionalImages": [],
-		"size": "small"
-	  },
+		
+		{
+			"title": "Supabase-Flutter Quickstart",
+			"shortDescription": "Creating a generalized quickstart for Supabase authentication, edge functions, and Flutter.",
+			"description": "Developed a comprehensive quickstart guide for integrating Supabase authentication and edge functions with Flutter applications. This project aims to streamline the setup process for developers looking to utilize Supabase in their Flutter projects. Particulary, I made it so for my personal projects like Hackathons have a easy starting point.",
+			"date": "January 2025",
+			"type": "Personal Project",
+			"skills": ["Flutter", "Supabase", "Dart", "Edge Functions", "Authentication", "Serverless"],
+			"links": ["https://github.com/owenstuckman/supabase-flutter-quickstart"],
+			"image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHfvJQdTD8IFAUS4jNkFrVYGai1NknAbHAMA&s",
+			"additionalImages": ["/quickstart.png"],
+			"size": "small"
+		},
+		{
+			"title": "Portfolio Website Revamp",
+			"shortDescription": "Personal portfolio website built with SvelteKit, Markdown, mdsvex, and TailwindCSS",
+			"description": "Created a modern portfolio website using SvelteKit for the framework, Markdown for content management, and TailwindCSS for styling. The site features a clean, responsive design with dark/light theme support and smooth page transitions. Built to showcase my projects and skills in an organized way.",
+			"date": "February 2025",
+			"type": "Personal Project",
+			"skills": ["SvelteKit", "Markdown", "TailwindCSS", "TypeScript", "svmdex"],
+			"links": ["https://owenstuckman.co"],
+			"image": "/os-logo.png",
+			"additionalImages": [],
+			"size": "small"
+		},
 	  {
 		"title": "SteerClear",
 		"shortDescription": "Walking at night is dangerous - why not have waze for walking, using croudsourced reports?",

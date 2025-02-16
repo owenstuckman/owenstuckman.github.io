@@ -5,10 +5,6 @@
 	  "description": "A personalized date ideas app. Co-Owner and Co-Founder of Sprklii LLC."
 	},
 	{
-		"title": "Supabase-Flutter Quickstart",
-		"description": "Creating a generalized quickstart for supabase auth, edge functions, and flutter.."
-	},
-	{
 	  "title": "Student Health Tracker", 
 	  "description": "Location based data driven application to assist in diagnosing and informing students or those in densely populated areas."
 	},
