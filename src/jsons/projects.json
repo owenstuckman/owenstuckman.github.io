@@ -32,9 +32,9 @@
 		"date": "February 2025",
 		"type": "Hackathon Project",
 		"skills": ["Expo", "React Native", "Supabase", "nativewind", "OpenAI", "Google-Places API", "MapBox API", "Serverless"],
-		"links": ["https://github.com/owenstuckman/SteerClear", "https://www.youtube.com/watch?v=P3OlZBgFtGw"],
+		"links": ["https://github.com/owenstuckman/SteerClear", "https://www.youtube.com/watch?v=P3OlZBgFtGw", "https://devpost.com/software/safewalk-gh3dk8?_gl=1*1qp7krw*_gcl_au*NDkxMzY2NjY0LjE3Mzg1MDM1NDc.*_ga*OTgzODc4MjM5LjE3Mzg1MDM1NDc.*_ga_0YHJK3Y10M*MTczOTc0MzU3Mi4xOC4xLjE3Mzk3NDM2ODIuMC4wLjA."],
 		"image": "/steercleer.png",
-		"additionalImages": [],
+		"additionalImages": ["hackvwin.png" ],
 		"size": "small"
 	  },
 	  {
@@ -44,7 +44,7 @@
 		"date": "January 2025",
 		"type": "", 
 		"skills": ["Power Automate"],
-		"links": [],
+		"links": ["Private"],
 		"image": "https://news.macgasm.net/wp-content/uploads/2011/12/canadaApple.png",
 		"additionalImages": [],
 		"size": "small"
