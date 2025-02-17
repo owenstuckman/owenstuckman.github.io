@@ -8,7 +8,7 @@
 			"date": "January 2025",
 			"type": "Personal Project",
 			"skills": ["Flutter", "Supabase", "Dart", "Edge Functions", "Authentication", "Serverless"],
-			"links": ["https://github.com/owenstuckman/supabase-flutter-quickstart"],
+			"links": ["https://github.com/owenstuckman/Flutter-Supabase-Quickstart"],
 			"image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHfvJQdTD8IFAUS4jNkFrVYGai1NknAbHAMA&s",
 			"additionalImages": ["/quickstart.png"],
 			"size": "small"
@@ -44,7 +44,7 @@
 		"date": "January 2025",
 		"type": "", 
 		"skills": ["Power Automate"],
-		"links": ["Private"],
+		"links": [""],
 		"image": "https://news.macgasm.net/wp-content/uploads/2011/12/canadaApple.png",
 		"additionalImages": [],
 		"size": "small"
