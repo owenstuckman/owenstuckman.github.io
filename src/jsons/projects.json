@@ -62,6 +62,18 @@
 		"size": "small"
 	  },
 	  {
+		"title": "RoomReady",
+		"shortDescription": "Flutter Application to help travellers get connected with locals. Locals eventually are the travellers, and this exchange of information is important in order for both parties to have the best travel experiences.This app connects them, helps plans trips, alongside other features powered by the collection of data from conversations. Built with flutter, supabase, and amazon EC2.",
+		"description": "",
+		"date": "October 2025",
+		"type": "", 
+		"skills": ["Flutter", "Dart", "Supabase", "EC2"],
+		"links": [""],
+		"image": "",
+		"additionalImages": [],
+		"size": "small"
+	  },
+	  {
 		"title": "Inflectors Project",
 		"shortDescription": "Participated in CIA pilot project which involved series of weekly cryptograhy puzzles.",
 		"description": "Completed a total of 10 puzzles, which were a series of weekly cryptography puzzles. All were in depth and challenging, each one taking multiple hours to complete. Finsihed within the top ten of the leaderboard, in which points were earned by completeing the puzzles and being the quickest to complete them. Learned many cryptography tactics and concepts.",
