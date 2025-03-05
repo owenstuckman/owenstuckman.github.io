@@ -23,6 +23,3 @@ Feel free to reach out to me!
 
 ---
 
-![Owen Stuckman](static/os-logo.png)
-
----
