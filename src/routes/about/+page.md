@@ -2,6 +2,9 @@
 	<title>About</title>
 </svelte:head>
 
+<script>
+    import MultiBullet from '$lib/components/MultiBullet.svelte';
+</script>
 
 <h1>About</h1>
 
@@ -37,11 +40,11 @@ TLDR;
 - *Whatever I need to learn for a project* 
 
 #### Extended List:
-*These are all the technologies I use / feel profficient with*
+*These are all the technologies I use / feel proficient with*
 
-Languages:
+**Languages**
 - Dart
-- Python 
+- Python
 - Java
 - JavaScript
 - C++
@@ -51,15 +54,14 @@ Languages:
 - PostgreSQL
 - Powershell
 
-Frameworks & Libraries:
+**Frameworks & Libraries**
 - Flutter
 - Expo React Native
 - React
 - mdsvex
 
-
-Tools:
-- Supabase 
+**Tools**
+- Supabase
 - Power Platform
 - OpenAI API
 - Dataverse
@@ -70,7 +72,7 @@ Tools:
 - VSCode
 - Cursor
 - Android Studio
-- Git 
+- Git
 - Github
 - Power Apps
 - Power Automate
@@ -81,14 +83,14 @@ Tools:
 #### Tech I Dabble With:
 *All the technologies I have used (not on prior list), but not as comfortable with*
 
-Languages:
+**Languages**
 - C
 - C#
 - MATLAB
 - HTML (I know... just a markup language)
 - CSS
 
-Frameworks & Libraries:
+**Frameworks & Libraries**
 - Svelte
 - Scrapy
 - TKinter
@@ -97,7 +99,7 @@ Frameworks & Libraries:
 - Meta XR Voice
 - Nativewind
 
-Tools:
+**Tools**
 - Firebase
 - AWS
 - Visual Studio
@@ -105,8 +107,7 @@ Tools:
 - XCode
 - Figma
 
-
-#### Other Important Stuff:
+#### Other Important Stuff
 - Agile
 - Six Sigma Methodologies
 - Adobe Premiere Pro
