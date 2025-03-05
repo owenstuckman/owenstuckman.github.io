@@ -1,7 +1,4 @@
----
-layout: fancy
-title: Projects
----
+
 # Current Projects
 ---
 
@@ -21,10 +18,13 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
   {/each}
 </div>
 
+###
+
 # Past Projects
 ---
 
 
+<!--
 <style>
 	.masonry-grid {
 		display: grid;
@@ -47,8 +47,9 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 		}
 	}
 </style>
+-->
 
-<div class="masonry-grid">
+<div class="masonry-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
 	{#each projectsData.projects as project}
 		<ProjectCard
 			image={project.image}
@@ -67,13 +68,21 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 </div>
 
 
+
 <center>
 
-# Quick Summary (In Chronological Order)
+###
+
+# Quick Summary
 ---
 
 | Project                     | Description                                                  | Tools/Technologies                              |
 |-----------------------------|--------------------------------------------------------------|-------------------------------------------------|
+SteerClear                   | Safety app for walking at night using crowdsourced data      | Expo, React Native, Supabase, MapBox, OpenAI    |
+| TrashCash                    | Mobile app incentivizing proper waste disposal                | Flutter, Supabase, IoT, C++, Esp32              |
+| Apple Canada Remittance      | Revamp existing apple remittance process for Planes          | Power Automate                                   |
+| Harvard's CS50              | Taking Harvard's introductory computer science course        | C, Python, SQL                                  |
+| Student Health Tracker       | Location based early diagnosis and health education tool     | Flutter, Supabase, Serverless                   |
 | Inflectors Project           | CIA Pilot Game, cryptography puzzles.                        | Cryptography techniques, technical knowledge    |
 | Project Torch                | Develop websites for local businesses in blacksburg          | React, Javascript, Supabase                     |
 | RoomReady                    | Connect locals and travelers, with AI suggestions (Code Fest)| Flutter, Supabase, ChatGPT                      |
@@ -87,6 +96,6 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 | Robot-X                      | FTC Robotics                                                 | OpenCV, Java, Odometry                          |
 | Planes IT Intern             | WTT App and SOP Sharepoint                                   | Power Platform, MS Administration               |
 | Automatic Garage Closer      | Arduino                                                      | C++                                             |
-| Kids Like Food 2             | Food Blog                                                    | HTML, CSS, JS  
-	 
+| Kids Like Food 2             | Food Blog                                                    | HTML, CSS, JS                                   |
 </center>
+

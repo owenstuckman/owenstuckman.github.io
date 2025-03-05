@@ -1,15 +1,15 @@
+<svelte:head>
+	<title>About</title>
+</svelte:head>
+
+
+<h1>About</h1>
+
 ---
-layout: fancy
-title: About
----
-
-
-This is my personal projects site - built with mdsvex.
-
 
 ## A Little Bit About Me:
 
-I am an undergraduate student pursuing computer science at Virginia Tech.  
+I am an undergraduate student studying computer science, with a minor in cybersecurity at Virginia Tech.  
   
 My professional interest is currently focused on automation, be it cloud based, or desktop based robotic process automation. I enjoy creating and improving systems so people can spend time on things that matter rather than an inefficiency or manual analog.  
   
@@ -20,135 +20,93 @@ In my free time, I like to run, play spikeball and pickleball, and to work on my
 
 ---
 
-### Technologies I Use:
+#### 
+
+# Tech
+---
+
 
 TLDR;
 
-- Dart with Flutter
-- Microsoft Power Platform
-- SQL and PostgreSQL
+- Dart with **Flutter**
+- **Supabase** (PostgreSQL) for Auth, DB, Storage, and Serverless
+- Webapps with Svelte and React 
+- **Python**, Java, C++, C# in a wide variety of applications
+- Microsoft **Power Platform**
 - OpenCV Computer Vision
-- Python, Java, C++, C# in a wide variety of applications
-- Whatever I need to get the job done
+- *Whatever I need to learn for a project* 
 
----
-<style>
-  .skills-section {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f9f9f9;
-    line-height: 1.6;
-  }
-  
-  .skills-header {
-    text-align: center;
-    font-size: 2em;
-    color: #333;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
-  }
-  
-  .skill-category {
-    font-size: 1.4em;
-    color: #007BFF;
-    margin-top: 20px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
-  }
-  
-  .skill-item {
-    margin-left: 20px;
-    margin-bottom: 10px;
-    font-size: 1.1em;
-    color: #555;
-  }
+#### Extended List:
+*These are all the technologies I use / feel profficient with*
 
-  .skill-item ul {
-    margin: 5px 0;
-    padding-left: 20px;
-  }
+Languages:
+- Dart
+- Python 
+- Java
+- JavaScript
+- C++
+- PowerFX
+- MD
+- T-SQL
+- PostgreSQL
+- Powershell
 
-  .skill-item li {
-    list-style-type: disc;
-  }
+Frameworks & Libraries:
+- Flutter
+- Expo React Native
+- React
+- mdsvex
 
-  .misc-category {
-    font-size: 1.2em;
-    margin-top: 30px;
-    color: #333;
-  }
-</style>
 
-<div class="skills-section">
-  <div class="skills-header">Skills Overview</div>
+Tools:
+- Supabase 
+- Power Platform
+- OpenAI API
+- Dataverse
+- Azure
+- SSMS
+- SQL Server 2016
+- Fusion 360
+- VSCode
+- Cursor
+- Android Studio
+- Git 
+- Github
+- Power Apps
+- Power Automate
+- Power Automate Desktop
+- Obsidian
+- Sharepoint / Sharepoint Administration
 
-  <div class="skill-category">Java</div>
-  <div class="skill-item">
-    - Android Applications: primarily for FTC Robotics
-  </div>
+#### Tech I Dabble With:
+*All the technologies I have used (not on prior list), but not as comfortable with*
 
-  <div class="skill-category">C++</div>
-  <div class="skill-item">
-    - Mainly Arduino projects but have used in other applications.
-  </div>
+Languages:
+- C
+- C#
+- MATLAB
+- HTML (I know... just a markup language)
+- CSS
 
-  <div class="skill-category">Dart</div>
-  <div class="skill-item">
-    - Flutter Applications
-  </div>
+Frameworks & Libraries:
+- Svelte
+- Scrapy
+- TKinter
+- Unity 2D
+- Unity MR
+- Meta XR Voice
+- Nativewind
 
-  <div class="skill-category">Python</div>
-  <div class="skill-item">
-    - My go-to for a quick script
-    - Scrapy web scraping
-    - OpenCV image converting
-    - Lots of small projects
-  </div>
+Tools:
+- Firebase
+- AWS
+- Visual Studio
+- Unity
+- XCode
+- Figma
 
-  <div class="skill-category">Markdown</div>
-  <div class="skill-item">
-    - Obsidian
-    - I love note-taking in markdown and the utilitarianism of md.
-  </div>
 
-  <div class="skill-category">Power Platform</div>
-  <div class="skill-item">
-    - Especially Dataverse, Power Apps, Power Automate
-    - PL-900 Certified
-    - Working on PL-200 and PL-400
-  </div>
-
-  <div class="skill-category">SQL</div>
-  <div class="skill-item">
-    - SSMS
-    - SQL Server 2016
-  </div>
-
-  <div class="skill-category">PostgreSQL</div>
-  <div class="skill-item">
-    - Supabase (firebase but better)
-    - My go-to for a cloud database
-  </div>
-
-  <div class="skill-category">Game Dev</div>
-  <div class="skill-item">
-    - Unity
-    - Developed a few games for fun
-    - Took a class and developed 3 games for that.
-  </div>
-
-  <div class="skill-category">AR/VR</div>
-  <div class="skill-item">
-    - Unity
-    - Hackathons
-  </div>
-
-  <div class="skill-category">CAD Software</div>
-  <div class="skill-item">
-    - Fusion360
-  </div>
-
-  <div class="misc-category">And More.</div>
-</div>
+#### Other Important Stuff:
+- Agile
+- Six Sigma Methodologies
+- Adobe Premiere Pro
