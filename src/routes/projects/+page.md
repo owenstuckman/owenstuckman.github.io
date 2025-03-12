@@ -74,6 +74,7 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 ###
 
 # Quick Summary
+
 ---
 
 | Project                     | Description                                                  | Tools/Technologies                              |
@@ -99,3 +100,5 @@ SteerClear                   | Safety app for walking at night using crowdsource
 | Kids Like Food 2             | Food Blog                                                    | HTML, CSS, JS                                   |
 </center>
 
+
+---

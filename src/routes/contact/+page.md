@@ -5,14 +5,9 @@
 	import Callout from '$lib/components/Callout.svelte'
 </script>
 
+# Contact
 
-<svelte:head>
-	<title>Contact</title>
-</svelte:head>
-
-
-<h1>Contact</h1>
-
+---
 
 Feel free to reach out to me at <a href="mailto:inquiries@owenstuckman.co">inquiries@owenstuckman.co</a>!
 

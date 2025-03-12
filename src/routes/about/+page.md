@@ -1,6 +1,3 @@
-<svelte:head>
-	<title>About</title>
-</svelte:head>
 
 <script>
     import MultiBullet from '$lib/components/MultiBullet.svelte';
