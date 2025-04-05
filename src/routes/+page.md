@@ -4,7 +4,22 @@
 
 ---
 
+<div style="text-align: center;">
+    <img src="headshot.png" alt="Owen Stuckman" style="border-radius:50%; max-width:150px; height:auto;">
+</div>
+
+
+---
+
 I'm Owen Stuckman, a software engineer passionate about building solutions to save people time. Feel free to explore!
+
+---
+
+## Connect with Me:
+- [GitHub](https://github.com/owenstuckman)
+- [LinkedIn](www.linkedin.com/in/owen-stuckman-b69977235)
+
+
 
 ---
 
@@ -29,4 +44,3 @@ Check out my latest work, past work, and ongoing projects.
 Feel free to reach out to me!
 
 ---
-

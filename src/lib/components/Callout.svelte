@@ -11,6 +11,5 @@
 </script>
 
 <div class="callout">
-	// Conditionally render 'children' if it is defined, utilizing the Svelte render function
 	{@render children?.()}
 </div>
