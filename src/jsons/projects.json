@@ -1,6 +1,18 @@
 {
   "projects": [
     {
+      "title": "LUMA",
+      "shortDescription": "Custom ATS",
+      "description": "Fully customized fully functional ATS system made for the archimedes society at VT to counter scheduling difficulties and additional requested functionality. Did this completely on my own",
+      "date": "May 2025 - September 2025",
+      "type": "",
+      "skills": ["Svelte", "TypeScript", "Supabase", "Full Stack"],
+      "links": ["https://github.com/ArchimedesVT/luma"],
+      "image": "",
+      "additionalImages": [],
+      "size": ""
+    },
+    {
       "title": "Customer Onboarding App",
       "shortDescription": "",
       "description": "",
