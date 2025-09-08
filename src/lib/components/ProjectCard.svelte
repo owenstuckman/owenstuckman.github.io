@@ -10,7 +10,6 @@
     export let link = "";
     export let links = []; // Array of additional links
     export let expanded = false;
-    export let size = "medium"; // Can be "small", "medium", or "large"
     export let skills = []; // Add skills prop
     export let additionalImages = []; // Array of additional images
     export let date = ""; // Add date prop
@@ -26,21 +25,6 @@
       }
     }
 
-    // Get card dimensions based on size
-    $: cardDimensions = {
-      small: {
-        width: "450px", // Increased from 400px
-        height: "180px"  // Increased from 150px
-      },
-      medium: {
-        width: "650px", // Increased from 600px
-        height: "280px"  // Increased from 250px
-      },
-      large: {
-        width: "850px", // Increased from 800px
-        height: "330px"  // Increased from 300px
-      }
-    }[size];
   </script>
   
   <style>
@@ -63,7 +47,8 @@
   
     .image-container {
       width: 100%;
-      background-size: contain;
+      height: 200px; 
+      background-size: contain; 
       background-repeat: no-repeat;
       background-position: center;
       border-radius: 14px 14px 0 0;
@@ -200,16 +185,16 @@
   <div 
     class="card" 
     on:click={toggleExpand}
-    style="max-width: {cardDimensions.width};"
   >
     {#if image}
       <div 
         class="image-container" 
         style="
           background-image: url('{image}');
-          height: {cardDimensions.height};
         "
       ></div>
+    {:else}
+      <div class="image-container" style="background-color: #f0f0f0;"></div> <!-- Placeholder for missing image -->
     {/if}
     <div class="content">
       <div class="title">{title}</div>

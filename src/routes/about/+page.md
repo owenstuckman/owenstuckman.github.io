@@ -14,8 +14,8 @@ I am an undergraduate student studying computer science, with a minor in cyberse
   
 My professional interest is currently focused on automation, be it cloud based, or desktop based robotic process automation. I enjoy creating and improving systems so people can spend time on things that matter rather than an inefficiency or manual analog.  
   
-My work experience is through an internship and seasonal employment at Planes, where I mainly worked on RPA. I also Co-Founded and Co-Own a business, Sprklii LLC, where we actively have our product on the app store.  
-  
+I have worked across multiple industries including moving and storage, consumer packaged goods, small business food, hospitality, and more. 
+
 In my free time, I like to run, play spikeball and pickleball, and to work on my personal projects and businesses. And backpack. A lot.
 
 
@@ -45,6 +45,7 @@ TLDR;
 - Python
 - Java
 - JavaScript
+- TypeScript
 - C++
 - PowerFX
 - MD
@@ -57,6 +58,7 @@ TLDR;
 - Expo React Native
 - React
 - mdsvex
+- Svelte
 
 **Tools**
 - Supabase
@@ -89,7 +91,6 @@ TLDR;
 - CSS
 
 **Frameworks & Libraries**
-- Svelte
 - Scrapy
 - TKinter
 - Unity 2D
