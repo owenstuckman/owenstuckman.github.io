@@ -25,7 +25,7 @@ I'm Owen Stuckman, a software engineer passionate about building solutions to sa
 
 ## Work Experience / More Information
 - [GitHub](https://github.com/owenstuckman)
-- [LinkedIn](www.linkedin.com/in/owen-stuckman-b69977235)
+- [LinkedIn](https://www.linkedin.com/in/owen-stuckman-b69977235)
 
 ---
 

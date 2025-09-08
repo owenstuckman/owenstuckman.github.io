@@ -1,8 +1,10 @@
 {
-	"extends": "/.svelte-kit/tsconfig.json",
+	"extends": "./.svelte-kit/tsconfig.json",
 	"include": [
 		"src/**/*.d.ts",
 		"src/**/*.js",
-		"src/**/*.svelte"
-, "src/routes/contact/+page.md", "src/routes/+page.md"	]
+		"src/**/*.svelte", 
+		"src/routes/contact/+page.md", 
+		"src/routes/+page.md"	
+	]
 }
