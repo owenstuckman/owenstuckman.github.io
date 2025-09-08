@@ -9,7 +9,7 @@ import projectsData from "$lib/../jsons/projects.json";
 import ProjectCard from "$lib/components/ProjectCard.svelte";
 </script>
 
-<div class="current-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 800px; margin: 0 auto;">
+<div class="current-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 800px; margin: 0 auto; justify-items: center;">
   {#each currentProjectsData.current_projects as project}
 	<CurrentCard
 	  title={project.title}

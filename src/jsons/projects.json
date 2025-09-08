@@ -3,13 +3,13 @@
     {
       "title": "LUMA",
       "shortDescription": "Custom ATS",
-      "description": "Fully customized fully functional ATS system made for the archimedes society at VT to counter scheduling difficulties and additional requested functionality. Did this completely on my own",
+      "description": "Fully customized fully functional ATS system made for the archimedes society at VT to counter scheduling difficulties and additional requested functionality. Has all the typical features of an ATS alongside a scheduling algorithm built with it to pair up recruiters with applicants. This system is built with cyclic recruiting cycles in mind, not rolling cycles in mind, so it is specialized.",
       "date": "May 2025 - September 2025",
       "type": "",
       "skills": ["Svelte", "TypeScript", "Supabase", "Full Stack"],
       "links": ["https://github.com/ArchimedesVT/luma"],
-      "image": "",
-      "additionalImages": [],
+      "image": "/LUMA_logo.png",
+      "additionalImages": ["/LUMA_sample.png"],
       "size": ""
     },
     {

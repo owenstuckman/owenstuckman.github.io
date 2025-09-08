@@ -1,12 +1,17 @@
-
+<script>
+import currentProjectsData from "$lib/../jsons/current_projects.json";
+import CurrentCard from "$lib/components/CurrentCard.svelte";
+</script>
 
 # Owen Stuckman
+---
 
 
 I'm Owen Stuckman, a software engineer passionate about building solutions to save people time. Here's a high level overview of me:
 
 
 ## Favorite Technologies:
+---
 
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
         <img src="https://storage.googleapis.com/cms-storage-bucket/lockup_flutter_horizontal.c823e53b3a1a7b0d36a9.png" alt="Flutter" />
@@ -18,12 +23,21 @@ I'm Owen Stuckman, a software engineer passionate about building solutions to sa
     </div>
 
 
-## Favorite Projects:
+## Current Projects:
+---
 
-<!-- Add in favorite projects using the componenet-->
+<div class="current-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 800px; margin: 0 auto; justify-items: center;">
+  {#each currentProjectsData.current_projects as project}
+	<CurrentCard
+	  title={project.title}
+	  description={project.description}
+	/>
+  {/each}
+</div>
 
 
 ## Work Experience / More Information
+---
 - [GitHub](https://github.com/owenstuckman)
 - [LinkedIn](https://www.linkedin.com/in/owen-stuckman-b69977235)
 

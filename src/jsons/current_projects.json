@@ -1,16 +1,12 @@
 {
   "current_projects": [
 	{
-	  "title": "Sparkli Beta",
-	  "description": "A personalized date ideas app. Co-Owner and Co-Founder of Sprklii LLC."
-	},
-	{
 	  "title": "Student Health Tracker", 
 	  "description": "Location based data driven application to assist in diagnosing and informing students or those in densely populated areas."
 	},
 	{
-	  "title": "Project Torch",
-	  "description": "Create websites for local businesses pro-bono as a part of the non-profit organization Project Torch."
+	  "title": "LUMA",
+	  "description": "ATS designed for college clubs and design teams."
 	}
   ]
 }
