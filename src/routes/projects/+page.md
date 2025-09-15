@@ -24,31 +24,6 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 ---
 
 
-<!--
-<style>
-	.masonry-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 12px;
-		padding: 12px;
-		grid-auto-flow: dense;
-		grid-auto-rows: min-content;
-	}
-
-	@media (min-width: 768px) {
-		.masonry-grid {
-			grid-template-columns: repeat(3, 1fr);
-		}
-	}
-
-	@media (min-width: 1200px) {
-		.masonry-grid {
-			grid-template-columns: repeat(4, 1fr);
-		}
-	}
-</style>
--->
-
 <div class="masonry-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
 	{#each projectsData.projects as project}
 		<ProjectCard
@@ -58,7 +33,6 @@ import ProjectCard from "$lib/components/ProjectCard.svelte";
 			shortDescription={project.shortDescription}
 			techStack={project.techStack}
 			link={project.link}
-			size={project.size}
 			skills={project.skills}
 			additionalImages={project.additionalImages}
 			links={project.links}

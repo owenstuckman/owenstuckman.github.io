@@ -9,20 +9,18 @@
       "skills": ["Svelte", "TypeScript", "Supabase", "Full Stack"],
       "links": ["https://github.com/ArchimedesVT/luma"],
       "image": "/LUMA_logo.png",
-      "additionalImages": ["/LUMA_sample.png"],
-      "size": ""
+      "additionalImages": []
     },
     {
       "title": "Customer Onboarding App",
-      "shortDescription": "",
-      "description": "",
-      "date": "",
-      "type": "",
-      "skills": [],
-      "links": [""],
+      "shortDescription": "Automated Form Application",
+      "description": "React application which served as a automated and digital way to onboard new clients at planes moving and storage. Express backend which was hosted on Windows Server 2016 in order to safely store the data and avoid common attacks like sql injection. ",
+      "date": "April 2025",
+      "type": "Professional",
+      "skills": ["React", "JavaScript", "Express", "Node.js"],
+      "links": ["Private Repo"],
       "image": "",
-      "additionalImages": [],
-      "size": ""
+      "additionalImages": []
     },
     {
       "title": "Supabase-Flutter Quickstart",
@@ -33,8 +31,7 @@
       "skills": ["Flutter", "Supabase", "Dart", "Edge Functions", "Authentication", "Serverless"],
       "links": ["https://github.com/owenstuckman/Flutter-Supabase-Quickstart"],
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHfvJQdTD8IFAUS4jNkFrVYGai1NknAbHAMA&s",
-      "additionalImages": ["/quickstart.png"],
-      "size": "small"
+      "additionalImages": []
     },
     {
       "title": "Portfolio Website Revamp",
@@ -45,8 +42,7 @@
       "skills": ["SvelteKit", "Markdown", "TailwindCSS", "TypeScript", "svmdex"],
       "links": ["https://owenstuckman.co"],
       "image": "/os-logo.png",
-      "additionalImages": [],
-      "size": "small"
+      "additionalImages": []
     },
     {
       "title": "SteerClear",
@@ -57,8 +53,7 @@
       "skills": ["Expo", "React Native", "Supabase", "nativewind", "OpenAI", "Google-Places API", "MapBox API", "Serverless"],
       "links": ["https://github.com/owenstuckman/SteerClear", "https://www.youtube.com/watch?v=P3OlZBgFtGw", "https://devpost.com/software/safewalk-gh3dk8?_gl=1*1qp7krw*_gcl_au*NDkxMzY2NjY0LjE3Mzg1MDM1NDc.*_ga*OTgzODc4MjM5LjE3Mzg1MDM1NDc.*_ga_0YHJK3Y10M*MTczOTc0MzU3Mi4xOC4xLjE3Mzk3NDM2ODIuMC4wLjA."],
       "image": "/steercleer.png",
-      "additionalImages": ["hackvwin.png"],
-      "size": "small"
+      "additionalImages": ["hackvwin.png"]
     },
     {
       "title": "Voicemail transcription project",
@@ -69,8 +64,7 @@
       "skills": [],
       "links": [""],
       "image": "",
-      "additionalImages": [],
-      "size": ""
+      "additionalImages": []
     },
     {
       "title": "Apple Canada Remittance",

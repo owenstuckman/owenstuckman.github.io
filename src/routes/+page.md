@@ -11,6 +11,14 @@ I'm Owen Stuckman, a software engineer passionate about building solutions to sa
 
 
 ## Favorite Technologies:
+
+<!-- 
+Need to update to be icons
+- [ ] make svelte icon component
+- [ ] get all icon images
+- [ ] pass in, use a seperate json file to store the links, just dynamically loop through all of them
+
+-->
 ---
 
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px;">
