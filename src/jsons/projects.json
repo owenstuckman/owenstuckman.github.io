@@ -19,7 +19,7 @@
       "type": "Professional",
       "skills": ["React", "JavaScript", "Express", "Node.js"],
       "links": ["Private Repo"],
-      "image": "",
+      "image": "https://teamplanes.com/wp-content/uploads/2022/09/planes-logo.png",
       "additionalImages": []
     },
     {
@@ -56,27 +56,26 @@
       "additionalImages": ["hackvwin.png"]
     },
     {
-      "title": "Voicemail transcription project",
-      "shortDescription": "",
-      "description": "",
-      "date": "",
+      "title": "Automated Voicemail Transcription",
+      "shortDescription": "Automated flow to transcribe voicemails.",
+      "description": "Created a full solution in Azure to take incoming voicemails from planes and process them all into text so it could be utilized for other projects internally in the organization. Took the input data and output the raw text to dataverse by utilizing Azure Speech Services.",
+      "date": "February 2025",
       "type": "",
-      "skills": [],
-      "links": [""],
-      "image": "",
+      "skills": ["Azure", "Azure Speech Service", "Python"],
+      "links": ["Private Repo"],
+      "image": "https://teamplanes.com/wp-content/uploads/2022/09/planes-logo.png",
       "additionalImages": []
     },
     {
       "title": "Apple Canada Remittance",
       "shortDescription": "Revamp existing apple remittance process for Planes to operate with Apple Canada.",
-      "description": "",
+      "description": "Full scale automation process focused on parsing all Apple Canada remittance information to avoid accounting from having to manually read all of the adjustments. Handled automatically receiving the data to an inbox, parsing critical information, and then adding it to central data stores.",
       "date": "January 2025",
       "type": "",
       "skills": ["Power Automate"],
-      "links": [""],
+      "links": ["Private Repo"],
       "image": "https://news.macgasm.net/wp-content/uploads/2011/12/canadaApple.png",
-      "additionalImages": [],
-      "size": "small"
+      "additionalImages": []
     },
     {
       "title": "TrashCash",
