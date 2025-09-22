@@ -12,6 +12,17 @@
       "additionalImages": []
     },
     {
+      "title": "Sparkli Dev App",
+      "shortDescription": "Internal dev app",
+      "description": "Simple Svelte application to enable internal edits to our database in a simpler frontend. Made it much quicker to edit and creat new date ideas for our database, alongside uploading the proper image and utilizing proper image compression all in one go. Remove the need to manually process or batch process every picture, and just click a few buttons and input some info.",
+      "date": "Mayl 2025",
+      "type": "Professional",
+      "skills": ["Svelte", "TypeScript", "Supabase"],
+      "links": ["Private Repo"],
+      "image": "https://media.licdn.com/dms/image/v2/D560BAQFkNhpOqP8khg/company-logo_200_200/company-logo_200_200/0/1733370242815?e=2147483647&v=beta&t=YtqGDRgGC-QKG6fTReD2g0_fBXLmyuoML5CaSDc2f8c",
+      "additionalImages": []
+    },
+    {
       "title": "Customer Onboarding App",
       "shortDescription": "Automated Form Application",
       "description": "React application which served as a automated and digital way to onboard new clients at planes moving and storage. Express backend which was hosted on Windows Server 2016 in order to safely store the data and avoid common attacks like sql injection. ",
