@@ -16,7 +16,7 @@ Overall really like markdown for any of my notetaking or long term information s
 
 
 ```mermaid
-FLOWCHART TD
-  A(HTML/CSS) -> B(MD)
-  B -> C(MDSVEX)
+flowchart TD
+  A(HTML/CSS) --> B(MD)
+  B --> C(MDSVEX)
 ```
