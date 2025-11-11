@@ -1,6 +1,61 @@
 {
   "projects": [
     {
+      "title": "Archimedes Snipe Bot",
+      "shortDescription": "Discord Bot for 'Sniping'",
+      "description": "Built a discord bot for 'sniping', where members take pictures of each other without the other noticing, which is used as a general team building activity for the semester. The bot notes the quantity of snipes and provides information like a leaderboard and rules. This as built specifically for Archimedes, but could be applied to any club or community in discord since it was generalized. Simply target a channel, and then it can calculate the totals as needed. This also allows it to be in place, or not be used before, as it does a running calculation and then caches it on each bot restart. This provides a bit of flexibility, and since not a ton of data is being cached, it works fine in comparison to using a database, which would require 100% uptime.",
+      "date": "November 2025",
+      "type": "",
+      "skills": ["JavaScript", "Cybrancee", "Discord.js"],
+      "links": ["https://github.com/ArchimedesVT/archimedes-snipe-bot"],
+      "image": "https://www.ravbug.com/tutorials/discordjs/discordjs.png",
+      "additionalImages": []
+    },
+    {
+      "title": "HomeLab v1",
+      "shortDescription": "Beginning HomeLab",
+      "description": "Grabbed an old laptop I was not using and converted it to run an Ubuntu server. Then setup ssh and some basic security, and now do devlopment remotely on it using vscode. I also experimented with a lot of self hosting, namely running my own n8n instance and my own supabase instance, alongside setting up some quality of life things like webmin to stay up to date on the server status. Mainly running some containers on it, but also playing around with things like xRDP to try out development setups on the machine inside of containers. ",
+      "date": "October 2025",
+      "type": "",
+      "skills": ["Ubuntu", "Supabase", "n8n", "self-host"],
+      "links": ["https://supabase.com/docs/guides/self-hosting", "https://docs.n8n.io/hosting/"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
+      "title": "Archimedes Website",
+      "shortDescription": "Static Website Project",
+      "description": "Built out the static website for the Archimedes Society at Virginia Tech, converting it from SquareSpace to be a fully custom website on its own. Relatively straightforward, and set up deployments to be through Vercel.",
+      "date": "October 2025",
+      "type": "",
+      "skills": ["Svelte", "TypeScript", "Vercel"],
+      "links": ["https://github.com/ArchimedesVT/ArchimedesWebsite", "https://archimedesvt.org/"],
+      "image": "https://archimedesvt.org/logoheader.png",
+      "additionalImages": []
+    },
+    {
+      "title": "Second Student",
+      "shortDescription": "VTHacks13: Canvas LMS Notes",
+      "description": "The concept behind this project was to build a full fledged knowledge management system which could accept external integrations such as Canvas LMS in order to integrate notes and task management all into one knowledge base, instead of having to go to multiple platforms. The issue we as students has was the formatting for certains sites like Canvas were not great, and by getting all of the information we interact with on a daily basis into one location. We got a basic version of this working at the hackathon, particularly integrating with Canvas itself, but decided to not continue due to just how complicated making an original note taking application is, and how much time it would take to even get to an MVP.",
+      "date": "September 2025",
+      "type": "",
+      "skills": ["Flutter", "Dart", "Supabase", "Full Stack", "AppFlowy", "MD", "RTF", "Gemini"],
+      "links": ["https://github.com/owenstuckman/SecondStudentVTHACKS13"],
+      "image": "/SecondStudent.png",
+      "additionalImages": []
+    },
+    {
+      "title": "HTMLToMD",
+      "shortDescription": "Beginner Scala Project",
+      "description": "Built out a Scala backend to begin working with Scala, and to be work a bit with a concept for VTHacks, which involved converting all of the files we can into native markdown, which would allow tools like obsidian or other markdown knowledge management systems beyond the ones we created to be used. Was overall successful, however did not use for VTHacks13. ",
+      "date": "August 2025",
+      "type": "",
+      "skills": ["Scala", "Backend"],
+      "links": ["https://github.com/owenstuckman/HtmlToMD"],
+      "image": "https://avatars.githubusercontent.com/u/57059?s=280&v=4",
+      "additionalImages": []
+    },
+    {
       "title": "LUMA",
       "shortDescription": "Custom ATS",
       "description": "Fully customized fully functional ATS system made for the archimedes society at VT to counter scheduling difficulties and additional requested functionality. Has all the typical features of an ATS alongside a scheduling algorithm built with it to pair up recruiters with applicants. This system is built with cyclic recruiting cycles in mind, not rolling cycles in mind, so it is specialized.",
@@ -15,7 +70,7 @@
       "title": "Sparkli Dev App",
       "shortDescription": "Internal dev app",
       "description": "Simple Svelte application to enable internal edits to our database in a simpler frontend. Made it much quicker to edit and creat new date ideas for our database, alongside uploading the proper image and utilizing proper image compression all in one go. Remove the need to manually process or batch process every picture, and just click a few buttons and input some info.",
-      "date": "Mayl 2025",
+      "date": "May 2025",
       "type": "Professional",
       "skills": ["Svelte", "TypeScript", "Supabase"],
       "links": ["Private Repo"],
