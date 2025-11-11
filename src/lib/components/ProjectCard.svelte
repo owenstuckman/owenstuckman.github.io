@@ -27,6 +27,77 @@
 
   </script>
   
+  
+  <div 
+    class="card" 
+    on:click={toggleExpand}
+  >
+    {#if image}
+      <div 
+        class="image-container" 
+        style="
+          background-image: url('{image}');
+        "
+      ></div>
+    {:else}
+      <div class="image-container" style="background-color: #f0f0f0;"></div> <!-- Placeholder for missing image -->
+    {/if}
+    <div class="content">
+      <div class="title">{title}</div>
+      <div class="short-description">{shortDescription}</div>
+      <div class="short-description">{date}</div>
+      {#if !image}
+        <div class="description-preview">{description}...</div>
+      {/if}
+    </div>
+  </div>
+  
+  {#if expanded}
+    <div class="modal-overlay" on:click={toggleExpand} transition:fade></div>
+    <div class="modal" transition:scale>
+      <span class="close-btn" on:click={toggleExpand}>✖</span>
+      <h2>{title}</h2>
+      {#if date}
+        <div class="date">{date}</div>
+      {/if}
+
+      {#if skills && skills.length > 0}
+        <div class="skills-container">
+          {#each skills as skill}
+            <span class="skill-tag">{skill}</span>
+          {/each}
+        </div>
+      {/if}
+
+      <p>{description}</p>
+  
+      {#if techStack.length > 0}
+        <div class="tech-icons">
+          {#each techStack as tech}
+            <img src={tech} alt="Tech Icon" />
+          {/each}
+        </div>
+      {/if}
+  
+      <div class="links-container">
+        {#if link}
+          <a href={link} target="_blank">View Project</a>
+        {/if}
+        {#each links as additionalLink}
+          <a href={additionalLink} target="_blank">{additionalLink}</a>
+        {/each}
+      </div>
+
+      {#if additionalImages && additionalImages.length > 0}
+        <div class="additional-images">
+          {#each additionalImages as imgSrc}
+            <img src={imgSrc} alt="Additional project image" />
+          {/each}
+        </div>
+      {/if}
+    </div>
+  {/if}
+
   <style>
     .card {
       position: relative;
@@ -64,7 +135,7 @@
     }
 
     .title {
-      font-size: 1.7rem; /* Increased from 1.5rem */
+      font-size: 1.6rem; 
       font-weight: bold;
       color: #1f2937;
       margin-bottom: 10px; /* Increased from 8px */
@@ -181,72 +252,3 @@
       margin-bottom: 18px; /* Increased from 16px */
     }
   </style>
-  
-  <div 
-    class="card" 
-    on:click={toggleExpand}
-  >
-    {#if image}
-      <div 
-        class="image-container" 
-        style="
-          background-image: url('{image}');
-        "
-      ></div>
-    {:else}
-      <div class="image-container" style="background-color: #f0f0f0;"></div> <!-- Placeholder for missing image -->
-    {/if}
-    <div class="content">
-      <div class="title">{title}</div>
-      <div class="short-description">{shortDescription}</div>
-      {#if !image}
-        <div class="description-preview">{description}...</div>
-      {/if}
-    </div>
-  </div>
-  
-  {#if expanded}
-    <div class="modal-overlay" on:click={toggleExpand} transition:fade></div>
-    <div class="modal" transition:scale>
-      <span class="close-btn" on:click={toggleExpand}>✖</span>
-      <h2>{title}</h2>
-      {#if date}
-        <div class="date">{date}</div>
-      {/if}
-
-      {#if skills && skills.length > 0}
-        <div class="skills-container">
-          {#each skills as skill}
-            <span class="skill-tag">{skill}</span>
-          {/each}
-        </div>
-      {/if}
-
-      <p>{description}</p>
-  
-      {#if techStack.length > 0}
-        <div class="tech-icons">
-          {#each techStack as tech}
-            <img src={tech} alt="Tech Icon" />
-          {/each}
-        </div>
-      {/if}
-  
-      <div class="links-container">
-        {#if link}
-          <a href={link} target="_blank">View Project</a>
-        {/if}
-        {#each links as additionalLink}
-          <a href={additionalLink} target="_blank">{additionalLink}</a>
-        {/each}
-      </div>
-
-      {#if additionalImages && additionalImages.length > 0}
-        <div class="additional-images">
-          {#each additionalImages as imgSrc}
-            <img src={imgSrc} alt="Additional project image" />
-          {/each}
-        </div>
-      {/if}
-    </div>
-  {/if}
