@@ -1,23 +1,21 @@
 <script>
-    import { onMount } from "svelte";
     import { fade, scale } from "svelte/transition";
-  
+    import { createEventDispatcher } from 'svelte';
+
     export let image = "";
     export let title = "";
     export let description = "";
-    export let shortDescription = ""; // Added shortDescription
+    export let shortDescription = "";
     export let techStack = [];
     export let link = "";
-    export let links = []; // Array of additional links
+    export let links = [];
     export let expanded = false;
-    export let skills = []; // Add skills prop
-    export let additionalImages = []; // Array of additional images
-    export let date = ""; // Add date prop
-    
-    // Dispatch event when expanded changes so parent can handle closing others
-    import { createEventDispatcher } from 'svelte';
+    export let skills = [];
+    export let additionalImages = [];
+    export let date = "";
+
     const dispatch = createEventDispatcher();
-  
+
     function toggleExpand() {
       expanded = !expanded;
       if (expanded) {
@@ -25,6 +23,19 @@
       }
     }
 
+    function extractLinkName(url) {
+      try {
+        const hostname = new URL(url).hostname.replace('www.', '');
+        if (hostname.includes('github.com')) return 'GitHub';
+        if (hostname.includes('devpost.com')) return 'Devpost';
+        if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) return 'YouTube';
+        if (hostname.includes('linkedin.com')) return 'LinkedIn';
+        if (hostname.includes('figma.com')) return 'Figma';
+        return hostname.split('.')[0].charAt(0).toUpperCase() + hostname.split('.')[0].slice(1);
+      } catch {
+        return 'Link';
+      }
+    }
   </script>
   
   
@@ -33,14 +44,14 @@
     on:click={toggleExpand}
   >
     {#if image}
-      <div 
-        class="image-container" 
-        style="
-          background-image: url('{image}');
-        "
+      <div
+        class="image-container"
+        style="background-image: url('{image}');"
       ></div>
     {:else}
-      <div class="image-container" style="background-color: #f0f0f0;"></div> <!-- Placeholder for missing image -->
+      <div class="image-container image-placeholder">
+        <span class="placeholder-icon">📁</span>
+      </div>
     {/if}
     <div class="content">
       <div class="title">{title}</div>
@@ -81,10 +92,10 @@
   
       <div class="links-container">
         {#if link}
-          <a href={link} target="_blank">View Project</a>
+          <a href={link} target="_blank" class="link-pill">View Project</a>
         {/if}
         {#each links as additionalLink}
-          <a href={additionalLink} target="_blank">{additionalLink}</a>
+          <a href={additionalLink} target="_blank" class="link-pill">{extractLinkName(additionalLink)}</a>
         {/each}
       </div>
 
@@ -118,16 +129,34 @@
   
     .image-container {
       width: 100%;
-      height: 200px; 
-      background-size: contain; 
+      height: 200px;
+      background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       border-radius: 14px 14px 0 0;
       filter: grayscale(100%);
+      transition: filter 0.2s ease-in-out;
+    }
+
+    .image-placeholder {
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      filter: none;
+    }
+
+    .placeholder-icon {
+      font-size: 2.5rem;
+      opacity: 0.4;
     }
 
     .card:hover .image-container {
       filter: grayscale(0%);
+    }
+
+    .card:hover .image-placeholder {
+      filter: none;
     }
   
     .content {
@@ -206,14 +235,27 @@
     }
 
     .links-container {
-      margin-top: 24px; /* Increased from 20px */
+      margin-top: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
-    .links-container a {
-      display: block;
-      color: cyan;
-      margin-bottom: 10px; /* Increased from 8px */
-      font-size: 1.15rem; /* Added larger font size */
+    .link-pill {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.1);
+      color: #A8DAE5;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s ease-in-out;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .link-pill:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
     }
 
     .skills-container {

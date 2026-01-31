@@ -3,7 +3,7 @@
     {
       "title": "Archimedes Snipe Bot",
       "shortDescription": "Discord Bot for 'Sniping'",
-      "description": "Built a discord bot for 'sniping', where members take pictures of each other without the other noticing, which is used as a general team building activity for the semester. The bot notes the quantity of snipes and provides information like a leaderboard and rules. This as built specifically for Archimedes, but could be applied to any club or community in discord since it was generalized. Simply target a channel, and then it can calculate the totals as needed. This also allows it to be in place, or not be used before, as it does a running calculation and then caches it on each bot restart. This provides a bit of flexibility, and since not a ton of data is being cached, it works fine in comparison to using a database, which would require 100% uptime.",
+      "description": "Built a discord bot for 'sniping', where members take pictures of each other without the other noticing, which is used as a general team building activity for the semester. The bot notes the quantity of snipes and provides information like a leaderboard and rules. This as built specifically for Archimedes, but could be applied to any club or community in discord since it was generalized. Simply target a channel, and then it can calculate the totals as needed. This also allows it to be in place, or not be used before, as it does a running calculation and then caches it on each bot restart. This provides a bit of flexibility, and since not a ton of data is being cached, it works fine in comparison to using a database, which would require 100% uptime. I maintain the project and deal with any new features or issues as they arrive",
       "date": "November 2025",
       "type": "",
       "skills": ["JavaScript", "Cybrancee", "Discord.js"],
@@ -13,8 +13,8 @@
     },
     {
       "title": "HomeLab v1",
-      "shortDescription": "Beginning HomeLab",
-      "description": "Grabbed an old laptop I was not using and converted it to run an Ubuntu server. Then setup ssh and some basic security, and now do devlopment remotely on it using vscode. I also experimented with a lot of self hosting, namely running my own n8n instance and my own supabase instance, alongside setting up some quality of life things like webmin to stay up to date on the server status. Mainly running some containers on it, but also playing around with things like xRDP to try out development setups on the machine inside of containers. ",
+      "shortDescription": "Started a HomeLab!",
+      "description": "Grabbed an old laptop I was not using and converted it to run an Ubuntu server. Then setup ssh and some basic security, and now do devlopment remotely on it using vscode. I also experimented with a lot of self hosting, namely running my own n8n instance and my own supabase instance, alongside setting up some quality of life things like webmin to stay up to date on the server status. Mainly running some containers on it, but also playing around with things like xRDP to try out development setups on the machine inside of containers. I currently mainly use it as a source of compute, where I can do things like train models for my side projects without bogging my everyday laptop down.",
       "date": "October 2025",
       "type": "",
       "skills": ["Ubuntu", "Supabase", "n8n", "self-host"],
@@ -25,10 +25,10 @@
     {
       "title": "Archimedes Website",
       "shortDescription": "Static Website Project",
-      "description": "Built out the static website for the Archimedes Society at Virginia Tech, converting it from SquareSpace to be a fully custom website on its own. Relatively straightforward, and set up deployments to be through Vercel.",
+      "description": "Built out the static website for the Archimedes Society at Virginia Tech, converting it from SquareSpace to be a fully custom website on its own. Relatively straightforward, and set up deployments to be through Vercel. Now continuously adding new features into it. To hit the full functionality that was originally on SquareSpace, I used things like Email.js in order to add in features like a contact form. Overall is a relatively simple site in order to get better engagement and publicity within the community and to get better outreach with our sponsors and partners.",
       "date": "October 2025",
       "type": "",
-      "skills": ["Svelte", "TypeScript", "Vercel"],
+      "skills": ["Svelte", "TypeScript", "Vercel", "Email.js"],
       "links": ["https://github.com/ArchimedesVT/ArchimedesWebsite", "https://archimedesvt.org/"],
       "image": "https://archimedesvt.org/logoheader.png",
       "additionalImages": []

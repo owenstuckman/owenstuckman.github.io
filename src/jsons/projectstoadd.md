@@ -6,3 +6,4 @@
 - [ ] orbit
 - [ ] project for Nate
 - [ ] hackviolet
+- [ ] add pictures to all of them 
