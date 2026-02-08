@@ -67,45 +67,60 @@
     <div class="modal-overlay" on:click={toggleExpand} transition:fade></div>
     <div class="modal" transition:scale>
       <span class="close-btn" on:click={toggleExpand}>✖</span>
-      <h2>{title}</h2>
-      {#if date}
-        <div class="date">{date}</div>
-      {/if}
 
-      {#if skills && skills.length > 0}
-        <div class="skills-container">
-          {#each skills as skill}
-            <span class="skill-tag">{skill}</span>
-          {/each}
-        </div>
-      {/if}
-
-      <p>{description}</p>
-  
-      {#if techStack.length > 0}
-        <div class="tech-icons">
-          {#each techStack as tech}
-            <img src={tech} alt="Tech Icon" />
-          {/each}
-        </div>
-      {/if}
-  
-      <div class="links-container">
-        {#if link}
-          <a href={link} target="_blank" class="link-pill">View Project</a>
+      <div class="modal-header">
+        {#if image}
+          <div class="modal-image">
+            <img src={image} alt={title} />
+          </div>
         {/if}
-        {#each links as additionalLink}
-          <a href={additionalLink} target="_blank" class="link-pill">{extractLinkName(additionalLink)}</a>
-        {/each}
+        <div class="modal-title-section">
+          <h2>{title}</h2>
+          {#if date}
+            <div class="date">{date}</div>
+          {/if}
+          {#if skills && skills.length > 0}
+            <div class="skills-container">
+              {#each skills as skill}
+                <span class="skill-tag">{skill}</span>
+              {/each}
+            </div>
+          {/if}
+        </div>
       </div>
 
-      {#if additionalImages && additionalImages.length > 0}
-        <div class="additional-images">
-          {#each additionalImages as imgSrc}
-            <img src={imgSrc} alt="Additional project image" />
+      <div class="modal-body">
+        <p>{description}</p>
+
+        {#if techStack.length > 0}
+          <div class="tech-icons">
+            {#each techStack as tech}
+              <img src={tech} alt="Tech Icon" />
+            {/each}
+          </div>
+        {/if}
+
+        <div class="links-container">
+          {#if link}
+            <a href={link} target="_blank" class="link-pill">View Project</a>
+          {/if}
+          {#each links as additionalLink}
+            {#if additionalLink && !additionalLink.includes('Private') && !additionalLink.includes('Archived') && !additionalLink.includes('Contact') && !additionalLink.includes('Lost') && additionalLink.startsWith('http')}
+              <a href={additionalLink} target="_blank" class="link-pill">{extractLinkName(additionalLink)}</a>
+            {:else if additionalLink && !additionalLink.startsWith('http')}
+              <span class="link-pill link-disabled">{additionalLink}</span>
+            {/if}
           {/each}
         </div>
-      {/if}
+
+        {#if additionalImages && additionalImages.length > 0}
+          <div class="additional-images">
+            {#each additionalImages as imgSrc}
+              <img src={imgSrc} alt="Additional project image" />
+            {/each}
+          </div>
+        {/if}
+      </div>
     </div>
   {/if}
 
@@ -193,16 +208,84 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 95%;
-      max-width: 1100px; /* Increased from 1000px */
+      max-width: 900px;
       background: #121212;
-      padding: 45px; /* Increased from 40px */
+      padding: 40px;
       border-radius: 14px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.5);
       color: white;
       max-height: 90vh;
       overflow-y: auto;
       z-index: 1000;
-      font-size: 1.15rem; /* Added larger base font size */
+      font-size: 1.1rem;
+    }
+
+    .modal-header {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 24px;
+      align-items: flex-start;
+    }
+
+    .modal-image {
+      flex-shrink: 0;
+      width: 160px;
+      height: 160px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .modal-title-section {
+      flex: 1;
+    }
+
+    .modal-title-section h2 {
+      margin: 0 0 8px 0;
+      font-size: 1.8rem;
+      line-height: 1.2;
+    }
+
+    .modal-body p {
+      line-height: 1.7;
+      color: #e0e0e0;
+      margin-bottom: 20px;
+    }
+
+    .link-disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    .link-disabled:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #A8DAE5;
+    }
+
+    @media (max-width: 600px) {
+      .modal-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .modal-image {
+        width: 120px;
+        height: 120px;
+      }
+
+      .skills-container {
+        justify-content: center;
+      }
     }
 
     .modal-overlay {

@@ -14,18 +14,18 @@
     {
       "title": "HomeLab v1",
       "shortDescription": "Started a HomeLab!",
-      "description": "Grabbed an old laptop I was not using and converted it to run an Ubuntu server. Then setup ssh and some basic security, and now do devlopment remotely on it using vscode. I also experimented with a lot of self hosting, namely running my own n8n instance and my own supabase instance, alongside setting up some quality of life things like webmin to stay up to date on the server status. Mainly running some containers on it, but also playing around with things like xRDP to try out development setups on the machine inside of containers. I currently mainly use it as a source of compute, where I can do things like train models for my side projects without bogging my everyday laptop down.",
+      "description": "Grabbed an old laptop I was not using and converted it to run an Ubuntu server. Then setup SSH and some basic security, and now do development remotely on it using VS Code. I also experimented with a lot of self-hosting, namely running my own n8n instance and my own Supabase instance, alongside setting up some quality of life things like Webmin to stay up to date on the server status. Mainly running some containers on it, but also playing around with things like xRDP to try out development setups on the machine inside of containers. I currently mainly use it as a source of compute, where I can do things like train models for my side projects without bogging my everyday laptop down.",
       "date": "October 2025",
       "type": "",
       "skills": ["Ubuntu", "Supabase", "n8n", "self-host"],
       "links": ["https://supabase.com/docs/guides/self-hosting", "https://docs.n8n.io/hosting/"],
-      "image": "",
+      "image": "https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png",
       "additionalImages": []
     },
     {
       "title": "Archimedes Website",
       "shortDescription": "Static Website Project",
-      "description": "Built out the static website for the Archimedes Society at Virginia Tech, converting it from SquareSpace to be a fully custom website on its own. Relatively straightforward, and set up deployments to be through Vercel. Now continuously adding new features into it. To hit the full functionality that was originally on SquareSpace, I used things like Email.js in order to add in features like a contact form. Overall is a relatively simple site in order to get better engagement and publicity within the community and to get better outreach with our sponsors and partners.",
+      "description": "Built out the static website for the Archimedes Society at Virginia Tech, converting it from Squarespace to be a fully custom website on its own. Relatively straightforward, and set up deployments to be through Vercel. Now continuously adding new features into it. To hit the full functionality that was originally on Squarespace, I used things like EmailJS in order to add in features like a contact form. Overall is a relatively simple site in order to get better engagement and publicity within the community and to get better outreach with our sponsors and partners.",
       "date": "October 2025",
       "type": "",
       "skills": ["Svelte", "TypeScript", "Vercel", "Email.js"],
@@ -36,7 +36,7 @@
     {
       "title": "Second Student",
       "shortDescription": "VTHacks13: Canvas LMS Notes",
-      "description": "The concept behind this project was to build a full fledged knowledge management system which could accept external integrations such as Canvas LMS in order to integrate notes and task management all into one knowledge base, instead of having to go to multiple platforms. The issue we as students has was the formatting for certains sites like Canvas were not great, and by getting all of the information we interact with on a daily basis into one location. We got a basic version of this working at the hackathon, particularly integrating with Canvas itself, but decided to not continue due to just how complicated making an original note taking application is, and how much time it would take to even get to an MVP.",
+      "description": "The concept behind this project was to build a full-fledged knowledge management system which could accept external integrations such as Canvas LMS in order to integrate notes and task management all into one knowledge base, instead of having to go to multiple platforms. The issue we as students had was the formatting for certain sites like Canvas were not great, and by getting all of the information we interact with on a daily basis into one location, we could improve our workflow. We got a basic version of this working at the hackathon, particularly integrating with Canvas itself, but decided to not continue due to just how complicated making an original note-taking application is, and how much time it would take to even get to an MVP.",
       "date": "September 2025",
       "type": "",
       "skills": ["Flutter", "Dart", "Supabase", "Full Stack", "AppFlowy", "MD", "RTF", "Gemini"],
@@ -47,7 +47,7 @@
     {
       "title": "HTMLToMD",
       "shortDescription": "Beginner Scala Project",
-      "description": "Built out a Scala backend to begin working with Scala, and to be work a bit with a concept for VTHacks, which involved converting all of the files we can into native markdown, which would allow tools like obsidian or other markdown knowledge management systems beyond the ones we created to be used. Was overall successful, however did not use for VTHacks13. ",
+      "description": "Built out a Scala backend to begin working with Scala, and to work a bit with a concept for VTHacks, which involved converting all of the files we can into native Markdown, which would allow tools like Obsidian or other Markdown knowledge management systems beyond the ones we created to be used. Was overall successful, however did not use for VTHacks13.",
       "date": "August 2025",
       "type": "",
       "skills": ["Scala", "Backend"],
@@ -80,7 +80,7 @@
     {
       "title": "Customer Onboarding App",
       "shortDescription": "Automated Form Application",
-      "description": "React application which served as a automated and digital way to onboard new clients at planes moving and storage. Express backend which was hosted on Windows Server 2016 in order to safely store the data and avoid common attacks like sql injection. ",
+      "description": "React application which served as an automated and digital way to onboard new clients at Planes Moving and Storage. Express backend which was hosted on Windows Server 2016 in order to safely store the data and avoid common attacks like SQL injection.",
       "date": "April 2025",
       "type": "Professional",
       "skills": ["React", "JavaScript", "Express", "Node.js"],
@@ -91,7 +91,7 @@
     {
       "title": "Supabase-Flutter Quickstart",
       "shortDescription": "Creating a generalized quickstart for Supabase authentication, edge functions, and Flutter.",
-      "description": "Developed a comprehensive quickstart guide for integrating Supabase authentication and edge functions with Flutter applications. This project aims to streamline the setup process for developers looking to utilize Supabase in their Flutter projects. Particulary, I made it so for my personal projects like Hackathons have a easy starting point.",
+      "description": "Developed a comprehensive quickstart guide for integrating Supabase authentication and edge functions with Flutter applications. This project aims to streamline the setup process for developers looking to utilize Supabase in their Flutter projects. Particularly, I made it so my personal projects like hackathons have an easy starting point.",
       "date": "March 2025",
       "type": "Personal Project",
       "skills": ["Flutter", "Supabase", "Dart", "Edge Functions", "Authentication", "Serverless"],
@@ -112,7 +112,7 @@
     },
     {
       "title": "SteerClear",
-      "shortDescription": "Walking at night is dangerous - why not have waze for walking, using croudsourced reports?",
+      "shortDescription": "Walking at night is dangerous - why not have Waze for walking, using crowdsourced reports?",
       "description": "Won 'Best Startup Hack' at Hackviolet. Created SteerClear to address the safety concerns of walking at night, particularly for college students aged 18-24. The app uses crowdsourced data to identify and recommend the safest walking routes, similar to how Waze works for driving. Features include an interactive map with community threat/safety markers, smart route planning, panic button, heat map of reported incidents, group walk system, college selection, and alternate transportation recommendations. Built with Expo React Native and styled with NativeWind, using Supabase for serverless backend and real-time database updates. Integrated MapBox for route visualization, Google Places API for location data, and OpenAI for dynamic threat analysis. The app aims to give everyone peace of mind while walking alone, especially in winter months when it gets dark earlier.",
       "date": "February 2025",
       "type": "Hackathon Project",
@@ -124,7 +124,7 @@
     {
       "title": "Automated Voicemail Transcription",
       "shortDescription": "Automated flow to transcribe voicemails.",
-      "description": "Created a full solution in Azure to take incoming voicemails from planes and process them all into text so it could be utilized for other projects internally in the organization. Took the input data and output the raw text to dataverse by utilizing Azure Speech Services.",
+      "description": "Created a full solution in Azure to take incoming voicemails from Planes and process them all into text so it could be utilized for other projects internally in the organization. Took the input data and output the raw text to Dataverse by utilizing Azure Speech Services.",
       "date": "February 2025",
       "type": "",
       "skills": ["Azure", "Azure Speech Service", "Python"],
@@ -157,20 +157,20 @@
     },
     {
       "title": "RoomReady",
-      "shortDescription": "Flutter Application to help travellers get connected with locals. Locals eventually are the travellers, and this exchange of information is important in order for both parties to have the best travel experiences.This app connects them, helps plans trips, alongside other features powered by the collection of data from conversations. Built with flutter, supabase, and amazon EC2.",
-      "description": "",
-      "date": "October 2025",
-      "type": "",
+      "shortDescription": "VTHacks12: Connect travelers with locals.",
+      "description": "Flutter application to help travelers get connected with locals. Locals eventually are the travelers, and this exchange of information is important in order for both parties to have the best travel experiences. This app connects them, helps plan trips, alongside other features powered by the collection of data from conversations. Built with Flutter, Supabase, and Amazon EC2.",
+      "date": "October 2024",
+      "type": "Hackathon Project",
       "skills": ["Flutter", "Dart", "Supabase", "EC2"],
-      "links": [""],
-      "image": "",
+      "links": ["https://devpost.com/software/roomready-c2m1gq"],
+      "image": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/074/131/datas/gallery.jpg",
       "additionalImages": [],
       "size": "small"
     },
     {
       "title": "Inflectors Project",
-      "shortDescription": "Participated in CIA pilot project which involved series of weekly cryptograhy puzzles.",
-      "description": "Completed a total of 10 puzzles, which were a series of weekly cryptography puzzles. All were in depth and challenging, each one taking multiple hours to complete. Finsihed within the top ten of the leaderboard, in which points were earned by completeing the puzzles and being the quickest to complete them. Learned many cryptography tactics and concepts.",
+      "shortDescription": "Participated in CIA pilot project which involved a series of weekly cryptography puzzles.",
+      "description": "Completed a total of 10 puzzles, which were a series of weekly cryptography puzzles. All were in-depth and challenging, each one taking multiple hours to complete. Finished within the top ten of the leaderboard, in which points were earned by completing the puzzles and being the quickest to complete them. Learned many cryptography tactics and concepts.",
       "date": "October 2024",
       "type": "Personal Project",
       "skills": ["Cryptography", "Spam Mimic", "File Encodings", "Steganography", "Cryptanalysis"],
@@ -230,7 +230,7 @@
     {
       "title": "Harvard's CS50",
       "shortDescription": "Taking Harvard's introductory computer science course to strengthen CS fundamentals",
-      "description": "Working to strengthen foundational Computer Science concepts. Following along with the phenomenal lectures from David J. Malan, and completing the problem sets to earn my CS50 completion certificate. worked through weekly psets and lectures to overall get a better grasp of the fundamentals of programming.",
+      "description": "Working to strengthen foundational Computer Science concepts. Following along with the phenomenal lectures from David J. Malan and completing the problem sets to earn my CS50 completion certificate. Worked through weekly psets and lectures to overall get a better grasp of the fundamentals of programming.",
       "date": "August 2024",
       "type": "Personal Project",
       "skills": ["C", "Python", "SQL", "CS Foundations"],
@@ -242,7 +242,7 @@
     {
       "title": "Sprklii MVP",
       "shortDescription": "Date ideas, personalized.",
-      "description": "Founded an LLC with the idea of bringing personalization to the date ideas scene. Google and other competitors serve people very generalized and blank ideas, and we serve personalized and customized ideas to keep the Spark Alive! I worked as the only developer to get our MVP + alpha product released, and now lead a team with two other developers as we enter our beta phase.",
+      "description": "Founded an LLC with the idea of bringing personalization to the date ideas scene. Google and other competitors serve people very generalized and blank ideas, and we serve personalized and customized ideas to keep the spark alive. I worked as the only developer to get our MVP and alpha product released, and now lead a team with two other developers as we enter our beta phase.",
       "date": "January 2023",
       "type": "Business Project",
       "skills": ["Flutter", "Dart", "Supabase", "Deno"],
@@ -254,7 +254,7 @@
     {
       "title": "Mover's Suite API",
       "shortDescription": "Built API connection tools for moving company's management software",
-      "description": "Created API connection tools for Mover's Suite. These connections enabled continuous data transfer between existing systems, which otherwise was not occuring. This was a great project to work on, and I learned a lot about the inner workings of the software we were using at planes, and also how to properly work with APIs, even if the documentation is lacking.",
+      "description": "Created API connection tools for Mover's Suite. These connections enabled continuous data transfer between existing systems, which otherwise was not occurring. This was a great project to work on, and I learned a lot about the inner workings of the software we were using at Planes, and also how to properly work with APIs, even if the documentation is lacking.",
       "date": "Summer 2024",
       "type": "Internship Project",
       "skills": ["Python", "TKinter", "REST API"],
@@ -266,7 +266,7 @@
     {
       "title": "Mover's Suite RPA Status Updates",
       "shortDescription": "Automated status update system for moving company operations",
-      "description": "Developed automated status update system at Planes Moving and Storage. This was a RPA project where I used Power Automate Desktop to stimulate the actions typically required in Mover's Suite to update a status. This project was done because accessing certain things like statuses via the API was extremely difficult, and by using RPA we were able to accomplish a similar effect without usingthe API. Additionally, this served internally as a demo of the possibilities of RPA in conjunction with some of the legacy systems and software in use.",
+      "description": "Developed automated status update system at Planes Moving and Storage. This was an RPA project where I used Power Automate Desktop to simulate the actions typically required in Mover's Suite to update a status. This project was done because accessing certain things like statuses via the API was extremely difficult, and by using RPA we were able to accomplish a similar effect without using the API. Additionally, this served internally as a demo of the possibilities of RPA in conjunction with some of the legacy systems and software in use.",
       "date": "Summer 2024",
       "type": "Internship Project",
       "skills": ["Power Automate Desktop"],
@@ -278,7 +278,7 @@
     {
       "title": "Employee Technology Education",
       "shortDescription": "Led technical training initiatives for company employees",
-      "description": "Led employee training and education initiatives at Planes. Training included multiple diferent topics, including Application Lifecycle Management, Microsoft Dataverse, Git, GitHub, and SQL Server. This was a part of a larger initiative to move the company to Microsoft's Power Platform. Inside of the group of dev's, this was a part of an initiative to move our SCM to elsewhere. We were on visual source safe, and I was instrumental in explaining the basics to git and github, and helpign initiate and bring about our migration to using git as our SCM.",
+      "description": "Led employee training and education initiatives at Planes. Training included multiple different topics, including Application Lifecycle Management, Microsoft Dataverse, Git, GitHub, and SQL Server. This was a part of a larger initiative to move the company to Microsoft's Power Platform. Inside of the group of devs, this was a part of an initiative to move our SCM elsewhere. We were on Visual SourceSafe, and I was instrumental in explaining the basics of Git and GitHub, and helping initiate and bring about our migration to using Git as our SCM.",
       "date": "Summer 2024",
       "type": "Internship Project",
       "skills": ["Application Lifecycle Management", "Microsoft Dataverse", "Git", "GitHub", "SQL Server"],
@@ -290,7 +290,7 @@
     {
       "title": "XPM to Smartsheet Data Connection",
       "shortDescription": "Created data integration between XPM and Smartsheet.",
-      "description": "Built data connection between XPM and Smartsheet at Planes. This data integration was integral, as it allowed us to move data between systems that we were unable to prior to this, and it was done as a manual process prior to the implementation of this system. This system also had to interact with data on an exchange drive. Working on this project taught me a lot about how data flows, and the importance of data integrity. I also learned a lot about how to work with different systems and groups to integrate something that works across multiple teams and functional groups.",
+      "description": "Built data connection between XPM and Smartsheet at Planes. This data integration was integral, as it allowed us to move data between systems that we were unable to prior to this, and it was done as a manual process prior to the implementation of this system. This system also had to interact with data on an exchange drive. Working on this project taught me a lot about how data flows and the importance of data integrity. I also learned a lot about how to work with different systems and groups to integrate something that works across multiple teams and functional groups.",
       "date": "Summer 2024",
       "type": "Internship Project",
       "skills": ["Smartsheet", "Power Automate Cloud"],
@@ -314,19 +314,19 @@
     {
       "title": "SmartSheet Supplier Information",
       "shortDescription": "Centralized supplier information system with automated data entry",
-      "description": "Smart Sheet Supplier Information was a project to better centralize all of our supplier information in the microsoft ecosystem. Prior to this project everything was in smartsheet and scattered to multiple files and sheets, and this project centralized all of this information, and automated some of the steps in the process of adding information to the database.",
+      "description": "Smartsheet Supplier Information was a project to better centralize all of our supplier information in the Microsoft ecosystem. Prior to this project everything was in Smartsheet and scattered across multiple files and sheets. This project centralized all of this information and automated some of the steps in the process of adding information to the database.",
       "date": "Summer 2024",
       "type": "Internship Project",
       "skills": ["Smartsheet", "Power Automate", "Network Drives"],
       "links": ["https://github.com/owenstuckman/PlanesReferences/blob/main/References-24/References-24/SupplierInformationDashboard_20240731185711.zip"],
-      "image": "https://blog.nashtechglobal.com/wp-content/uploads/2024/07/power.jpeg,",
+      "image": "https://blog.nashtechglobal.com/wp-content/uploads/2024/07/power.jpeg",
       "additionalImages": [],
       "size": "small"
     },
     {
       "title": "Apple Remittance Automation",
       "shortDescription": "Automated parsing of Apple remittance emails into CSV format",
-      "description": "This project involved automating the extraction of information from our apple remittances. Apple sends their remittances as text embedded in email, so I had to write an automate to parse the text and save it into a csv so our accounting department could more easily work with it. This way accountants did not need to manually compile this data",
+      "description": "This project involved automating the extraction of information from our Apple remittances. Apple sends their remittances as text embedded in email, so I had to write an automation to parse the text and save it into a CSV so our accounting department could more easily work with it. This way accountants did not need to manually compile this data.",
       "date": "Summer 2024",
       "type": "Internship Project",
       "skills": ["Text Parsing", "Regex", "Power Automate", "CSV File Structure"],
@@ -361,13 +361,13 @@
     },
     {
       "title": "GolfBot MVP",
-      "shortDescription": "Golf playing robot for those who are physically impaired. Built for May We Help.",
+      "shortDescription": "Golf-playing robot for those who are physically impaired. Built for May We Help.",
       "description": "Developed a specialized robot capable of playing golf to assist individuals with physical impairments. The robot was built for May We Help, a non-profit organization dedicated to creating custom solutions for people with special needs. The system used computer vision to identify golf balls and targets, and featured a mechanical swing mechanism that could be triggered remotely. This project made the sport of golf more accessible to those who otherwise couldn't participate.",
       "date": "August 2023 - January 2024",
       "type": "Robotics Project",
       "skills": ["OpenCV", "Java"],
       "links": ["https://github.com/owenstuckman/GolfBot"],
-      "image": "",
+      "image": "https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-and-season-info/ftc-into-the-deep-sm.png",
       "additionalImages": [],
       "size": "small"
     },
@@ -409,24 +409,24 @@
     },
     {
       "title": "Automatic Garage Door Closer",
-      "shortDescription": "Built IoT device to automatically close garage doors using Arduino",
+      "shortDescription": "Built IoT device to automatically close garage doors using Arduino.",
       "description": "Created an automatic garage door closing system that physically pressed the garage door button when the garage door was left open for too long. Used two radio transceivers, an ultrasonic sensor, and a servo to put together the physical product to accompany the software I made.",
       "date": "Summer 2021",
       "type": "Personal Project",
       "skills": ["Arduino IDE", "C++", "Basic Circuitry", "Radio Communication"],
       "links": ["Contact me for the specific files"],
-      "image": "",
+      "image": "https://cdn.arduino.cc/header-footer/prod/assets/headerLogo-arduino.svg",
       "size": "small"
     },
     {
       "title": "Kids Like Food 2",
-      "shortDescription": "First programming project - food blog built with HTML/CSS",
+      "shortDescription": "First programming project - food blog built with HTML/CSS.",
       "description": "Learned the basics of HTML and CSS as a starting project to make a food blog with a friend. Used Google Docs as version control and learned fundamental programming practices.",
       "date": "2019",
       "type": "Personal Project",
       "skills": ["HTML", "CSS", "JS"],
       "links": ["Lost in old Google accounts"],
-      "image": "",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/512px-HTML5_logo_and_wordmark.svg.png",
       "size": "small"
     }
   ]
