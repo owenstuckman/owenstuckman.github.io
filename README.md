@@ -2,6 +2,8 @@
 
 This is my personal portfolio site, the current site is mdsvex, which is a combination of markdown and svelte, which runs a preprocessor to process the markdown.
 
+One of my big motivations for this site is to also keep a personal log of everything in one place. Github itself takes care of most of it, but this tracks everything critical to my proffesional development. 
+
 # Background
 
 Both for recuiters and myself to keep track of all the projects I have done historically, as there are some projects which are private/inaccessible, and I eant to retain all the project info.

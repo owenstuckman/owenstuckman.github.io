@@ -1,6 +1,39 @@
 {
   "projects": [
     {
+      "title": "SipSafe",
+      "shortDescription": "HackViolet 2026: IoT drink safety system",
+      "description": "Built a cross-platform IoT solution at HackViolet 2026 to protect beverages from tampering. The system combines an ESP32 device with capacitive touch sensing to detect when a drink's lid is removed, paired with native iOS (SwiftUI) and Android (Kotlin/Compose) mobile apps. When the device detects tampering while armed, it triggers a local buzzer alarm, BLE notification to the paired phone, and automated push notifications plus SMS alerts to emergency contacts via Supabase edge functions. Implemented a custom BLE GATT service for communication between the ESP32 and mobile apps, with offline event queuing so nothing is missed if the phone temporarily disconnects.",
+      "date": "January 2026",
+      "type": "Hackathon Project",
+      "skills": ["Swift", "SwiftUI", "Kotlin", "ESP32", "BLE", "Supabase", "IoT"],
+      "links": ["https://github.com/owenstuckman/SipSafe"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
+      "title": "WikiArena",
+      "shortDescription": "LMArena for Online Encyclopedias",
+      "description": "Built an open-source platform that applies competitive ranking to online encyclopedias, answering the question: do people actually prefer AI-generated encyclopedias like Grokipedia over traditional sources like Wikipedia or Britannica? Users are presented with blind side-by-side comparisons of articles from different sources on the same topic, and their votes feed into a Glicko-2 rating system (the same algorithm used in chess rankings) to produce a real-time leaderboard. Also built a Knowledge Blender feature that uses xAI's Grok to synthesize the best parts of multiple sources into a single article. The platform currently integrates five sources: Wikipedia, Grokipedia, Encyclopedia Britannica, Citizendium, and New World Encyclopedia. Separated the Selenium-based web scraping into its own Dockerized backend service to keep the main app lightweight.",
+      "date": "2025",
+      "type": "",
+      "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "Selenium", "Docker", "Vercel", "xAI Grok"],
+      "links": ["https://github.com/owenstuckman/WikiArena", "https://wikiarena.dev", "https://github.com/owenstuckman/WikiArenaSelenium"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
+      "title": "Orbit",
+      "shortDescription": "Project management meets performance-based compensation",
+      "description": "Building a gamified workplace platform that combines project management with performance-based compensation. The core idea is inspired by Andy Grove's management philosophy: capability times motivation equals performance. The platform supports multiple roles including sales, project managers, QC reviewers, employees, and contractors, each with their own views and workflows. Features include a Kanban task board with urgency multipliers, customizable salary structures mixing base pay with task-based compensation, AI-assisted quality control with Shapley value-based payouts, and auto-generated contracts with e-signatures. Built the ML pipeline (OrbitQCML) to predict first-pass QC approval probability using GitHub PR data with a Random Forest classifier and FastAPI inference endpoint. Also ran Monte Carlo simulations (Orbit-MonteCarlo) to optimize the confidence-scaling and geometric decay parameters for the QC payout system.",
+      "date": "2025 - Present",
+      "type": "",
+      "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Python", "scikit-learn", "FastAPI"],
+      "links": ["https://github.com/owenstuckman/Orbit", "https://github.com/owenstuckman/OrbitQCML", "https://github.com/owenstuckman/Orbit-MonteCarlo"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
       "title": "Archimedes Snipe Bot",
       "shortDescription": "Discord Bot for 'Sniping'",
       "description": "Built a discord bot for 'sniping', where members take pictures of each other without the other noticing, which is used as a general team building activity for the semester. The bot notes the quantity of snipes and provides information like a leaderboard and rules. This as built specifically for Archimedes, but could be applied to any club or community in discord since it was generalized. Simply target a channel, and then it can calculate the totals as needed. This also allows it to be in place, or not be used before, as it does a running calculation and then caches it on each bot restart. This provides a bit of flexibility, and since not a ton of data is being cached, it works fine in comparison to using a database, which would require 100% uptime. I maintain the project and deal with any new features or issues as they arrive",
@@ -212,6 +245,18 @@
       "skills": ["Flutter", "Supabase", "Serverless"],
       "links": ["Repo is private."],
       "image": "https://media.licdn.com/dms/image/v2/D560BAQEOWBsEjseMbA/company-logo_200_200/company-logo_200_200/0/1693695807519?e=1747267200&v=beta&t=_Z9dod3oZOexHlkoN28DSvlEoTfuXRPOq8hvRqPTuKg",
+      "additionalImages": [],
+      "size": "small"
+    },
+    {
+      "title": "Symptom2Disease",
+      "shortDescription": "ML classifier for symptom-based disease prediction",
+      "description": "Built a proof-of-concept machine learning pipeline that predicts diseases based on symptom inputs, created as part of Microsoft's Imagine Cup. Trained two models on Kaggle datasets: a Random Forest classifier as the lightweight option and an XGBoost gradient-boosted model for higher accuracy. Set up a simple API endpoint for inference so the models could be integrated into the Student Health Tracker app our team was prototyping.",
+      "date": "September 2024",
+      "type": "Group - Team of Four",
+      "skills": ["Python", "scikit-learn", "XGBoost", "Machine Learning"],
+      "links": ["https://github.com/owenstuckman/Symptom2Disease"],
+      "image": "",
       "additionalImages": [],
       "size": "small"
     },
