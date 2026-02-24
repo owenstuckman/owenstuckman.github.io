@@ -1,6 +1,28 @@
 {
   "projects": [
     {
+      "title": "FICO Score Simulator",
+      "shortDescription": "Monte Carlo FICO score projector",
+      "description": "Built an interactive web app that estimates a user's FICO credit score and projects how it might evolve over time using Monte Carlo simulation — running 1,000 probabilistic scenarios across 12, 24, or 36-month timeframes. Users input their credit profile across all five FICO factors (payment history, amounts owed, credit history length, new credit, and credit mix), the app calculates a real-time score estimate, and Recharts visualizes the range of possible future trajectories. All computation runs locally in the browser with no data transmitted anywhere.",
+      "date": "February 2026",
+      "type": "",
+      "skills": ["Next.js", "React", "TypeScript", "Tailwind CSS", "shadcn/ui", "Recharts"],
+      "links": ["https://github.com/owenstuckman/montecarlo-fico"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
+      "title": "TapCap Bot",
+      "shortDescription": "Game reverse engineering and ML training toolkit",
+      "description": "Built a game reverse engineering toolkit to systematically analyze and extract the internal state and mechanics of the TapCap game through automated browser automation and JavaScript introspection. The project provides three sequential scripts for progressively deeper analysis: initial reconnaissance cataloging global JS variables and detected game engines (Phaser, PIXI, Unity), then hooking requestAnimationFrame to establish control over the game loop and test input injection, and finally diffing frame-by-frame snapshots to pinpoint exactly which variables track player state, position, and score. End goal is wrapping the identified state into a window.getState() interface to train a Gymnasium/Stable-Baselines3 ML agent to autonomously play the game.",
+      "date": "February 2026",
+      "type": "",
+      "skills": ["Python", "Playwright", "JavaScript", "Gymnasium", "Stable-Baselines3"],
+      "links": ["https://github.com/owenstuckman/tapcap-bot"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
       "title": "SipSafe",
       "shortDescription": "HackViolet 2026: IoT drink safety system",
       "description": "Built a cross-platform IoT solution at HackViolet 2026 to protect beverages from tampering. The system combines an ESP32 device with capacitive touch sensing to detect when a drink's lid is removed, paired with native iOS (SwiftUI) and Android (Kotlin/Compose) mobile apps. When the device detects tampering while armed, it triggers a local buzzer alarm, BLE notification to the paired phone, and automated push notifications plus SMS alerts to emergency contacts via Supabase edge functions. Implemented a custom BLE GATT service for communication between the ESP32 and mobile apps, with offline event queuing so nothing is missed if the phone temporarily disconnects.",
@@ -15,7 +37,7 @@
       "title": "WikiArena",
       "shortDescription": "LMArena for Online Encyclopedias",
       "description": "Built an open-source platform that applies competitive ranking to online encyclopedias, answering the question: do people actually prefer AI-generated encyclopedias like Grokipedia over traditional sources like Wikipedia or Britannica? Users are presented with blind side-by-side comparisons of articles from different sources on the same topic, and their votes feed into a Glicko-2 rating system (the same algorithm used in chess rankings) to produce a real-time leaderboard. Also built a Knowledge Blender feature that uses xAI's Grok to synthesize the best parts of multiple sources into a single article. The platform currently integrates five sources: Wikipedia, Grokipedia, Encyclopedia Britannica, Citizendium, and New World Encyclopedia. Separated the Selenium-based web scraping into its own Dockerized backend service to keep the main app lightweight.",
-      "date": "2025",
+      "date": "December 2025",
       "type": "",
       "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "Selenium", "Docker", "Vercel", "xAI Grok"],
       "links": ["https://github.com/owenstuckman/WikiArena", "https://wikiarena.dev", "https://github.com/owenstuckman/WikiArenaSelenium"],
@@ -26,7 +48,7 @@
       "title": "Orbit",
       "shortDescription": "Project management meets performance-based compensation",
       "description": "Building a gamified workplace platform that combines project management with performance-based compensation. The core idea is inspired by Andy Grove's management philosophy: capability times motivation equals performance. The platform supports multiple roles including sales, project managers, QC reviewers, employees, and contractors, each with their own views and workflows. Features include a Kanban task board with urgency multipliers, customizable salary structures mixing base pay with task-based compensation, AI-assisted quality control with Shapley value-based payouts, and auto-generated contracts with e-signatures. Built the ML pipeline (OrbitQCML) to predict first-pass QC approval probability using GitHub PR data with a Random Forest classifier and FastAPI inference endpoint. Also ran Monte Carlo simulations (Orbit-MonteCarlo) to optimize the confidence-scaling and geometric decay parameters for the QC payout system.",
-      "date": "2025 - Present",
+      "date": "December 2025 - Present",
       "type": "",
       "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Python", "scikit-learn", "FastAPI"],
       "links": ["https://github.com/owenstuckman/Orbit", "https://github.com/owenstuckman/OrbitQCML", "https://github.com/owenstuckman/Orbit-MonteCarlo"],
