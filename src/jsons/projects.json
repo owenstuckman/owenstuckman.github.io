@@ -23,6 +23,17 @@
       "additionalImages": []
     },
     {
+      "title": "LUMA v2",
+      "shortDescription": "Open-source multi-tenant ATS for design orgs",
+      "description": "Generalized and open-sourced the original LUMA applicant tracking system built for Archimedes at Virginia Tech. Refactored into a multi-tenant platform so any organization can self-deploy and manage their own recruitment cycles. The original deployment successfully processed 400+ applicants and scheduled 250+ interviews in Fall 2025. Features a dynamic form builder for custom application questionnaires, a recruiter dashboard with filtering and bulk updates, calendar-based interview scheduling via Schedule-X, and role-based access control (Owner, Admin, Recruiter, Viewer). Released under MIT license.",
+      "date": "February 2026",
+      "type": "",
+      "skills": ["SvelteKit", "TypeScript", "Supabase", "PostgreSQL", "Bootstrap", "Schedule-X"],
+      "links": ["https://github.com/ArchimedesVT/luma"],
+      "image": "/LUMA_logo.png",
+      "additionalImages": []
+    },
+    {
       "title": "SipSafe",
       "shortDescription": "HackViolet 2026: IoT drink safety system",
       "description": "Built a cross-platform IoT solution at HackViolet 2026 to protect beverages from tampering. The system combines an ESP32 device with capacitive touch sensing to detect when a drink's lid is removed, paired with native iOS (SwiftUI) and Android (Kotlin/Compose) mobile apps. When the device detects tampering while armed, it triggers a local buzzer alarm, BLE notification to the paired phone, and automated push notifications plus SMS alerts to emergency contacts via Supabase edge functions. Implemented a custom BLE GATT service for communication between the ESP32 and mobile apps, with offline event queuing so nothing is missed if the phone temporarily disconnects.",
@@ -260,12 +271,12 @@
     },
     {
       "title": "Student Health Tracker",
-      "shortDescription": "Location based early diagnosis and health education tool.",
-      "description": "Competing in Microsoft's Imagine Cup. Our team is still in prototyping.",
+      "shortDescription": "Location-based early diagnosis and health education tool.",
+      "description": "Built a Flutter mobile app for location-based disease diagnosis aimed at helping students in densely populated areas identify and manage health risks early. Integrates Google Maps API to surface location-specific health data, and connects to the Symptom2Disease ML model (a Random Forest / XGBoost classifier trained on symptom-to-disease datasets) deployed as an inference endpoint on Render. Users input symptoms and receive likely diagnoses along with relevant health education. Built as part of Microsoft's Imagine Cup.",
       "date": "September 2024",
       "type": "Group - Team of Four",
-      "skills": ["Flutter", "Supabase", "Serverless"],
-      "links": ["Repo is private."],
+      "skills": ["Flutter", "Dart", "Supabase", "Google Maps API", "Machine Learning", "Serverless"],
+      "links": ["https://github.com/Infinitum-Archimedes/MobileAppUserSide"],
       "image": "https://media.licdn.com/dms/image/v2/D560BAQEOWBsEjseMbA/company-logo_200_200/company-logo_200_200/0/1693695807519?e=1747267200&v=beta&t=_Z9dod3oZOexHlkoN28DSvlEoTfuXRPOq8hvRqPTuKg",
       "additionalImages": [],
       "size": "small"

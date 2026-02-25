@@ -18,20 +18,14 @@ export const postsPerPage = 10
 export const navItems = [
 	{
 		title: 'About',
-		route: '/about'
-	}, 
+		route: '/#about'
+	},
 	{
 		title: 'Projects',
-		route: '/projects'	
+		route: '/#projects'
 	},
-	{
-		title: 'Contact',
-		route: '/contact' 
-	},
-	/*
 	{
 		title: 'Blog',
 		route: '/blog'
-	}, 
-	*/
+	},
 ]
