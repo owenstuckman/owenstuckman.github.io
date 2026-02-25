@@ -85,19 +85,6 @@ In my free time, I like to run, play spikeball and pickleball, work on my person
 
 ---
 
-<div id="contact">
-
-## Contact
-
-Feel free to reach out at <a href="mailto:inquiries@owenstuckman.co">inquiries@owenstuckman.co</a> — I'm open to any and all freelance projects!
-
-- [GitHub](https://github.com/owenstuckman)
-- [LinkedIn](https://www.linkedin.com/in/owen-stuckman-b69977235)
-
-</div>
-
----
-
 *This site is built with mdsvex.*
 
 <style>
