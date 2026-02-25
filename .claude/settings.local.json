@@ -4,7 +4,18 @@
       "WebSearch",
       "WebFetch(domain:github.com)",
       "Bash(gh api:*)",
-      "Bash(node -e \"const d=require\\(''fs''\\).readFileSync\\(''/dev/stdin'',''utf8''\\); JSON.parse\\(d\\).forEach\\(f=>console.log\\(f.name, f.type\\)\\)\")"
+      "Bash(node -e \"const d=require\\(''fs''\\).readFileSync\\(''/dev/stdin'',''utf8''\\); JSON.parse\\(d\\).forEach\\(f=>console.log\\(f.name, f.type\\)\\)\")",
+      "WebFetch(domain:wikiarena.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:gymnasium.farama.org)",
+      "WebFetch(domain:stable-baselines3.readthedocs.io)",
+      "WebFetch(domain:upload.wikimedia.org)",
+      "WebFetch(domain:xgboost.readthedocs.io)",
+      "WebFetch(domain:opengraph.githubassets.com)",
+      "WebFetch(domain:xgboost.ai)",
+      "WebFetch(domain:cdn.worldvectorlogo.com)",
+      "WebFetch(domain:commons.wikimedia.org)",
+      "WebFetch(domain:playwright.dev)"
     ]
   }
 }

@@ -8,7 +8,7 @@
       "type": "",
       "skills": ["Next.js", "React", "TypeScript", "Tailwind CSS", "shadcn/ui", "Recharts"],
       "links": ["https://github.com/owenstuckman/montecarlo-fico"],
-      "image": "",
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/montecarlo-fico",
       "additionalImages": []
     },
     {
@@ -19,7 +19,7 @@
       "type": "",
       "skills": ["Python", "Playwright", "JavaScript", "Gymnasium", "Stable-Baselines3"],
       "links": ["https://github.com/owenstuckman/tapcap-bot"],
-      "image": "",
+      "image": "https://playwright.dev/img/playwright-logo.svg",
       "additionalImages": []
     },
     {
@@ -41,7 +41,7 @@
       "type": "Hackathon Project",
       "skills": ["Swift", "SwiftUI", "Kotlin", "ESP32", "BLE", "Supabase", "IoT"],
       "links": ["https://github.com/owenstuckman/SipSafe"],
-      "image": "",
+      "image": "https://raw.githubusercontent.com/owenstuckman/SipSafe/main/Esp32Files/product_design.svg",
       "additionalImages": []
     },
     {
@@ -52,7 +52,7 @@
       "type": "",
       "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "Selenium", "Docker", "Vercel", "xAI Grok"],
       "links": ["https://github.com/owenstuckman/WikiArena", "https://wikiarena.dev", "https://github.com/owenstuckman/WikiArenaSelenium"],
-      "image": "",
+      "image": "https://wikiarena.dev/logo.png",
       "additionalImages": []
     },
     {
@@ -63,7 +63,7 @@
       "type": "",
       "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Python", "scikit-learn", "FastAPI"],
       "links": ["https://github.com/owenstuckman/Orbit", "https://github.com/owenstuckman/OrbitQCML", "https://github.com/owenstuckman/Orbit-MonteCarlo"],
-      "image": "",
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/Orbit",
       "additionalImages": []
     },
     {
@@ -289,7 +289,7 @@
       "type": "Group - Team of Four",
       "skills": ["Python", "scikit-learn", "XGBoost", "Machine Learning"],
       "links": ["https://github.com/owenstuckman/Symptom2Disease"],
-      "image": "",
+      "image": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/doc/logos/scikit-learn-logo.png",
       "additionalImages": [],
       "size": "small"
     },
