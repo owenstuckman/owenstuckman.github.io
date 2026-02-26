@@ -271,13 +271,13 @@
     },
     {
       "title": "Student Health Tracker",
-      "shortDescription": "Location-based early diagnosis and health education tool.",
-      "description": "Built a Flutter mobile app for location-based disease diagnosis aimed at helping students in densely populated areas identify and manage health risks early. Integrates Google Maps API to surface location-specific health data, and connects to the Symptom2Disease ML model (a Random Forest / XGBoost classifier trained on symptom-to-disease datasets) deployed as an inference endpoint on Render. Users input symptoms and receive likely diagnoses along with relevant health education. Built as part of Microsoft's Imagine Cup.",
+      "shortDescription": "Disease diagnosis and health info for high-density areas.",
+      "description": "Built a cross-platform Flutter app for disease diagnosis and health information targeting students in high population density areas. The app uses location-based analysis to surface health risks relevant to a user's area, lets users input symptoms and receive likely diagnoses, and provides health education content. Backend powered by Supabase; ML inference (Random Forest / XGBoost classifier) runs via a separate model repo deployed on Render. Built as part of Microsoft's Imagine Cup with a team of four across 65+ commits.",
       "date": "September 2024",
       "type": "Group - Team of Four",
       "skills": ["Flutter", "Dart", "Supabase", "Google Maps API", "Machine Learning", "Serverless"],
       "links": ["https://github.com/Infinitum-Archimedes/MobileAppUserSide"],
-      "image": "https://media.licdn.com/dms/image/v2/D560BAQEOWBsEjseMbA/company-logo_200_200/company-logo_200_200/0/1693695807519?e=1747267200&v=beta&t=_Z9dod3oZOexHlkoN28DSvlEoTfuXRPOq8hvRqPTuKg",
+      "image": "https://opengraph.githubassets.com/1/Infinitum-Archimedes/MobileAppUserSide",
       "additionalImages": [],
       "size": "small"
     },
