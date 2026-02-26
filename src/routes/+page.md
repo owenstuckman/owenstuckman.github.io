@@ -3,6 +3,8 @@ import currentProjectsData from "$lib/../jsons/current_projects.json";
 import CurrentCard from "$lib/components/CurrentCard.svelte";
 import projectsData from "$lib/../jsons/projects.json";
 import ProjectCard from "$lib/components/ProjectCard.svelte";
+
+let visibleCount = 4;
 </script>
 
 # Owen Stuckman
@@ -48,7 +50,7 @@ In my free time, I like to run, play spikeball and pickleball, work on my person
 ## Past Projects
 
 <div class="projects-grid">
-  {#each projectsData.projects as project}
+  {#each projectsData.projects.slice(0, visibleCount) as project}
     <ProjectCard
       image={project.image}
       title={project.title}
@@ -62,6 +64,12 @@ In my free time, I like to run, play spikeball and pickleball, work on my person
     />
   {/each}
 </div>
+
+{#if visibleCount < projectsData.projects.length}
+  <div class="see-more-container">
+    <button class="see-more-btn" on:click={() => visibleCount += 4}>See More</button>
+  </div>
+{/if}
 
 </div>
 
@@ -96,6 +104,28 @@ In my free time, I like to run, play spikeball and pickleball, work on my person
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
     margin-top: 1.5rem;
+  }
+
+  .see-more-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .see-more-btn {
+    background: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 20px;
+    padding: 10px 28px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #4b5563;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .see-more-btn:hover {
+    background: #f3f4f6;
+    color: #1f2937;
   }
 
   @media (max-width: 768px) {
