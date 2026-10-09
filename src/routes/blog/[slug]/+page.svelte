@@ -1,20 +1,45 @@
 <script>
+	import BlogLock from '$lib/components/BlogLock.svelte';
+
 	let { data } = $props();
-	const { component: Post, metadata } = data;
 </script>
 
-{#if metadata.title}
-	<h1>{metadata.title}</h1>
-	{#if metadata.date}<p class="post-date">{metadata.date}</p>{/if}
-	<hr />
-{/if}
+<svelte:head>
+	<title>Blog · Owen Stuckman</title>
+</svelte:head>
 
-<Post />
+<BlogLock payload={data.payload}>
+	{#snippet children(post)}
+		<article>
+			<p class="label"><a href="/blog">← Blog</a>{post.date ? ` · ${post.date}` : ''}</p>
+			<h1>{post.title}</h1>
+			<hr />
+			<div class="prose">{@html post.html}</div>
+		</article>
+	{/snippet}
+</BlogLock>
 
 <style>
-	.post-date {
-		opacity: 0.6;
-		font-size: 0.9rem;
-		margin-top: -0.5rem;
+	article {
+		max-width: 44rem;
+	}
+
+	h1 {
+		font-size: clamp(2.25rem, 6vw, 3.5rem);
+	}
+
+	.prose :global(h1) {
+		font-size: 2rem;
+		margin-top: 2.5rem;
+	}
+
+	.prose :global(hr) {
+		height: 1px;
+		margin: 2rem 0;
+		background: var(--line);
+	}
+
+	.prose :global(h2) {
+		font-size: 1.5rem;
 	}
 </style>

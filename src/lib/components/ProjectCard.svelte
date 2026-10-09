@@ -1,379 +1,407 @@
 <script>
-    import { fade, scale } from "svelte/transition";
-    import { createEventDispatcher } from 'svelte';
+	import { lazyImage } from '$lib/actions/lazyImage.js';
 
-    export let image = "";
-    export let title = "";
-    export let description = "";
-    export let shortDescription = "";
-    export let techStack = [];
-    export let link = "";
-    export let links = [];
-    export let expanded = false;
-    export let skills = [];
-    export let additionalImages = [];
-    export let date = "";
+	let {
+		index = 0,
+		image = '',
+		title = '',
+		description = '',
+		shortDescription = '',
+		type = '',
+		skills = [],
+		links = [],
+		additionalImages = [],
+		date = '',
+		eager = false
+	} = $props();
 
-    const dispatch = createEventDispatcher();
+	let dialog = $state();
 
-    function toggleExpand() {
-      expanded = !expanded;
-      if (expanded) {
-        dispatch('expand');
-      }
-    }
+	// Bin label, e.g. A-01, A-02 … B-01
+	let bin = $derived(
+		`${String.fromCharCode(65 + Math.floor(index / 12))}-${String((index % 12) + 1).padStart(2, '0')}`
+	);
 
-    function extractLinkName(url) {
-      try {
-        const hostname = new URL(url).hostname.replace('www.', '');
-        if (hostname.includes('github.com')) return 'GitHub';
-        if (hostname.includes('devpost.com')) return 'Devpost';
-        if (hostname.includes('youtube.com') || hostname.includes('youtu.be')) return 'YouTube';
-        if (hostname.includes('linkedin.com')) return 'LinkedIn';
-        if (hostname.includes('figma.com')) return 'Figma';
-        return hostname.split('.')[0].charAt(0).toUpperCase() + hostname.split('.')[0].slice(1);
-      } catch {
-        return 'Link';
-      }
-    }
-  </script>
-  
-  
-  <div 
-    class="card" 
-    on:click={toggleExpand}
-  >
-    {#if image}
-      <div
-        class="image-container"
-        style="background-image: url('{image}');"
-      ></div>
-    {:else}
-      <div class="image-container image-placeholder">
-        <span class="placeholder-icon">📁</span>
-      </div>
-    {/if}
-    <div class="content">
-      <div class="title">{title}</div>
-      <div class="short-description">{shortDescription}</div>
-      <div class="short-description">{date}</div>
-      {#if !image}
-        <div class="description-preview">{description}...</div>
-      {/if}
-    </div>
-  </div>
-  
-  {#if expanded}
-    <div class="modal-overlay" on:click={toggleExpand} transition:fade></div>
-    <div class="modal" transition:scale>
-      <span class="close-btn" on:click={toggleExpand}>✖</span>
+	// "hackvwin.png" would resolve relative to /projects — anchor bare paths at the site root
+	const src = (path) => (/^(https?:|data:|\/)/.test(path) ? path : `/${path}`);
 
-      <div class="modal-header">
-        {#if image}
-          <div class="modal-image">
-            <img src={image} alt={title} />
-          </div>
-        {/if}
-        <div class="modal-title-section">
-          <h2>{title}</h2>
-          {#if date}
-            <div class="date">{date}</div>
-          {/if}
-          {#if skills && skills.length > 0}
-            <div class="skills-container">
-              {#each skills as skill}
-                <span class="skill-tag">{skill}</span>
-              {/each}
-            </div>
-          {/if}
-        </div>
-      </div>
+	function linkName(url) {
+		try {
+			const host = new URL(url).hostname.replace('www.', '');
+			if (host.includes('github.com')) return 'GitHub';
+			if (host.includes('devpost.com')) return 'Devpost';
+			if (host.includes('youtube.com') || host.includes('youtu.be')) return 'YouTube';
+			if (host.includes('linkedin.com')) return 'LinkedIn';
+			if (host.includes('figma.com')) return 'Figma';
+			if (host.includes('apple.com')) return 'App Store';
+			const name = host.split('.')[0];
+			return name.charAt(0).toUpperCase() + name.slice(1);
+		} catch {
+			return 'Link';
+		}
+	}
 
-      <div class="modal-body">
-        <p>{description}</p>
+	function open() {
+		dialog.showModal();
+	}
 
-        {#if techStack.length > 0}
-          <div class="tech-icons">
-            {#each techStack as tech}
-              <img src={tech} alt="Tech Icon" />
-            {/each}
-          </div>
-        {/if}
+	function close() {
+		dialog.close();
+	}
 
-        <div class="links-container">
-          {#if link}
-            <a href={link} target="_blank" class="link-pill">View Project</a>
-          {/if}
-          {#each links as additionalLink}
-            {#if additionalLink && !additionalLink.includes('Private') && !additionalLink.includes('Archived') && !additionalLink.includes('Contact') && !additionalLink.includes('Lost') && additionalLink.startsWith('http')}
-              <a href={additionalLink} target="_blank" class="link-pill">{extractLinkName(additionalLink)}</a>
-            {:else if additionalLink && !additionalLink.startsWith('http')}
-              <span class="link-pill link-disabled">{additionalLink}</span>
-            {/if}
-          {/each}
-        </div>
+	// Clicking the backdrop (the dialog element itself, outside the panel) closes it
+	function onDialogClick(e) {
+		if (e.target === dialog) close();
+	}
+</script>
 
-        {#if additionalImages && additionalImages.length > 0}
-          <div class="additional-images">
-            {#each additionalImages as imgSrc}
-              <img src={imgSrc} alt="Additional project image" />
-            {/each}
-          </div>
-        {/if}
-      </div>
-    </div>
-  {/if}
+<button class="card" type="button" onclick={open} aria-haspopup="dialog">
+	<div class="media">
+		{#if image}
+			<img
+				use:lazyImage
+				src={src(image)}
+				alt=""
+				loading={eager ? 'eager' : 'lazy'}
+				decoding="async"
+			/>
+		{:else}
+			<span class="placeholder label">No image on file</span>
+		{/if}
+		<span class="bin">{bin}</span>
+	</div>
+	<div class="content">
+		<h3>{title}</h3>
+		<p class="short">{shortDescription}</p>
+		<p class="meta label">{date}{type ? ` · ${type}` : ''}</p>
+	</div>
+</button>
 
-  <style>
-    .card {
-      position: relative;
-      width: 100%;
-      cursor: pointer;
-      overflow: hidden;
-      border-radius: 14px; /* Slightly larger radius */
-      transition: all 0.2s ease-in-out;
-      margin: 0 auto;
-      background: white;
-      border: 1px solid #e5e7eb;
-    }
-  
-    .card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-  
-    .image-container {
-      width: 100%;
-      height: 200px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      border-radius: 14px 14px 0 0;
-      filter: grayscale(100%);
-      transition: filter 0.2s ease-in-out;
-    }
+<!-- Escape closes natively; the click handler only adds backdrop-to-close -->
+<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_noninteractive_element_interactions -->
+<dialog bind:this={dialog} onclick={onDialogClick} aria-label={title}>
+	<div class="panel">
+		<button class="close" type="button" onclick={close} aria-label="Close">✕</button>
 
-    .image-placeholder {
-      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: none;
-    }
+		<header>
+			{#if image}
+				<div class="thumb"><img src={src(image)} alt="" loading="lazy" /></div>
+			{/if}
+			<div>
+				<p class="label">{bin}{date ? ` · ${date}` : ''}</p>
+				<h2>{title}</h2>
+				{#if type}<p class="type">{type}</p>{/if}
+			</div>
+		</header>
 
-    .placeholder-icon {
-      font-size: 2.5rem;
-      opacity: 0.4;
-    }
+		{#if skills?.length}
+			<ul class="tags">
+				{#each skills as skill}
+					<li>{skill}</li>
+				{/each}
+			</ul>
+		{/if}
 
-    .card:hover .image-container {
-      filter: grayscale(0%);
-    }
+		<p class="description">{description}</p>
 
-    .card:hover .image-placeholder {
-      filter: none;
-    }
-  
-    .content {
-      padding: 24px; /* Increased from 20px */
-    }
+		{#if links?.length}
+			<div class="links">
+				{#each links as l}
+					{#if l?.startsWith('http')}
+						<a href={l} target="_blank" rel="noopener">{linkName(l)} ↗</a>
+					{:else if l}
+						<span class="note">{l}</span>
+					{/if}
+				{/each}
+			</div>
+		{/if}
 
-    .title {
-      font-size: 1.6rem; 
-      font-weight: bold;
-      color: #1f2937;
-      margin-bottom: 10px; /* Increased from 8px */
-    }
+		{#if additionalImages?.length}
+			<div class="gallery">
+				{#each additionalImages as img}
+					<img src={src(img)} alt="" loading="lazy" />
+				{/each}
+			</div>
+		{/if}
+	</div>
+</dialog>
 
-    .short-description {
-      color: #4b5563;
-      font-size: 1.15rem; /* Increased from 1rem */
-      line-height: 1.5;
-    }
+<style>
+	.card {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		padding: 0;
+		text-align: left;
+		font: inherit;
+		color: inherit;
+		cursor: pointer;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		overflow: hidden;
+		box-shadow: var(--shadow);
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease;
+	}
 
-    .description-preview {
-      color: #4b5563;
-      font-size: 1.05rem; /* Increased from 0.9rem */
-      line-height: 1.4;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      margin-top: 10px; /* Increased from 8px */
-    }
-  
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 95%;
-      max-width: 900px;
-      background: #121212;
-      padding: 40px;
-      border-radius: 14px;
-      box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.5);
-      color: white;
-      max-height: 90vh;
-      overflow-y: auto;
-      z-index: 1000;
-      font-size: 1.1rem;
-    }
+	.card:hover {
+		transform: translateY(-3px);
+		border-color: var(--tape);
+	}
 
-    .modal-header {
-      display: flex;
-      gap: 24px;
-      margin-bottom: 24px;
-      align-items: flex-start;
-    }
+	.media {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		display: grid;
+		place-items: center;
+		background: var(--surface-2);
+		border-bottom: 1px solid var(--line);
+		overflow: hidden;
+	}
 
-    .modal-image {
-      flex-shrink: 0;
-      width: 160px;
-      height: 160px;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #1a1a1a;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+	/* skeleton shimmer until the image arrives */
+	.media::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(
+			100deg,
+			transparent 30%,
+			color-mix(in srgb, var(--ink) 6%, transparent) 50%,
+			transparent 70%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.4s linear infinite;
+	}
 
-    .modal-image img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
+	.media:has(img:global(.loaded))::before,
+	.media:has(img:global(.failed))::before,
+	.media:has(.placeholder)::before {
+		display: none;
+	}
 
-    .modal-title-section {
-      flex: 1;
-    }
+	.media img {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		padding: 1rem;
+		opacity: 0;
+		filter: grayscale(1);
+		transition:
+			opacity 0.4s ease,
+			filter 0.3s ease;
+	}
 
-    .modal-title-section h2 {
-      margin: 0 0 8px 0;
-      font-size: 1.8rem;
-      line-height: 1.2;
-    }
+	.media img:global(.loaded) {
+		opacity: 1;
+	}
 
-    .modal-body p {
-      line-height: 1.7;
-      color: #e0e0e0;
-      margin-bottom: 20px;
-    }
+	.card:hover .media img {
+		filter: none;
+	}
 
-    .link-disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
+	.placeholder {
+		font-size: 0.7rem;
+	}
 
-    .link-disabled:hover {
-      background: rgba(255, 255, 255, 0.1);
-      color: #A8DAE5;
-    }
+	/* external image that 404s or blocks hotlinking */
+	.media:has(img:global(.failed))::after {
+		content: 'Image unavailable';
+		position: absolute;
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--muted);
+	}
 
-    @media (max-width: 600px) {
-      .modal-header {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
+	.bin {
+		position: absolute;
+		top: 0.6rem;
+		left: 0.6rem;
+		padding: 0.1rem 0.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		color: var(--tape-ink);
+		background: var(--tape);
+		border-radius: 2px;
+	}
 
-      .modal-image {
-        width: 120px;
-        height: 120px;
-      }
+	.content {
+		padding: 1rem 1.1rem 1.1rem;
+	}
 
-      .skills-container {
-        justify-content: center;
-      }
-    }
+	h3 {
+		margin: 0 0 0.35rem;
+	}
 
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 999;
-    }
-  
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 25px;
-      cursor: pointer;
-      font-size: 28px; /* Increased from 24px */
-    }
-  
-    .tech-icons {
-      display: flex;
-      gap: 14px; /* Increased from 12px */
-      margin-top: 24px; /* Increased from 20px */
-    }
-  
-    .tech-icons img {
-      width: 38px; /* Increased from 32px */
-      height: 38px; /* Increased from 32px */
-    }
+	.short {
+		margin: 0 0 0.6rem;
+		color: var(--muted);
+		line-height: 1.45;
+	}
 
-    .links-container {
-      margin-top: 24px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+	.meta {
+		margin: 0;
+		font-size: 0.68rem;
+	}
 
-    .link-pill {
-      display: inline-block;
-      background: rgba(255, 255, 255, 0.1);
-      color: #A8DAE5;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 1rem;
-      text-decoration: none;
-      transition: all 0.2s ease-in-out;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
+	@keyframes shimmer {
+		to {
+			background-position: -200% 0;
+		}
+	}
 
-    .link-pill:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-    }
+	/* ---------- Modal ---------- */
+	dialog {
+		width: min(52rem, calc(100% - 2rem));
+		max-height: calc(100vh - 2rem);
+		padding: 0;
+		border: 1px solid var(--line);
+		border-top: 6px solid var(--tape);
+		border-radius: var(--radius);
+		background: var(--surface);
+		color: var(--ink);
+		box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.5);
+	}
 
-    .skills-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px; /* Increased from 8px */
-      margin-bottom: 24px; /* Increased from 20px */
-    }
+	dialog::backdrop {
+		background: rgb(10 10 10 / 0.55);
+		backdrop-filter: blur(3px);
+	}
 
-    .skill-tag {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 6px 14px; /* Increased from 4px 12px */
-      border-radius: 18px; /* Increased from 16px */
-      font-size: 1.05rem; /* Increased from 0.9rem */
-      color: #fff;
-    }
+	dialog[open] {
+		animation: rise 0.22s ease-out;
+	}
 
-    .additional-images {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Increased from 200px */
-      gap: 18px; /* Increased from 16px */
-      margin-top: 28px; /* Increased from 24px */
-    }
+	@keyframes rise {
+		from {
+			opacity: 0;
+			transform: translateY(12px);
+		}
+	}
 
-    .additional-images img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 10px;
-    }
+	.panel {
+		position: relative;
+		padding: 2rem;
+	}
 
-    .date {
-      color: #888;
-      font-size: 1.05rem; /* Increased from 0.9rem */
-      margin-top: -10px; /* Adjusted from -8px */
-      margin-bottom: 18px; /* Increased from 16px */
-    }
-  </style>
+	.close {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		width: 2.25rem;
+		height: 2.25rem;
+		border: 1px solid var(--line);
+		border-radius: 999px;
+		background: var(--surface-2);
+		color: var(--ink);
+		font-size: 0.9rem;
+		cursor: pointer;
+	}
+
+	header {
+		display: flex;
+		gap: 1.25rem;
+		align-items: center;
+		margin-bottom: 1.25rem;
+		padding-right: 2.5rem;
+	}
+
+	.thumb {
+		flex-shrink: 0;
+		width: 112px;
+		height: 112px;
+		display: grid;
+		place-items: center;
+		padding: 0.5rem;
+		background: var(--surface-2);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+	}
+
+	.thumb img {
+		max-width: 100%;
+		max-height: 100%;
+		object-fit: contain;
+	}
+
+	header h2 {
+		margin: 0.15rem 0 0.25rem;
+		font-size: 2rem;
+	}
+
+	header .label,
+	.type {
+		margin: 0;
+	}
+
+	.type {
+		color: var(--muted);
+	}
+
+	.tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		list-style: none;
+		margin: 0 0 1.25rem;
+		padding: 0;
+	}
+
+	.tags li {
+		margin: 0;
+		padding: 0.15rem 0.55rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		border: 1px solid var(--line);
+		border-radius: 3px;
+		background: var(--surface-2);
+	}
+
+	.description {
+		line-height: 1.7;
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem 1.25rem;
+		margin-top: 1.25rem;
+	}
+
+	.note {
+		color: var(--muted);
+		font-style: italic;
+	}
+
+	.gallery {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+		gap: 1rem;
+		margin-top: 1.5rem;
+	}
+
+	.gallery img {
+		width: 100%;
+		border-radius: var(--radius);
+		border: 1px solid var(--line);
+	}
+
+	@media (max-width: 36rem) {
+		.panel {
+			padding: 1.25rem;
+		}
+		header {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		.thumb {
+			width: 80px;
+			height: 80px;
+		}
+	}
+</style>

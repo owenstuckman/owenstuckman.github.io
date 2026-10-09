@@ -20,19 +20,22 @@ npm run format   # Auto-format code with Prettier
 
 **Framework:** SvelteKit with static adapter for GitHub Pages deployment
 
-**Content System:** mdsvex preprocessor allows markdown files (`.md`) to be used as Svelte components/pages. Both `.svelte` and `.md` extensions are valid page routes.
+**Pages:** `/` (about), `/projects` (current and past projects, infinite scroll), and `/blog` (password protected, see `docs/blog.md`). There is no header or footer. `Dock.svelte` is the minimal nav: an AGV parks under the active station, plus the light/default/dark `ThemeSwitch`.
+
+**Content System:** mdsvex preprocessor allows markdown files (`.md`) to be used as Svelte components/pages. Blog posts live in `src/lib/posts/*.md` and are encrypted at build time, so the build needs `BLOG_PASSWORD` set.
 
 **Key directories:**
-- `src/routes/` - Page routes (markdown pages: `+page.md`)
+- `src/routes/` - Page routes
 - `src/lib/components/` - Reusable Svelte components
 - `src/jsons/` - Project data (`current_projects.json`, `projects.json`)
 - `src/lib/config.js` - Site metadata and navigation configuration
-- `static/css/` - CSS stylesheets (vars, layout, typography)
+- `src/app.css` - Global styles and theme tokens. The `data-theme` attribute on `<html>` overrides `prefers-color-scheme`
+- `src/lib/actions/` - `lazyImage` (fade images in over a skeleton) and `infiniteScroll` (IntersectionObserver sentinel)
 - `old-site/` - Archived previous version (Vercel/Tailwind setup, not active)
 
-**Data flow:** Project information is stored in JSON files and rendered by `ProjectCard.svelte` (past projects with modal view) and `CurrentCard.svelte` (current projects).
+**Data flow:** Project information is stored in JSON files and rendered by `ProjectCard.svelte` (past projects, `<dialog>` modal) and `CurrentCard.svelte` (current projects).
 
-**Deployment:** Pushes to `main` trigger GitHub Actions workflow that builds and deploys to GitHub Pages.
+**Deployment:** Pushes to `main` trigger GitHub Actions workflow that builds and deploys to GitHub Pages. The build needs the `BLOG_PASSWORD` repo secret.
 
 ## Configuration
 

@@ -1,52 +1,56 @@
 <script>
-    export let title = "";
-    export let description = "";
+	let { title = '', description = '' } = $props();
 </script>
 
-<div class="card">
-    <div class="status-indicator"></div>
-    <h3>{title}</h3>
-    <p>{description}</p>
-</div>
+<article class="card">
+	<p class="status label"><span class="light" aria-hidden="true"></span>In progress</p>
+	<h3>{title}</h3>
+	<p class="desc">{description}</p>
+</article>
 
 <style>
-    .card {
-        width: 100%;
-        padding: 24px;
-        background: var(--white, #fff);
-        border-radius: 14px;
-        border: 1px solid #e5e7eb;
-        transition: all 0.2s ease-in-out;
-        position: relative;
-    }
+	.card {
+		position: relative;
+		padding: 1.1rem 1.2rem 1.2rem;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-left: 6px solid var(--tape);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+	}
 
-    .card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
+	.status {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+		margin: 0 0 0.5rem;
+		font-size: 0.68rem;
+	}
 
-    .status-indicator {
-        width: 8px;
-        height: 8px;
-        background: var(--accent, #E63946);
-        border-radius: 50%;
-        position: absolute;
-        top: 24px;
-        right: 24px;
-    }
+	.light {
+		width: 8px;
+		height: 8px;
+		border-radius: 50%;
+		background: var(--signal);
+		box-shadow: 0 0 0 0 var(--signal);
+		animation: pulse 2s ease-out infinite;
+	}
 
-    h3 {
-        margin: 0 0 0.75rem 0;
-        font-size: 1.4rem;
-        font-weight: bold;
-        color: var(--slate, #2F3948);
-        font-family: var(--primaryFont, sans-serif);
-    }
+	@keyframes pulse {
+		70% {
+			box-shadow: 0 0 0 7px transparent;
+		}
+		100% {
+			box-shadow: 0 0 0 0 transparent;
+		}
+	}
 
-    p {
-        margin: 0;
-        color: #4b5563;
-        font-size: 1.1rem;
-        line-height: 1.5;
-    }
+	h3 {
+		margin: 0 0 0.35rem;
+	}
+
+	.desc {
+		margin: 0;
+		color: var(--muted);
+	}
 </style>

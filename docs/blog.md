@@ -69,8 +69,22 @@ Added a second node and set up a basic Tailscale mesh...
 
 This will appear at `/blog/homelab-v2`.
 
+## Password protection
+
+The blog is locked behind a password. Because the site is static, the lock is real encryption rather than a hidden page: at build time every post (and the post list) is rendered to HTML and encrypted with AES-256-GCM, using a key derived from the password with PBKDF2. Only ciphertext ships to the browser, and visitors decrypt it client-side after entering the password. The password is remembered for the browser session.
+
+- The password comes from the `BLOG_PASSWORD` environment variable. In CI it is the `BLOG_PASSWORD` repository secret (Settings → Secrets and variables → Actions).
+- `npm run build` **fails** if `BLOG_PASSWORD` is unset, so the blog is never published unprotected.
+- `npm run dev` without it falls back to the password `dev`.
+- To change the password, update the secret and redeploy.
+- Lock screen text lives in `blogLockMessage` in `src/lib/config.js`.
+
+Because posts are rendered to static HTML before encryption, Svelte components inside a post render but aren't interactive.
+
 ## How the blog works (internals)
 
-- **Index page** (`src/routes/blog/+page.svelte`): uses `import.meta.glob` to scan all `.md` files in `src/lib/posts/` at build time, reads their frontmatter, and renders a sorted list.
-- **Post page** (`src/routes/blog/[slug]/+page.ts` + `+page.svelte`): loads the matching `.md` file by slug, renders it as a Svelte component (mdsvex compiles each `.md` to a component), and displays the frontmatter title/date above the content.
-- The site is fully static — posts are prerendered at build time by `entries()` in `+page.ts`.
+- **`src/lib/server/posts.js`**: globs `src/lib/posts/*.md`, renders each post with `svelte/server`, and encrypts the results (`lockIndex`, `lockPost`).
+- **`src/lib/vault.js`**: Web Crypto encrypt and decrypt, shared by the build (Node) and the browser.
+- **Index page** (`src/routes/blog/+page.server.js` + `+page.svelte`): ships the encrypted post list.
+- **Post page** (`src/routes/blog/[slug]/+page.server.js` + `+page.svelte`): ships one encrypted post. `entries()` prerenders every slug.
+- **`src/lib/components/BlogLock.svelte`**: password prompt. Decrypts the payload and renders it.
