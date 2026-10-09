@@ -2,7 +2,11 @@
   "current_projects": [
 	{
 	  "title": "LUMA",
-	  "description": "Generalized ATS designed for college clubs and design teams."
+	  "description": "Generalized, open-source ATS designed for college clubs and design teams."
+	},
+	{
+	  "title": "Workbenched",
+	  "description": "Local-first command center that tracks project time and writes my work log for me."
 	}
   ]
 }

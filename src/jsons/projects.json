@@ -1,6 +1,61 @@
 {
   "projects": [
     {
+      "title": "Workbenched",
+      "shortDescription": "Project-focused command center with a self-writing work log",
+      "description": "Built a local-first desktop app that tracks what I work on, files it to the right project automatically, and keeps a work log that writes itself. Passive activity capture comes from ActivityWatch; Workbenched attributes each window and artifact to a project — first by rules, then by previously seen artifacts, then by LLM inference — tagging every guess with a confidence score so anything uncertain lands in a filing queue instead of getting lost. Time, artifacts, tasks, and blockers are kept per project, and a HUD overlay lets me set the current project or task on demand. Everything runs locally on an embedded PostgreSQL database; the only outbound traffic is to a bring-your-own LLM provider (Anthropic, OpenAI, Google, or xAI) whose key is stored in the OS keychain.",
+      "date": "July 2026 - August 2026",
+      "type": "Personal Project",
+      "skills": ["Electron", "Svelte", "TypeScript", "PostgreSQL", "Drizzle ORM", "ActivityWatch", "LLMs"],
+      "links": ["https://github.com/owenstuckman/Workbenched"],
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/Workbenched",
+      "additionalImages": []
+    },
+    {
+      "title": "Hokie Cart Check-Out",
+      "shortDescription": "Badge-scan move-in cart tracking for Virginia Tech",
+      "description": "Built a move-in cart tracking system for Virginia Tech residence halls, designed for a folding table at the building entrance. Staff scan a student's Hokie Passport with any keyboard-wedge barcode scanner and the ledger decides what the scan means: return a cart that's out, show a short list if the student has several, or open a prefilled check-out form if they have none. Carts are picked from a live list of what's actually available, and every action lands in an append-only ledger that exports to CSV. Development runs on an embedded Postgres (PGlite) so there's nothing to install; production deploys to Vercel.",
+      "date": "August 2026",
+      "type": "Personal Project",
+      "skills": ["Next.js", "TypeScript", "PostgreSQL", "PGlite", "Vercel"],
+      "links": ["https://github.com/owenstuckman/MoveInCarts", "https://move-in-carts.vercel.app"],
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/MoveInCarts",
+      "additionalImages": []
+    },
+    {
+      "title": "A Reasonable WMS",
+      "shortDescription": "Reasoning model for warehouse internal transfers",
+      "description": "Research project exploring a 'reasoning' layer for warehouse management systems. AGVs and fork truck operators are rarely at 100% utilization, so the question is what productive internal transfers they should do while idle — staging the next product isn't always optimal when several smaller moves could lower the average loading time overall. Evaluated multi-agent reinforcement learning (MARL), regression, and decision-tree approaches, settling on MARL with pretrained agents tuned for different factors and a final arbiter that picks the highest-value move. Designed as a containerized, independently scalable, plug-and-play service that can sit alongside any existing WMS.",
+      "date": "April 2026 - June 2026",
+      "type": "Research Project",
+      "skills": ["Python", "Reinforcement Learning", "MARL", "Docker"],
+      "links": ["https://github.com/owenstuckman/AReasonableWMS"],
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/AReasonableWMS",
+      "additionalImages": []
+    },
+    {
+      "title": "AutoShowTracker",
+      "shortDescription": "Automatic TV episode tracker across every player",
+      "description": "Built a local-first tracker that detects what TV show and episode I'm watching across browsers, desktop media players, and streaming sites, then logs a unified watch history. Detection comes from a browser extension, OS media session APIs (SMTC/MPRIS), VLC/mpv IPC, ActivityWatch window titles, and an OCR fallback. Titles and filenames are parsed with guessit and URL patterns for nine streaming platforms, then fuzzy-matched against TMDb with rapidfuzz. Confidence-based routing decides whether an event is auto-logged, flagged for review, or queued for manual resolution, and a local web dashboard shows history, show progress, and stats.",
+      "date": "March 2026 - April 2026",
+      "type": "Personal Project",
+      "skills": ["Python", "SQLite", "TMDb API", "ActivityWatch", "OCR", "Fuzzy Matching"],
+      "links": ["https://github.com/owenstuckman/AutoShowTracker"],
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/AutoShowTracker",
+      "additionalImages": []
+    },
+    {
+      "title": "PredictPEV",
+      "shortDescription": "Quant signal bots for Kalshi prediction markets",
+      "description": "Built a dual-module trading bot for Kalshi binary contracts that looks for mispricings using quantitative signals from equities and crypto markets. The stocks bot combines P/E z-scores and the volatility risk premium in a logistic regression model; the crypto bot uses momentum, volatility, funding rate, and open interest from Binance. Both share the same loop — ingest, signal, model, edge detection, execution, and risk management — with walk-forward backtesting, paper trading by default, and TimescaleDB, Grafana, and Prometheus running in Docker for storage and monitoring.",
+      "date": "February 2026",
+      "type": "Personal Project",
+      "skills": ["Python", "Logistic Regression", "TimescaleDB", "Grafana", "Docker", "Kalshi API"],
+      "links": ["Private Repo"],
+      "image": "",
+      "additionalImages": []
+    },
+    {
       "title": "FICO Score Simulator",
       "shortDescription": "Monte Carlo FICO score projector",
       "description": "Built an interactive web app that estimates a user's FICO credit score and projects how it might evolve over time using Monte Carlo simulation — running 1,000 probabilistic scenarios across 12, 24, or 36-month timeframes. Users input their credit profile across all five FICO factors (payment history, amounts owed, credit history length, new credit, and credit mix), the app calculates a real-time score estimate, and Recharts visualizes the range of possible future trajectories. All computation runs locally in the browser with no data transmitted anywhere.",
@@ -29,7 +84,7 @@
       "date": "February 2026",
       "type": "",
       "skills": ["SvelteKit", "TypeScript", "Supabase", "PostgreSQL", "Bootstrap", "Schedule-X"],
-      "links": ["https://github.com/ArchimedesVT/luma"],
+      "links": ["https://github.com/owenstuckman/luma", "https://github.com/ArchimedesVT/luma"],
       "image": "/LUMA_logo.png",
       "additionalImages": []
     },
@@ -172,7 +227,7 @@
       "date": "February 2025",
       "type": "Personal Project",
       "skills": ["SvelteKit", "Markdown", "TailwindCSS", "TypeScript", "svmdex"],
-      "links": ["https://owenstuckman.co"],
+      "links": ["https://owenstuckman.lol"],
       "image": "/os-logo.png",
       "additionalImages": []
     },
@@ -216,7 +271,7 @@
       "date": "December 2024",
       "type": "Group - Team of Four",
       "skills": ["Flutter", "Supabase", "IoT", "C++", "Esp32"],
-      "links": ["https://github.com/owenstuckman/Group3IncentivesEsp32", "https://github.com/owenstuckman/Group3IncentivesApp"],
+      "links": ["https://github.com/owenstuckman/TrashCashEsp32", "https://github.com/owenstuckman/TrashCashApp"],
       "image": "/trashcash.png",
       "additionalImages": [],
       "size": "small"
@@ -264,7 +319,7 @@
       "date": "October 2024",
       "type": "Solo Project in a Team Competition",
       "skills": ["Scrapy", "Supabase", "Python"],
-      "links": ["https://github.com/owenstuckman/AdaptiveSpec-Logistics", "https://www.ylloutube.com/watch?v=V1gkJ94yNnk"],
+      "links": ["https://github.com/owenstuckman/AdaptiveSpec-Logistics", "https://www.youtube.com/watch?v=V1gkJ94yNnk"],
       "image": "/adaptivespec.png",
       "additionalImages": [],
       "size": "small"
