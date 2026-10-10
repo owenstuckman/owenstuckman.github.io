@@ -7,6 +7,8 @@
 	import { onMount, tick } from 'svelte';
 	import ProjectDetails from './ProjectDetails.svelte';
 	import { ZONES } from '$lib/projects.js';
+	import { recipeFor, KIND_NAMES } from '$lib/factory/recipes.js';
+	import { dock } from '$lib/dock.svelte.js';
 
 	let { projects, about, onfallback } = $props();
 
@@ -14,12 +16,19 @@
 	let factory = null;
 	let status = $state('loading'); // loading | ready | failed
 	let selected = $state(-1);
-	let hover = $state({ line: -1, x: 0, y: 0 });
+	let stageIndex = $state(-1); // selected station on the line, -1 = whole line
+	let hover = $state({ line: -1, station: -1, x: 0, y: 0 });
+	let zone = $state('Wall');
 	let listOpen = $state(true);
 	let listEl = $state();
 	let panelEl = $state();
 
 	let project = $derived(selected >= 0 ? projects[selected] : null);
+	let recipe = $derived(project ? recipeFor(project) : null);
+	let stored = $derived(project?.status === 'archived');
+	let unit = $derived(stored ? 'Pallet' : 'Stage');
+	let station = $derived(recipe && stageIndex >= 0 ? recipe.stations[stageIndex] : null);
+	const stationName = (i, s) => recipeFor(projects[i]).stations[s]?.label;
 
 	// Floor order: running lines, construction sites, then the warehouse
 	const groups = [
@@ -32,27 +41,29 @@
 
 	// Camera views are framed to the uncovered canvas, so update the HUD (and the
 	// scene's insets) before asking for a view.
-	async function select(i) {
+	async function select(i, s = -1) {
 		selected = i;
+		stageIndex = s;
 		if (i >= 0 && matchMedia('(max-width: 48rem)').matches) listOpen = false;
 		await syncInsets();
-		factory?.select(i);
+		factory?.select(i, s);
+		panelBody?.scrollTo({ top: 0 });
 	}
 
-	async function home() {
+	// Jump-to views: the side rail and the stops on the top-bar tape
+	const JUMPS = [
+		{ view: 'wall', label: 'Wall', short: 'Wall', zone: 'Wall' },
+		{ view: 'lines', label: 'Production floor', short: 'Floor', zone: 'Lines' },
+		{ view: 'warehouse', label: 'Warehouse', short: 'Store', zone: 'Warehouse' }
+	];
+
+	async function jump(view) {
 		await select(-1);
-		factory?.home();
+		factory?.[view]();
 	}
 
-	async function readWall() {
-		await select(-1);
-		factory?.wall();
-	}
-
-	async function warehouse() {
-		await select(-1);
-		factory?.warehouse();
-	}
+	const home = () => jump('home');
+	let panelBody = $state();
 
 	const step = (d) => select(ordered[Math.min(ordered.length - 1, Math.max(0, position + d))].index);
 
@@ -78,7 +89,9 @@
 	});
 
 	function onkeydown(e) {
-		if (e.key === 'Escape' && selected >= 0) home();
+		if (e.key !== 'Escape' || selected < 0) return;
+		if (stageIndex >= 0) select(selected);
+		else home();
 	}
 
 	onMount(() => {
@@ -97,15 +110,22 @@
 					projects,
 					about,
 					onSelect: select,
-					onHover: (line, x = 0, y = 0) => {
+					onHover: (line, x = 0, y = 0, station = -1) => {
 						const rect = stage.getBoundingClientRect();
-						hover = { line, x: x - rect.left, y: y - rect.top };
+						hover = { line, station, x: x - rect.left, y: y - rect.top };
+					},
+					onMove: ({ progress, zone: z }) => {
+						zone = z;
+						dock.progress = progress;
+						dock.label = z;
 					}
 				});
 				if (destroyed) return created.destroy();
 				factory = created;
 				if (import.meta.env.DEV) window.__factory = created;
 				status = 'ready';
+				dock.owner = 'factory';
+				dock.stops = created.stops.map((stop) => ({ ...stop, go: () => jump(stop.view) }));
 				await syncInsets();
 				factory.home();
 				themeObserver = new MutationObserver(retheme);
@@ -123,6 +143,7 @@
 			themeObserver?.disconnect();
 			scheme.removeEventListener('change', retheme);
 			factory?.destroy();
+			Object.assign(dock, { owner: null, stops: [], label: '', progress: 0 });
 		};
 	});
 </script>
@@ -167,10 +188,11 @@
 			{/if}
 		</nav>
 
-		{#if hover.line >= 0 && hover.line !== selected}
+		{#if hover.line >= 0 && !(hover.line === selected && hover.station === stageIndex)}
 			<div class="tip" style="transform: translate({hover.x + 14}px, {hover.y + 14}px)" aria-hidden="true">
 				<span class="code">{projects[hover.line].code}</span>
 				{projects[hover.line].title}
+				{#if hover.station >= 0}<span class="tip-stage">· {stationName(hover.line, hover.station)}</span>{/if}
 			</div>
 		{/if}
 
@@ -180,8 +202,50 @@
 					<span class="label">{ZONES[project.status].label} · {project.code}</span>
 					<button type="button" class="close" onclick={home} aria-label="Close and return to the overview">✕</button>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body" bind:this={panelBody}>
+					{#if station}
+						<section class="stage-card" aria-label="Station">
+							<p class="label">
+								{unit} {stageIndex + 1} of {recipe.stations.length}{stored ? '' : ` · ${KIND_NAMES[station.kind]}`}
+								{#if !station.built}<span class="planned">Planned</span>{/if}
+							</p>
+							<h3>{station.label}</h3>
+							<p>{station.detail}</p>
+							<div class="stage-nav">
+								<button type="button" disabled={stageIndex === 0} onclick={() => select(selected, stageIndex - 1)}>← {unit}</button>
+								<button type="button" onclick={() => select(selected)}>{stored ? 'All pallets' : 'Whole line'}</button>
+								<button
+									type="button"
+									disabled={stageIndex === recipe.stations.length - 1}
+									onclick={() => select(selected, stageIndex + 1)}>{unit} →</button
+								>
+							</div>
+						</section>
+					{/if}
 					<ProjectDetails {project} compact />
+					{#if recipe}
+						<section class="stages" aria-label={stored ? 'Pallets' : 'Stations on this line'}>
+							<p class="label">
+								{stored ? `In storage · ${recipe.stations.length} pallets` : `The line · makes ${recipe.product}s`}
+							</p>
+							<ol>
+								{#each recipe.stations as st, s}
+									<li>
+										<button
+											type="button"
+											class:active={stageIndex === s}
+											class:planned={!st.built}
+											onclick={() => select(selected, s)}
+										>
+											<span class="num">{s + 1}</span>
+											<span class="st-name">{st.label}</span>
+											{#if !st.built}<span class="tag">planned</span>{/if}
+										</button>
+									</li>
+								{/each}
+							</ol>
+						</section>
+					{/if}
 				</div>
 				<div class="panel-foot">
 					<button type="button" onclick={() => step(-1)} disabled={position <= 0}>← Prev</button>
@@ -191,11 +255,18 @@
 			</aside>
 		{/if}
 
+		<nav class="rail" class:shifted={!!project} aria-label="Jump to">
+			{#each JUMPS as j, i}
+				<button type="button" class:here={zone === j.zone} data-short={j.short} onclick={() => jump(j.view)}>
+					<span class="rail-num">{String(i + 1).padStart(2, '0')}</span>
+					<span class="rail-label">{j.label}</span>
+				</button>
+			{/each}
+		</nav>
+
 		<div class="hud-bottom">
 			<button type="button" class="chip" onclick={home}>↺ Overview</button>
-			<button type="button" class="chip" onclick={readWall}>Read the wall</button>
-			<button type="button" class="chip" onclick={warehouse}>Warehouse</button>
-			<span class="hint label">Drag to move · Right-drag to rotate · Scroll to zoom · Click any line or pallet</span>
+			<span class="hint label">WASD or drag to move · Q/E or right-drag to rotate · Scroll to zoom · Click a station, line, or pallet</span>
 		</div>
 	</div>
 {/if}
@@ -446,6 +517,196 @@
 		cursor: default;
 	}
 
+	.tip-stage {
+		color: var(--muted);
+	}
+
+	/* ---------- stations ---------- */
+	.stage-card {
+		margin: -0.25rem 0 1.25rem;
+		padding: 0.9rem 1rem;
+		background: var(--surface-2);
+		border-left: 4px solid var(--tape);
+		border-radius: 4px;
+	}
+
+	.stage-card .label {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+		margin: 0 0 0.25rem;
+		font-size: 0.66rem;
+	}
+
+	.stage-card h3 {
+		margin: 0 0 0.4rem;
+		font-size: 1.5rem;
+	}
+
+	.stage-card p:not(.label) {
+		margin: 0 0 0.75rem;
+		line-height: 1.6;
+	}
+
+	.planned {
+		padding: 0 0.3rem;
+		color: var(--tape-ink);
+		background: repeating-linear-gradient(-45deg, var(--tape) 0 5px, #ffd75e 5px 10px);
+		border-radius: 2px;
+	}
+
+	.stage-nav {
+		display: flex;
+		gap: 0.4rem;
+		flex-wrap: wrap;
+	}
+
+	.stage-nav button,
+	.stages button {
+		font: inherit;
+		color: var(--ink);
+		background: var(--surface);
+		border: 1px solid var(--line);
+		border-radius: 4px;
+		cursor: pointer;
+	}
+
+	.stage-nav button {
+		padding: 0.25rem 0.55rem;
+		font-size: 0.82rem;
+	}
+
+	.stage-nav button:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+
+	.stages {
+		margin-top: 1.5rem;
+	}
+
+	.stages .label {
+		margin: 0 0 0.5rem;
+		font-size: 0.66rem;
+	}
+
+	.stages ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.3rem;
+	}
+
+	.stages li {
+		margin: 0;
+	}
+
+	.stages button {
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		width: 100%;
+		padding: 0.4rem 0.6rem;
+		text-align: left;
+	}
+
+	.stages button:hover {
+		border-color: var(--tape);
+	}
+
+	.stages button.active {
+		background: color-mix(in srgb, var(--tape) 30%, var(--surface));
+		border-color: var(--tape);
+	}
+
+	.stages button.planned {
+		border-style: dashed;
+		color: var(--muted);
+	}
+
+	.num {
+		width: 1.4rem;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--muted);
+	}
+
+	.st-name {
+		font-family: var(--font-head);
+		font-size: 1.05rem;
+		font-weight: 700;
+		text-transform: uppercase;
+	}
+
+	.tag {
+		margin-left: auto;
+		font-family: var(--font-mono);
+		font-size: 0.62rem;
+		text-transform: uppercase;
+	}
+
+	/* ---------- jump rail ---------- */
+	.rail {
+		position: absolute;
+		top: 50%;
+		right: 1rem;
+		transform: translateY(-50%);
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+		transition: right 0.25s ease;
+	}
+
+	.rail.shifted {
+		right: calc(min(26rem, 100% - 2rem) + 2rem);
+	}
+
+	/* compact next to the project panel */
+	.rail.shifted .rail-label {
+		display: none;
+	}
+
+	.rail.shifted button::after {
+		content: attr(data-short);
+	}
+
+	.rail button {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.45rem 0.7rem 0.45rem 0.5rem;
+		font-family: var(--font-head);
+		font-size: 1rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		color: var(--ink);
+		background: color-mix(in srgb, var(--surface) 92%, transparent);
+		backdrop-filter: blur(6px);
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		cursor: pointer;
+	}
+
+	.rail button:hover {
+		border-color: var(--tape);
+	}
+
+	.rail button.here {
+		border-color: var(--tape);
+		box-shadow: inset 4px 0 0 var(--tape), var(--shadow);
+	}
+
+	.rail-num {
+		font-family: var(--font-mono);
+		font-size: 0.66rem;
+		font-weight: 400;
+		color: var(--muted);
+	}
+
 	/* ---------- bottom bar ---------- */
 	.hud-bottom {
 		position: absolute;
@@ -492,6 +753,24 @@
 		}
 		.hint {
 			display: none;
+		}
+		.rail {
+			top: auto;
+			bottom: 0.5rem;
+			right: 0.5rem;
+			transform: none;
+		}
+		.rail.shifted {
+			display: none;
+		}
+		.rail-label {
+			display: none;
+		}
+		.rail button {
+			padding: 0.45rem 0.6rem;
+		}
+		.rail button::after {
+			content: attr(data-short);
 		}
 		.hud-bottom {
 			left: 0.5rem;

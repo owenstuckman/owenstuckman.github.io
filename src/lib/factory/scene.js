@@ -38,8 +38,8 @@ const PALLET_TOP = PALLET_Y + 0.075;
 const BAY = 2.3;
 const RACK_FACE = 6.2; // |x| of the rack face on the aisle
 const SLOT_X = 7.0; // |x| of a pallet in a bay
-const LEVELS = [0, 2.1, 4.0]; // beam heights; level 0 is the AGV drop level
-const RACK_H = 5.8;
+const LEVELS = [0, 2.1, 4.0, 5.9]; // beam heights; level 0 is the AGV drop level
+const RACK_H = 7.7;
 
 const AGV_COUNT = 6;
 const AGV_SPEED = 9;
@@ -66,7 +66,7 @@ function toonGradient() {
 	return tex;
 }
 
-export async function createFactory(container, { projects, about, onSelect, onHover }) {
+export async function createFactory(container, { projects, about, onSelect, onHover, onMove }) {
 	const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	// ---- Renderer / scene / camera / controls ----
@@ -144,7 +144,7 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		const stations = [];
 		for (let s = recipe.stations.length - 1; s >= 0; s--) {
 			const st = recipe.stations[s];
-			stations[s] = { ...st, x: cursor - st.len / 2, built: s < recipe.built };
+			stations[s] = { ...st, x: cursor - st.len / 2 };
 			cursor -= st.len + GAP;
 		}
 		const hopperX = cursor - 0.4;
@@ -172,7 +172,29 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	const lastRowZ = Math.max(0, (rows - 1) * ROW);
 	const maxOuter = Math.max(30, ...lines.map((l) => PICK_X + l.length));
 
-	const baysPerSide = Math.max(8, Math.ceil(archived.length / 4));
+	// Each archived project is a run of pallets (one per part of the project) on
+	// one rack level. Runs fill level 1 left, level 1 right, level 2 left, …
+	const groups = archived.map((project) => ({ project, recipe: recipeFor(project) }));
+	const palletCount = groups.reduce((n, g) => n + g.recipe.stations.length, 0);
+	function pack(bays) {
+		const rows = [];
+		for (let level = 1; level < LEVELS.length; level++) for (const side of [-1, 1]) rows.push({ side, level });
+		let row = 0;
+		let used = 0;
+		for (const g of groups) {
+			const n = g.recipe.stations.length;
+			if (used + n > bays) {
+				row++;
+				used = 0;
+			}
+			if (row >= rows.length || n > bays) return false;
+			Object.assign(g, { side: rows[row].side, level: rows[row].level, bay: used });
+			used += n;
+		}
+		return true;
+	}
+	let baysPerSide = Math.max(10, Math.ceil(palletCount / ((LEVELS.length - 1) * 2)));
+	while (!pack(baysPerSide)) baysPerSide++;
 	const W0 = lastRowZ + 16; // warehouse start
 	const W1 = W0 + baysPerSide * BAY;
 	const toWorld = (line, x, y = 0, z = 0) => new THREE.Vector3(x, y, z).applyMatrix4(line.matrix);
@@ -267,7 +289,7 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	];
 
 	// Zone banner over the aisle, back to back so it reads from both directions
-	const banner = drawZoneBanner('Warehouse', `${archived.length} archived projects · drop-off on the ground level`);
+	const banner = drawZoneBanner('Warehouse', `${archived.length} archived projects · ${palletCount} pallets`);
 	sign(banner, 10, 1.875, 0, 7, W0 - 2.2);
 	sign(banner, 10, 1.875, 0, 7, W0 - 2.26, Math.PI);
 	poles(-5.1, 5.1, 7.9, W0 - 2.23);
@@ -310,7 +332,8 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 
 	const animated = []; // { update(time) }
 	const flows = []; // running lines' belt items and palletizers
-	const hitTargets = []; // { project, center, size, kind: 'line' | 'slot', line?, slot? }
+	const hitTargets = []; // { project, center, size, kind: 'line' | 'group', line?, group? }
+	const stationTargets = []; // line stations and stored pallets: { project, line? | group?, station, pallet?, center, size }
 
 	function ghostBox(line, w, h, d, x, y, z) {
 		const world = new THREE.Matrix4().multiplyMatrices(line.matrix, at(x, y, z));
@@ -463,6 +486,16 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		}
 
 		const heights = stations.map((st) => buildStation(line, st));
+		stations.forEach((st, s) =>
+			stationTargets.push({
+				project: line.project,
+				line,
+				station: s,
+				kind: 'station',
+				center: toWorld(line, st.x, heights[s] / 2, -0.4),
+				size: new THREE.Vector3(st.len + 0.2, heights[s] + 0.2, 4)
+			})
+		);
 
 		// stage labels above each station
 		stations.forEach((st, s) => {
@@ -576,31 +609,34 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	}
 
 	// ---- Warehouse racks ----
-	const slots = [];
-	for (const side of [-1, 1]) {
-		for (let bay = 0; bay < baysPerSide; bay++) {
-			const z = W0 + bay * BAY + BAY / 2;
-			for (let level = 0; level < LEVELS.length; level++) {
-				const y = level === 0 ? PALLET_Y : LEVELS[level] + 0.16 + 0.075;
-				slots.push({ side, bay, level, pos: new THREE.Vector3(side * SLOT_X, y, z), occupied: false, age: 0, reserved: -1 });
-			}
-		}
-	}
-	// archived projects fill the upper levels bay by bay, alternating sides
-	const upper = [-1, 1].map((side) => slots.filter((s) => s.side === side && s.level > 0));
-	archived.forEach((project, k) => {
-		const slot = upper[k % 2][Math.floor(k / 2)];
-		if (!slot) return;
-		slot.project = project;
-		slot.occupied = true;
-		slot.product = recipeFor(project).product;
+	const bayZ = (bay) => W0 + bay * BAY + BAY / 2;
+	const levelY = (level) => (level === 0 ? PALLET_Y : LEVELS[level] + 0.16 + 0.075);
+	const slot = (side, level, bay, extra) => ({
+		side,
+		level,
+		bay,
+		pos: new THREE.Vector3(side * SLOT_X, levelY(level), bayZ(bay)),
+		occupied: false,
+		age: 0,
+		reserved: -1,
+		...extra
 	});
-	const ground = slots.filter((s) => s.level === 0);
-	// some finished pallets are already in from earlier shifts
+
+	// ground level: drop-off bays for the AGVs, some already filled from earlier shifts
+	const ground = [];
+	for (const side of [-1, 1]) for (let bay = 0; bay < baysPerSide; bay++) ground.push(slot(side, 0, bay));
 	const wraps = lines.filter((l) => l.running).map((l) => PRODUCTS[l.recipe.product].wrap);
 	ground.forEach((s, i) => {
 		if (wraps.length && i % 3 !== 2) Object.assign(s, { occupied: true, color: wraps[i % wraps.length], age: -i });
 	});
+
+	// upper levels: archived projects, one pallet per part
+	const stored = groups.flatMap((g) =>
+		g.recipe.stations.map((st, k) =>
+			slot(g.side, g.level, g.bay + k, { group: g, segment: k, occupied: true, product: g.recipe.product })
+		)
+	);
+	const slots = [...ground, ...stored];
 
 	for (const side of [-1, 1]) {
 		for (let b = 0; b <= baysPerSide; b++) {
@@ -608,7 +644,7 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 				addPiece('rack-upright', boxGeo(0.12, RACK_H, 0.12), COLORS.rack, at(side * x, RACK_H / 2, W0 + b * BAY));
 		}
 		for (let b = 0; b < baysPerSide; b++) {
-			const z = W0 + b * BAY + BAY / 2;
+			const z = bayZ(b);
 			for (const y of LEVELS.slice(1)) {
 				for (const x of [RACK_FACE, RACK_FACE + 1.6]) addPiece('rack-beam', boxGeo(0.1, 0.16, BAY), COLORS.tape, at(side * x, y, z));
 				addPiece('rack-deck', boxGeo(1.5, 0.04, BAY - 0.15), COLORS.steel, at(side * SLOT_X, y + 0.1, z));
@@ -619,7 +655,7 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 
 	// wrapped loads (pallet + stretch-wrapped block), tinted by product
 	const white = new THREE.Color('#ffffff');
-	const wrapColor = (hex) => new THREE.Color(hex).lerp(white, 0.35);
+	const wrapColor = (hex, mix = 0.35) => new THREE.Color(hex).lerp(white, mix);
 	const wrapPallets = new THREE.InstancedMesh(boxGeo(1.4, 0.15, 1.4), mat(COLORS.wood), slots.length);
 	const wrapBlocks = new THREE.InstancedMesh(
 		boxGeo(1.32, 0.9, 1.32),
@@ -627,15 +663,17 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		slots.length
 	);
 	const hidden = new THREE.Matrix4().makeScale(0, 0, 0);
-	function drawSlot(slot) {
-		const i = slots.indexOf(slot);
-		if (!slot.occupied) {
+	function drawSlot(s) {
+		const i = slots.indexOf(s);
+		if (!s.occupied) {
 			wrapPallets.setMatrixAt(i, hidden);
 			wrapBlocks.setMatrixAt(i, hidden);
 		} else {
-			wrapPallets.setMatrixAt(i, tmp.makeTranslation(slot.pos.x, slot.pos.y, slot.pos.z));
-			wrapBlocks.setMatrixAt(i, tmp.makeTranslation(slot.pos.x, slot.pos.y + 0.525, slot.pos.z));
-			wrapBlocks.setColorAt(i, wrapColor(slot.color ?? PRODUCTS[slot.product]?.wrap ?? '#d9d6ce'));
+			wrapPallets.setMatrixAt(i, tmp.makeTranslation(s.pos.x, s.pos.y, s.pos.z));
+			wrapBlocks.setMatrixAt(i, tmp.makeTranslation(s.pos.x, s.pos.y + 0.525, s.pos.z));
+			// alternate shades so a project's pallets read as separate parts
+			const hex = s.color ?? PRODUCTS[s.product]?.wrap ?? '#d9d6ce';
+			wrapBlocks.setColorAt(i, wrapColor(hex, s.segment % 2 ? 0.5 : 0.25));
 		}
 		wrapPallets.instanceMatrix.needsUpdate = true;
 		wrapBlocks.instanceMatrix.needsUpdate = true;
@@ -645,31 +683,43 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	wrapPallets.frustumCulled = wrapBlocks.frustumCulled = false;
 	scene.add(wrapPallets, wrapBlocks);
 
-	// archived slots: a sample of the product on top, a beam label, a hit target
-	for (const s of slots) {
-		if (!s.project) continue;
+	// each stored pallet: a sample of the product on top and its own hit target
+	for (const s of stored) {
 		const [, sy] = PRODUCTS[s.product].size;
-		for (const pt of productParts(s.product)) {
-			const m = new THREE.Mesh(pt.geo, mat(pt.color));
-			m.matrixAutoUpdate = false;
-			m.matrix.multiplyMatrices(at(s.pos.x, s.pos.y + 0.075 + 0.9 + sy / 2, s.pos.z), pt.local);
-			scene.add(m);
-		}
+		productParts(s.product).forEach((pt, i) =>
+			addPiece(`sample-${s.product}-${i}`, pt.geo, pt.color, new THREE.Matrix4().multiplyMatrices(at(s.pos.x, s.pos.y + 0.975 + sy / 2, s.pos.z), pt.local))
+		);
+		stationTargets.push({
+			project: s.group.project,
+			group: s.group,
+			station: s.segment,
+			kind: 'station',
+			pallet: s,
+			center: new THREE.Vector3(s.pos.x, s.pos.y + 0.6, s.pos.z),
+			size: new THREE.Vector3(1.7, 1.7, BAY - 0.2)
+		});
+	}
+
+	// each project: one beam label across its run of pallets, and a hit target for the run
+	for (const g of groups) {
+		const n = g.recipe.stations.length;
+		const z = W0 + (g.bay + n / 2) * BAY;
+		const w = n * BAY - 0.25;
 		sign(
-			drawSlotLabel(s.project.code, s.project.title),
-			2.1,
-			0.525,
-			s.side * (RACK_FACE - 0.08),
-			LEVELS[s.level] - 0.2,
-			s.pos.z,
-			s.side < 0 ? Math.PI / 2 : -Math.PI / 2
+			drawSlotLabel(g.project.code, g.project.title, Math.round((w / 0.5) * 128)),
+			w,
+			0.5,
+			g.side * (RACK_FACE - 0.08),
+			LEVELS[g.level] - 0.2,
+			z,
+			g.side < 0 ? Math.PI / 2 : -Math.PI / 2
 		);
 		hitTargets.push({
-			project: s.project,
-			center: new THREE.Vector3(s.pos.x, s.pos.y + 0.6, s.pos.z),
-			size: new THREE.Vector3(1.8, 1.8, BAY - 0.1),
-			kind: 'slot',
-			slot: s
+			project: g.project,
+			center: new THREE.Vector3(g.side * SLOT_X, levelY(g.level) + 0.6, z),
+			size: new THREE.Vector3(1.9, 1.9, n * BAY - 0.1),
+			kind: 'group',
+			group: g
 		});
 	}
 
@@ -689,6 +739,14 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	hitMesh.layers.set(1); // the camera renders layer 0 only
 	scene.add(hitMesh);
 	const byProject = new Map(hitTargets.map((t) => [t.project.index, t]));
+
+	const stationHit = new THREE.InstancedMesh(boxGeo(1, 1, 1), new THREE.MeshBasicMaterial(), stationTargets.length);
+	stationTargets.forEach((t, i) => stationHit.setMatrixAt(i, tmp.compose(t.center, q.identity(), t.size)));
+	stationHit.instanceMatrix.needsUpdate = true;
+	stationHit.computeBoundingSphere();
+	stationHit.layers.set(1);
+	scene.add(stationHit);
+	const stationOf = (index, s) => stationTargets.find((t) => t.project.index === index && t.station === s);
 
 	const makeHighlight = (opacity) => {
 		const m = new THREE.Mesh(
@@ -937,15 +995,26 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			return { position: new THREE.Vector3(target.x, 8.6, WALL_Z + fitDistance(narrow ? 27 : 44, 14) * 1.04), target };
 		},
 		warehouse() {
-			return view(new THREE.Vector3(0, 2, (W0 + W1) / 2), new THREE.Vector3(0.12, 0.8, -0.9), fitDistance(22, (W1 - W0) * 0.8));
+			// from the entrance, looking down the aisle between the racks
+			return view(new THREE.Vector3(0, 3, W0 + 10), new THREE.Vector3(0, 0.45, -1), fitDistance(20, 12));
+		},
+		lines() {
+			return view(new THREE.Vector3(0, 1, lastRowZ / 2), new THREE.Vector3(0, 0.85, 0.6), fitDistance(maxOuter * 1.6, lastRowZ + 12));
 		},
 		target(t) {
+			if (t.kind === 'station' && t.pallet) {
+				return view(t.center.clone(), new THREE.Vector3(-t.pallet.side, 0.3, 0.4), fitDistance(6, 4.5));
+			}
+			if (t.kind === 'station') {
+				const target = t.center.clone().setY(1.3);
+				return view(target, new THREE.Vector3(-t.line.side * 0.35, 0.5, 0.85), fitDistance(t.size.x + 8, 7));
+			}
 			if (t.kind === 'line') {
 				const target = new THREE.Vector3(t.center.x, 1.2, t.center.z);
 				return view(target, new THREE.Vector3(-t.line.side * 0.25, 0.6, 0.8), fitDistance(t.size.x + 2, 9) * 0.95);
 			}
-			// rack slot: look across the aisle at the bay
-			return view(t.center.clone(), new THREE.Vector3(-t.slot.side, 0.35, 0.45), fitDistance(6, 4.5));
+			// a project's run of pallets: look across the aisle at it
+			return view(t.center.clone(), new THREE.Vector3(-t.group.side, 0.35, 0.45), fitDistance(t.size.z + 4, 5));
 		}
 	};
 
@@ -970,18 +1039,29 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	const raycaster = new THREE.Raycaster();
 	raycaster.layers.enable(1);
 	const pointer = new THREE.Vector2();
-	let hovered = -1;
-	let selected = -1;
+	let hovered = '';
+	let selected = '';
+	const keyOf = (project, station) => (project < 0 ? '' : `${project}:${station}`);
+	const targetOf = (project, station) => (station >= 0 ? stationOf(project, station) : byProject.get(project));
 
 	function pick(clientX, clientY) {
 		const rect = renderer.domElement.getBoundingClientRect();
 		pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
 		raycaster.setFromCamera(pointer, camera);
 		const hit = raycaster.intersectObjects([hitMesh, ...boards], false)[0];
-		if (!hit) return { project: -1, wall: false };
+		// stations sit inside their line's box: a station wins if it's nearer, or inside the line that was hit
+		const st = raycaster.intersectObject(stationHit, false)[0];
+		if (st) {
+			const t = stationTargets[st.instanceId];
+			const h = hit?.object === hitMesh ? hitTargets[hit.instanceId] : null;
+			const owner = (x) => x?.line ?? x?.group;
+			if (!hit || st.distance < hit.distance || (h && owner(h) === owner(t)))
+				return { project: t.project.index, station: t.station, wall: false };
+		}
+		if (!hit) return { project: -1, station: -1, wall: false };
 		return hit.object === hitMesh
-			? { project: hitTargets[hit.instanceId].project.index, wall: false }
-			: { project: -1, wall: true };
+			? { project: hitTargets[hit.instanceId].project.index, station: -1, wall: false }
+			: { project: -1, station: -1, wall: true };
 	}
 
 	let downAt = null;
@@ -989,16 +1069,17 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	const onPointerDown = (e) => (downAt = [e.clientX, e.clientY]);
 	const onPointerMove = (e) => {
 		if (e.pointerType !== 'mouse' || e.buttons) return;
-		const { project } = pick(e.clientX, e.clientY);
-		if (project !== hovered) {
-			hovered = project;
-			placeHighlight(hoverBox, project === selected ? null : byProject.get(project));
+		const { project, station } = pick(e.clientX, e.clientY);
+		const key = keyOf(project, station);
+		if (key !== hovered) {
+			hovered = key;
+			placeHighlight(hoverBox, key === selected || project < 0 ? null : targetOf(project, station));
 			el.style.cursor = project >= 0 ? 'pointer' : '';
 		}
-		onHover?.(project, e.clientX, e.clientY);
+		onHover?.(project, e.clientX, e.clientY, station);
 	};
 	const onPointerLeave = () => {
-		hovered = -1;
+		hovered = '';
 		placeHighlight(hoverBox, null);
 		onHover?.(-1);
 	};
@@ -1007,14 +1088,86 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]);
 		downAt = null;
 		if (moved > 6) return;
-		const { project, wall } = pick(e.clientX, e.clientY);
-		if (project >= 0) onSelect?.(project);
+		const { project, station, wall } = pick(e.clientX, e.clientY);
+		if (project >= 0) onSelect?.(project, station);
 		else if (wall) flyTo(views.wall());
 	};
 	el.addEventListener('pointerdown', onPointerDown);
 	el.addEventListener('pointermove', onPointerMove);
 	el.addEventListener('pointerleave', onPointerLeave);
 	el.addEventListener('pointerup', onPointerUp);
+
+	// ---- Keyboard: WASD / arrows move, Q/E rotate, Shift is faster ----
+	const keys = new Set();
+	const MOVE_KEYS = new Set(['w', 'a', 's', 'd', 'q', 'e', 'arrowup', 'arrowdown', 'arrowleft', 'arrowright']);
+	const typing = (e) => e.target.closest?.('input, textarea, select, [contenteditable]');
+	const onKeyDown = (e) => {
+		const k = e.key.toLowerCase();
+		if (e.metaKey || e.ctrlKey || e.altKey || typing(e) || !MOVE_KEYS.has(k)) return;
+		// arrows only steer the floor while it fills the view; otherwise let the page scroll
+		if (k.startsWith('arrow')) {
+			const r = container.getBoundingClientRect();
+			if (r.top > innerHeight * 0.4 || r.bottom < innerHeight * 0.6) return;
+			e.preventDefault();
+		}
+		keys.add(k);
+		fly = null;
+	};
+	const onKeyUp = (e) => keys.delete(e.key.toLowerCase());
+	const clearKeys = () => keys.clear();
+	addEventListener('keydown', onKeyDown);
+	addEventListener('keyup', onKeyUp);
+	addEventListener('blur', clearKeys);
+
+	const forward = new THREE.Vector3();
+	const right = new THREE.Vector3();
+	const offset = new THREE.Vector3();
+	function stepKeys(dt, fast) {
+		if (!keys.size) return;
+		const has = (...k) => k.some((x) => keys.has(x));
+		const dist = camera.position.distanceTo(controls.target);
+		const speed = Math.max(8, dist * 0.9) * (fast ? 2.2 : 1) * dt;
+		camera.getWorldDirection(forward).setY(0).normalize();
+		right.crossVectors(forward, yAxis).normalize();
+		const move = new THREE.Vector3();
+		if (has('w', 'arrowup')) move.add(forward);
+		if (has('s', 'arrowdown')) move.sub(forward);
+		if (has('d', 'arrowright')) move.add(right);
+		if (has('a', 'arrowleft')) move.sub(right);
+		if (move.lengthSq()) {
+			move.normalize().multiplyScalar(speed);
+			camera.position.add(move);
+			controls.target.add(move);
+		}
+		const turn = (has('q') ? 1 : 0) - (has('e') ? 1 : 0);
+		if (turn) {
+			offset.subVectors(camera.position, controls.target).applyAxisAngle(yAxis, turn * 1.6 * dt);
+			camera.position.copy(controls.target).add(offset);
+		}
+	}
+	let shift = false;
+	const onShift = (e) => (shift = e.shiftKey);
+	addEventListener('keydown', onShift);
+	addEventListener('keyup', onShift);
+
+	// Where the view is along the hall, for the AGV in the top bar
+	const hallStart = WALL_Z;
+	const hallEnd = W1 + 6;
+	const along = (z) => THREE.MathUtils.clamp((z - hallStart) / (hallEnd - hallStart), 0, 1);
+	const zoneAt = (z) => (z < WALL_Z + 12 ? 'Wall' : z < W0 - 4 ? 'Lines' : 'Warehouse');
+	let lastProgress = -1;
+	function reportMove() {
+		const z = controls.target.z;
+		const progress = along(z);
+		if (Math.abs(progress - lastProgress) < 0.002) return;
+		lastProgress = progress;
+		onMove?.({ progress, zone: zoneAt(z) });
+	}
+	const stops = [
+		{ label: 'Wall', at: along(WALL_Z + 6), view: 'home' },
+		{ label: 'Lines', at: along(lastRowZ / 2), view: 'lines' },
+		{ label: 'Warehouse', at: along((W0 + W1) / 2), view: 'warehouse' }
+	];
 
 	// ---- Loop ----
 	let visible = true;
@@ -1045,6 +1198,7 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			for (const a of animated) a.update(simTime);
 		}
 
+		stepKeys(dt, shift);
 		if (fly) {
 			fly.t = Math.min(1, fly.t + dt / fly.duration);
 			const k = ease(fly.t);
@@ -1054,21 +1208,24 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		}
 		controls.update();
 		clampTarget();
+		reportMove();
 		renderer.render(scene, camera);
 	}
 	frame();
 
 	return {
-		select(index) {
-			selected = index;
-			const target = byProject.get(index);
+		select(index, station = -1) {
+			selected = keyOf(index, station);
+			const target = index >= 0 ? targetOf(index, station) : null;
 			placeHighlight(selectBox, target);
-			if (index === hovered) placeHighlight(hoverBox, null);
+			if (selected === hovered) placeHighlight(hoverBox, null);
 			if (target) flyTo(views.target(target));
 		},
 		home: () => flyTo(views.home()),
+		lines: () => flyTo(views.lines()),
 		wall: () => flyTo(views.wall()),
 		warehouse: () => flyTo(views.warehouse()),
+		stops,
 		setTheme,
 		setInsets(next) {
 			insets = { left: 0, right: 0, bottom: 0, ...next };
@@ -1087,6 +1244,11 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			el.removeEventListener('pointermove', onPointerMove);
 			el.removeEventListener('pointerleave', onPointerLeave);
 			el.removeEventListener('pointerup', onPointerUp);
+			removeEventListener('keydown', onKeyDown);
+			removeEventListener('keyup', onKeyUp);
+			removeEventListener('blur', clearKeys);
+			removeEventListener('keydown', onShift);
+			removeEventListener('keyup', onShift);
 			controls.dispose();
 			scene.traverse((o) => {
 				o.geometry?.dispose();

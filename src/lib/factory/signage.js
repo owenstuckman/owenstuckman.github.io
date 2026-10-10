@@ -205,21 +205,22 @@ export function drawStationLabel(label) {
 	return c;
 }
 
-/** Rack beam label for an archived project. 512×128. */
-export function drawSlotLabel(code, title) {
-	const [c, ctx] = canvas(512, 128);
+/** Rack beam label for an archived project, as wide as its run of pallets. `width`×128. */
+export function drawSlotLabel(code, title, width = 512) {
+	width = Math.max(512, Math.min(2048, width));
+	const [c, ctx] = canvas(width, 128);
 	ctx.fillStyle = PAPER;
-	ctx.fillRect(0, 0, 512, 128);
+	ctx.fillRect(0, 0, width, 128);
 	ctx.fillStyle = INK;
-	ctx.fillRect(0, 0, 116, 128);
+	ctx.fillRect(0, 0, 150, 128);
 	ctx.fillStyle = TAPE;
 	ctx.textBaseline = 'middle';
-	fitText(ctx, code, 400, MONO, 34, 18, 100);
-	ctx.fillText(code, 12, 66);
+	fitText(ctx, code, 400, MONO, 40, 18, 130);
+	ctx.fillText(code, 14, 66);
 	ctx.fillStyle = INK;
 	const text = title.toUpperCase();
-	fitText(ctx, text, 700, HEAD, 52, 22, 512 - 140);
-	ctx.fillText(text, 130, 66);
+	fitText(ctx, text, 700, HEAD, 76, 22, width - 190);
+	ctx.fillText(text, 170, 68);
 	return c;
 }
 
