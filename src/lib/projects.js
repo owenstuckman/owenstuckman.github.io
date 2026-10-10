@@ -1,5 +1,4 @@
 import data from '../jsons/projects.json';
-import currentData from '../jsons/current_projects.json';
 
 const slugify = (s) =>
 	s
@@ -7,19 +6,34 @@ const slugify = (s) =>
 		.replace(/[^a-z0-9]+/g, '-')
 		.replace(/^-|-$/g, '');
 
-// Line / bin code, e.g. A-01 … A-12, B-01 …
-const code = (i) =>
-	`${String.fromCharCode(65 + Math.floor(i / 12))}-${String((i % 12) + 1).padStart(2, '0')}`;
+/**
+ * Where a project sits on the factory floor, from its `status` in projects.json:
+ *   running      → a production line making product
+ *   construction → a line still being built (current projects)
+ *   archived     → a pallet in the warehouse (default)
+ */
+export const ZONES = {
+	running: { prefix: 'L', label: 'Running line' },
+	construction: { prefix: 'UC', label: 'Under construction' },
+	archived: { prefix: 'W', label: 'Warehouse' }
+};
 
-/** Every project, with a stable slug and line code. */
-export const projects = data.projects.map((p, i) => ({
-	...p,
-	index: i,
-	slug: slugify(p.title),
-	code: code(i)
-}));
+const counters = { running: 0, construction: 0, archived: 0 };
 
-export const currentProjects = currentData.current_projects;
+/** Every project, with a stable slug, its zone, and a zone code (L-01, UC-01, W-01 …). */
+export const projects = data.projects.map((p, i) => {
+	const status = ZONES[p.status] ? p.status : 'archived';
+	const n = ++counters[status];
+	return {
+		...p,
+		index: i,
+		status,
+		slug: slugify(p.title),
+		code: `${ZONES[status].prefix}-${String(n).padStart(2, '0')}`
+	};
+});
+
+export const currentProjects = projects.filter((p) => p.status === 'construction');
 
 /** "hackvwin.png" would resolve relative to the page — anchor bare paths at the site root */
 export const imageSrc = (path) => (/^(https?:|data:|\/)/.test(path) ? path : `/${path}`);
@@ -27,7 +41,11 @@ export const imageSrc = (path) => (/^(https?:|data:|\/)/.test(path) ? path : `/$
 export function linkName(url) {
 	try {
 		const host = new URL(url).hostname.replace('www.', '');
-		if (host.includes('github.com')) return 'GitHub';
+		if (host.includes('github.com')) {
+			// owner/repo, so several repos on one project stay distinguishable
+			const [owner, repo] = new URL(url).pathname.split('/').filter(Boolean);
+			return repo ? `GitHub · ${owner}/${repo}` : 'GitHub';
+		}
 		if (host.includes('devpost.com')) return 'Devpost';
 		if (host.includes('youtube.com') || host.includes('youtu.be')) return 'YouTube';
 		if (host.includes('linkedin.com')) return 'LinkedIn';

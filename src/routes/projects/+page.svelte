@@ -8,7 +8,7 @@
 	import { projects, currentProjects } from '$lib/projects.js';
 
 	let query = $state('');
-	let view = $state('list');
+	let view = $state('grid');
 	let selected = $state(null);
 	let count = $state(projectsBatchSize);
 	let ready = $state(false);
@@ -33,7 +33,7 @@
 	function setView(v) {
 		view = v;
 		try {
-			localStorage.setItem('projects-view', v);
+			localStorage.setItem('projects-view-v2', v);
 		} catch {}
 	}
 
@@ -55,7 +55,7 @@
 
 	onMount(() => {
 		try {
-			const saved = localStorage.getItem('projects-view');
+			const saved = localStorage.getItem('projects-view-v2');
 			if (saved === 'grid' || saved === 'list') view = saved;
 		} catch {}
 		openFromHash();
@@ -76,7 +76,9 @@
 	<h2>On the line now</h2>
 	<div class="current">
 		{#each currentProjects as project}
-			<CurrentCard {...project} />
+			<button type="button" class="current-open" onclick={() => open(project)} aria-haspopup="dialog">
+				<CurrentCard title={project.title} description={project.shortDescription} />
+			</button>
 		{/each}
 	</div>
 </section>
@@ -95,11 +97,11 @@
 				/>
 			</label>
 			<div class="toggle" role="radiogroup" aria-label="View">
+				<button type="button" role="radio" aria-checked={view === 'grid'} onclick={() => setView('grid')}>
+					Cards
+				</button>
 				<button type="button" role="radio" aria-checked={view === 'list'} onclick={() => setView('list')}>
 					List
-				</button>
-				<button type="button" role="radio" aria-checked={view === 'grid'} onclick={() => setView('grid')}>
-					Grid
 				</button>
 			</div>
 		</div>
@@ -147,6 +149,22 @@
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
 		gap: 1rem;
+	}
+
+	.current-open {
+		display: block;
+		width: 100%;
+		padding: 0;
+		text-align: left;
+		font: inherit;
+		color: inherit;
+		background: none;
+		border: 0;
+		cursor: pointer;
+	}
+
+	.current-open:hover :global(.card) {
+		border-color: var(--tape);
 	}
 
 	.toolbar {

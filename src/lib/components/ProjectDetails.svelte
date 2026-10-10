@@ -1,6 +1,6 @@
 <!-- Full project write-up: shared by the projects-page dialog and the factory side panel. -->
 <script>
-	import { imageSrc, linkName } from '$lib/projects.js';
+	import { imageSrc, linkName, ZONES } from '$lib/projects.js';
 
 	let { project, compact = false } = $props();
 </script>
@@ -10,7 +10,7 @@
 		<div class="thumb"><img src={imageSrc(project.image)} alt="" loading="lazy" /></div>
 	{/if}
 	<div>
-		<p class="label">Line {project.code}{project.date ? ` · ${project.date}` : ''}</p>
+		<p class="label">{project.code} · {ZONES[project.status]?.label}{project.date ? ` · ${project.date}` : ''}</p>
 		<h2>{project.title}</h2>
 		{#if project.type}<p class="type">{project.type}</p>{/if}
 	</div>

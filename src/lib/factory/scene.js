@@ -1,51 +1,59 @@
 /**
- * The factory floor. Every project is a production line:
+ * The factory floor.
  *
- *   unwind → converter → cartoner → casepacker → palletizer → (AGV pickup)
- *
- * Lines sit on both sides of a central AGV aisle, running from the outer wall
- * inward. Machines are InstancedMeshes (one draw call per part across all
- * lines), so the floor stays cheap even with ~50 lines.
+ *   back wall (about boards)
+ *   ── production hall: one line per running project, plus construction sites
+ *      for current projects. Each line is built from its project's recipe:
+ *      infeed → its own stations → palletizer, making its own product.
+ *   ── warehouse: rack bays down both sides of the aisle. Archived projects are
+ *      wrapped pallets on the upper levels; AGVs drop finished pallets from the
+ *      running lines into the ground-level bays.
  */
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { drawAboutBoard, drawToolingBoard, drawLineSign, loadFonts } from './signage.js';
+import { MapControls } from 'three/examples/jsm/controls/MapControls.js';
+import {
+	drawAboutBoard,
+	drawToolingBoard,
+	drawLineSign,
+	drawStationLabel,
+	drawSlotLabel,
+	drawZoneBanner,
+	loadFonts
+} from './signage.js';
+import { PRODUCTS } from './products.js';
+import { recipeFor } from './recipes.js';
 
 // ---- Layout (world units ≈ meters) ----
-const OUTER = 36; // |x| where a line starts (unwind end)
-const ROW = 8; // z spacing between rows of lines
+const PICK_X = 8.2; // |x| of each line's pallet pickup spot
 const AISLE = 5; // aisle half-width
+const ROW = 9; // z spacing between rows of lines
 const WALL_Z = -20;
-const DOCK_Z = -12;
-const PALLET_X = 27.8; // local x of the pallet pickup spot
-const CASES_PER_PALLET = 8;
-const BELT_Y = 0.98;
-const AGV_COUNT = 10;
-const AGV_SPEED = 10;
-const ARM_SWING = 1.6; // seconds per pick-and-place
+const GAP = 1.4; // belt between stations
+const BELT_Y = 0.96;
+const BELT_SPEED = 0.8;
+const PALLET_Y = 0.43; // pallet center on its stand
+const PALLET_TOP = PALLET_Y + 0.075;
 
-// Local x ranges of the conveyor segments between machines
-const SEGMENTS = [
-	{ from: 8, to: 11, count: 3, kind: 'product' }, // converter → cartoner
-	{ from: 15, to: 17.5, count: 2, kind: 'carton' }, // cartoner → casepacker
-	{ from: 21.5, to: 25.4, count: 3, kind: 'case' } // casepacker → palletizer
-];
-const BELT_SPEED = 0.7;
+// Warehouse racks
+const BAY = 2.3;
+const RACK_FACE = 6.2; // |x| of the rack face on the aisle
+const SLOT_X = 7.0; // |x| of a pallet in a bay
+const LEVELS = [0, 2.1, 4.0]; // beam heights; level 0 is the AGV drop level
+const RACK_H = 5.8;
+
+const AGV_COUNT = 6;
+const AGV_SPEED = 9;
 
 const COLORS = {
-	converter: '#3b7dd8',
-	cartoner: '#2fa36b',
-	casepacker: '#e07b39',
 	steel: '#8a9099',
 	dark: '#2b2d31',
 	cap: '#3a3d42',
 	tape: '#f2b705',
-	paper: '#f4f1ea',
-	product: '#ffffff',
-	carton: '#e9c98f',
-	kraft: '#b98549',
+	glass: '#1f2a36',
 	wood: '#c8a165',
-	glass: '#1f2a36'
+	rack: '#e07b39',
+	ghost: '#3b7dd8',
+	cone: '#f26b1d'
 };
 
 const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -60,27 +68,24 @@ function toonGradient() {
 
 export async function createFactory(container, { projects, about, onSelect, onHover }) {
 	const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-	const N = projects.length;
-	const rows = Math.ceil(N / 2);
-	const lastZ = (rows - 1) * ROW;
 
-	// ---- Renderer / scene / camera ----
+	// ---- Renderer / scene / camera / controls ----
 	const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
 	renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 	renderer.outputColorSpace = THREE.SRGBColorSpace;
 	container.appendChild(renderer.domElement);
 
 	const scene = new THREE.Scene();
-	scene.fog = new THREE.Fog('#ecebe6', 90, 220);
+	scene.fog = new THREE.Fog('#ecebe6', 110, 260);
 	const camera = new THREE.PerspectiveCamera(50, 1, 0.5, 400);
 
-	const controls = new OrbitControls(camera, renderer.domElement);
+	// Drag pans across the floor; right-drag (or two fingers) rotates; wheel/pinch zooms
+	const controls = new MapControls(camera, renderer.domElement);
 	controls.enableDamping = true;
 	controls.dampingFactor = 0.08;
 	controls.maxPolarAngle = Math.PI * 0.47;
 	controls.minDistance = 5;
-	controls.maxDistance = 140;
-	controls.screenSpacePanning = false;
+	controls.maxDistance = 150;
 
 	scene.add(new THREE.HemisphereLight('#ffffff', '#8d8a80', 1.6));
 	const sun = new THREE.DirectionalLight('#ffffff', 1.4);
@@ -89,36 +94,113 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 
 	const gradientMap = toonGradient();
 	const materials = new Map();
-	const mat = (color, extra = {}) => {
-		const key = color + JSON.stringify(extra);
-		if (!materials.has(key)) materials.set(key, new THREE.MeshToonMaterial({ color, gradientMap, ...extra }));
-		return materials.get(key);
+	const mat = (color) => {
+		if (!materials.has(color)) materials.set(color, new THREE.MeshToonMaterial({ color, gradientMap }));
+		return materials.get(color);
 	};
+	const ghostMat = new THREE.MeshBasicMaterial({
+		color: COLORS.ghost,
+		transparent: true,
+		opacity: 0.16,
+		depthWrite: false
+	});
+	const ghostEdgeMat = new THREE.LineBasicMaterial({ color: COLORS.ghost, transparent: true, opacity: 0.8 });
 
-	// ---- Floor, aisle tape, dock zone, back wall ----
+	const geoCache = new Map();
+	const boxGeo = (x, y, z) => {
+		const key = `b${x},${y},${z}`;
+		if (!geoCache.has(key)) geoCache.set(key, new THREE.BoxGeometry(x, y, z));
+		return geoCache.get(key);
+	};
+	const cylGeo = (rt, rb, h, seg = 16) => {
+		const key = `c${rt},${rb},${h},${seg}`;
+		if (!geoCache.has(key)) geoCache.set(key, new THREE.CylinderGeometry(rt, rb, h, seg));
+		return geoCache.get(key);
+	};
+	const at = (x, y, z) => new THREE.Matrix4().makeTranslation(x, y, z);
+	const tmp = new THREE.Matrix4();
+	const tmp2 = new THREE.Matrix4();
+	const v = new THREE.Vector3();
+	const q = new THREE.Quaternion();
+	const one = new THREE.Vector3(1, 1, 1);
+	const yAxis = new THREE.Vector3(0, 1, 0);
+
+	// ---- Sort projects onto the floor ----
+	// running lines first, construction sites nearest the warehouse
+	const lineProjects = [
+		...projects.filter((p) => p.status === 'running'),
+		...projects.filter((p) => p.status === 'construction')
+	];
+	const archived = projects.filter((p) => p.status === 'archived');
+
+	const lines = lineProjects.map((project, j) => {
+		const recipe = recipeFor(project);
+		const side = j % 2 === 0 ? -1 : 1;
+		const z = Math.floor(j / 2) * ROW;
+		// Origin at the pallet spot; the line runs outward along local -x
+		const matrix = new THREE.Matrix4().makeTranslation(side * PICK_X, 0, z);
+		if (side > 0) matrix.multiply(new THREE.Matrix4().makeRotationY(Math.PI));
+		let cursor = -4.4 - 1.2;
+		const stations = [];
+		for (let s = recipe.stations.length - 1; s >= 0; s--) {
+			const st = recipe.stations[s];
+			stations[s] = { ...st, x: cursor - st.len / 2, built: s < recipe.built };
+			cursor -= st.len + GAP;
+		}
+		const hopperX = cursor - 0.4;
+		const start = hopperX - 1;
+		return {
+			project,
+			recipe,
+			running: project.status === 'running',
+			side,
+			z,
+			matrix,
+			stations,
+			hopperX,
+			start,
+			length: 2 - start,
+			count: 0,
+			capacity: 0,
+			timer: 0,
+			placing: false,
+			pallet: true,
+			claimed: -1
+		};
+	});
+	const rows = Math.ceil(lines.length / 2);
+	const lastRowZ = Math.max(0, (rows - 1) * ROW);
+	const maxOuter = Math.max(30, ...lines.map((l) => PICK_X + l.length));
+
+	const baysPerSide = Math.max(8, Math.ceil(archived.length / 4));
+	const W0 = lastRowZ + 16; // warehouse start
+	const W1 = W0 + baysPerSide * BAY;
+	const toWorld = (line, x, y = 0, z = 0) => new THREE.Vector3(x, y, z).applyMatrix4(line.matrix);
+	const yawOf = (line) => (line.side > 0 ? Math.PI : 0);
+
+	// ---- Floor, tape, back wall ----
 	const floorCanvas = document.createElement('canvas');
 	floorCanvas.width = floorCanvas.height = 128;
 	const floorTex = new THREE.CanvasTexture(floorCanvas);
 	floorTex.wrapS = floorTex.wrapT = THREE.RepeatWrapping;
 	floorTex.colorSpace = THREE.SRGBColorSpace;
-	const floorW = OUTER * 2 + 20;
-	const floorD = lastZ - WALL_Z + 40;
+	const floorW = maxOuter * 2 + 16;
+	const floorD = W1 - WALL_Z + 24;
 	floorTex.repeat.set(floorW / 4, floorD / 4);
-	const floor = new THREE.Mesh(
-		new THREE.PlaneGeometry(floorW, floorD),
-		new THREE.MeshLambertMaterial({ map: floorTex })
-	);
+	const floor = new THREE.Mesh(new THREE.PlaneGeometry(floorW, floorD), new THREE.MeshLambertMaterial({ map: floorTex }));
 	floor.rotation.x = -Math.PI / 2;
 	floor.position.set(0, 0, WALL_Z + floorD / 2);
 	scene.add(floor);
 
+	const flat = (w, d, material, x, z, y = 0.01) => {
+		const m = new THREE.Mesh(new THREE.PlaneGeometry(w, d), material);
+		m.rotation.x = -Math.PI / 2;
+		m.position.set(x, y, z);
+		scene.add(m);
+		return m;
+	};
 	const tapeMat = new THREE.MeshBasicMaterial({ color: COLORS.tape });
-	for (const x of [-AISLE, AISLE]) {
-		const tape = new THREE.Mesh(new THREE.PlaneGeometry(0.25, lastZ - DOCK_Z + 10), tapeMat);
-		tape.rotation.x = -Math.PI / 2;
-		tape.position.set(x, 0.01, (DOCK_Z + lastZ + 10) / 2);
-		scene.add(tape);
-	}
+	for (const x of [-AISLE, AISLE]) flat(0.25, W1 - WALL_Z - 6, tapeMat, x, (WALL_Z + 6 + W1) / 2);
 
 	const hazardCanvas = document.createElement('canvas');
 	hazardCanvas.width = 256;
@@ -137,247 +219,566 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			g.fill();
 		}
 	}
-	const hazardTex = new THREE.CanvasTexture(hazardCanvas);
-	hazardTex.wrapS = THREE.RepeatWrapping;
-	hazardTex.colorSpace = THREE.SRGBColorSpace;
-	hazardTex.repeat.set(6, 1);
-	const dockEdge = new THREE.Mesh(
-		new THREE.PlaneGeometry(24, 0.6),
-		new THREE.MeshBasicMaterial({ map: hazardTex })
-	);
-	dockEdge.rotation.x = -Math.PI / 2;
-	dockEdge.position.set(0, 0.012, DOCK_Z + 3.2);
-	scene.add(dockEdge);
+	const hazardMat = (repeat) => {
+		const t = new THREE.CanvasTexture(hazardCanvas);
+		t.wrapS = THREE.RepeatWrapping;
+		t.colorSpace = THREE.SRGBColorSpace;
+		t.repeat.set(Math.max(1, repeat), 1);
+		return new THREE.MeshBasicMaterial({ map: t });
+	};
+	// warehouse threshold across the aisle
+	flat(2 * RACK_FACE, 0.6, hazardMat(6), 0, W0 - 2, 0.012);
 
 	const wallMat = new THREE.MeshLambertMaterial({ color: '#d8d5cc' });
 	const wall = new THREE.Mesh(new THREE.BoxGeometry(floorW, 18, 0.6), wallMat);
 	wall.position.set(0, 9, WALL_Z - 0.3);
 	scene.add(wall);
 
-	// ---- About boards on the wall ----
+	// ---- Signs ----
 	await loadFonts();
-	const boards = [];
-	const addBoard = (canvasEl, w, h, x, y) => {
+	const texFrom = (canvasEl, aniso = 4) => {
 		const tex = new THREE.CanvasTexture(canvasEl);
 		tex.colorSpace = THREE.SRGBColorSpace;
-		tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-		const board = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: tex }));
-		board.position.set(x, y, WALL_Z + 0.02);
-		scene.add(board);
-		boards.push(board);
+		tex.anisotropy = aniso;
+		return tex;
 	};
-	addBoard(await drawAboutBoard(about), 26, 13, -7, 8);
-	addBoard(drawToolingBoard(about, N), 13.6, 12.75, 14, 7.9);
-
-	// ---- Per-line transforms ----
-	const lineSide = (i) => (i % 2 === 0 ? -1 : 1);
-	const lineZ = (i) => Math.floor(i / 2) * ROW;
-	const lineMatrices = projects.map((_, i) => {
-		const m = new THREE.Matrix4().makeTranslation(lineSide(i) * OUTER, 0, lineZ(i));
-		if (lineSide(i) > 0) m.multiply(new THREE.Matrix4().makeRotationY(Math.PI));
+	/** A flat sign facing +z (rotated by rotY). */
+	function sign(canvasEl, w, h, x, y, z, rotY = 0, aniso = 4) {
+		const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: texFrom(canvasEl, aniso) }));
+		m.position.set(x, y, z);
+		m.rotation.y = rotY;
+		scene.add(m);
 		return m;
-	});
-	const toWorld = (i, x, y = 0, z = 0) => new THREE.Vector3(x, y, z).applyMatrix4(lineMatrices[i]);
-	const lineCenter = (i) => toWorld(i, 15, 1.5, 0);
+	}
+	const poleGeo = cylGeo(0.05, 0.05, 1, 6);
+	function poles(x1, x2, height, z) {
+		for (const x of [x1, x2]) {
+			const p = new THREE.Mesh(poleGeo, mat(COLORS.dark));
+			p.scale.y = height;
+			p.position.set(x, height / 2, z);
+			scene.add(p);
+		}
+	}
 
-	// ---- Static machine parts (instanced across all lines) ----
-	const tmp = new THREE.Matrix4();
-	const box = (w, h, d) => new THREE.BoxGeometry(w, h, d);
-	const at = (x, y, z) => new THREE.Matrix4().makeTranslation(x, y, z);
-
-	const staticParts = [
-		// unwind stand + converter
-		{ geo: box(0.25, 2.2, 0.25), color: COLORS.steel, locals: [at(1, 1.1, -1.4), at(1, 1.1, 1.4)] },
-		{ geo: box(5.5, 2.8, 3), color: COLORS.converter, locals: [at(5.25, 1.4, 0)] },
-		{ geo: box(5.6, 0.12, 3.1), color: COLORS.cap, locals: [at(5.25, 2.84, 0)] },
-		{ geo: box(5.62, 0.14, 3.12), color: COLORS.tape, locals: [at(5.25, 0.2, 0)] },
-		{ geo: box(2.6, 1, 0.04), color: COLORS.glass, locals: [at(5.25, 1.7, 1.52)] },
-		// conveyor frame + belt
-		{ geo: box(18, 0.88, 0.9), color: COLORS.steel, locals: [at(17, 0.44, 0)] },
-		{ geo: box(18, 0.08, 0.92), color: COLORS.dark, locals: [at(17, 0.92, 0)] },
-		// cartoner
-		{ geo: box(4, 2.4, 2.6), color: COLORS.cartoner, locals: [at(13, 1.2, 0)] },
-		{ geo: box(4.1, 0.12, 2.7), color: COLORS.cap, locals: [at(13, 2.44, 0)] },
-		{ geo: box(4.12, 0.14, 2.62), color: COLORS.tape, locals: [at(13, 0.2, 0)] },
-		{ geo: box(2.2, 0.9, 0.04), color: COLORS.glass, locals: [at(13, 1.5, 1.32)] },
-		// casepacker
-		{ geo: box(4, 2.8, 2.8), color: COLORS.casepacker, locals: [at(19.5, 1.4, 0)] },
-		{ geo: box(4.1, 0.12, 2.9), color: COLORS.cap, locals: [at(19.5, 2.84, 0)] },
-		{ geo: box(4.12, 0.14, 2.82), color: COLORS.tape, locals: [at(19.5, 0.2, 0)] },
-		{ geo: box(2.2, 1, 0.04), color: COLORS.glass, locals: [at(19.5, 1.7, 1.42)] },
-		// palletizer cell: posts, top beams, robot pedestal, P&D stand rails
-		{
-			geo: box(0.18, 3.4, 0.18),
-			color: COLORS.tape,
-			locals: [at(23.4, 1.7, -2), at(23.4, 1.7, 2), at(29.6, 1.7, -2), at(29.6, 1.7, 2)]
-		},
-		{ geo: box(6.4, 0.18, 0.18), color: COLORS.tape, locals: [at(26.5, 3.4, -2), at(26.5, 3.4, 2)] },
-		{ geo: box(0.18, 0.18, 4.2), color: COLORS.tape, locals: [at(23.4, 3.4, 0)] },
-		{ geo: new THREE.CylinderGeometry(0.35, 0.45, 1.6, 12), color: COLORS.dark, locals: [at(26.2, 0.8, -1.5)] },
-		{ geo: box(1.5, 0.35, 0.12), color: COLORS.steel, locals: [at(PALLET_X, 0.175, -0.68), at(PALLET_X, 0.175, 0.68)] }
+	const maxAniso = renderer.capabilities.getMaxAnisotropy();
+	const boards = [
+		sign(await drawAboutBoard(about), 26, 13, -7, 8, WALL_Z + 0.02, 0, maxAniso),
+		sign(drawToolingBoard(about, projects.length), 13.6, 12.75, 14, 7.9, WALL_Z + 0.02, 0, maxAniso)
 	];
 
-	const instanced = [];
-	for (const part of staticParts) {
-		const mesh = new THREE.InstancedMesh(part.geo, mat(part.color), N * part.locals.length);
-		let k = 0;
-		for (let i = 0; i < N; i++) {
-			for (const local of part.locals) mesh.setMatrixAt(k++, tmp.multiplyMatrices(lineMatrices[i], local));
+	// Zone banner over the aisle, back to back so it reads from both directions
+	const banner = drawZoneBanner('Warehouse', `${archived.length} archived projects · drop-off on the ground level`);
+	sign(banner, 10, 1.875, 0, 7, W0 - 2.2);
+	sign(banner, 10, 1.875, 0, 7, W0 - 2.26, Math.PI);
+	poles(-5.1, 5.1, 7.9, W0 - 2.23);
+
+	// ---- Product parts ----
+	const productParts = (type) =>
+		PRODUCTS[type].parts.map((part) => {
+			const geo = part.shape === 'cyl' ? cylGeo(...part.args) : boxGeo(...part.args);
+			const local = new THREE.Matrix4().compose(
+				new THREE.Vector3(...(part.pos ?? [0, 0, 0])),
+				new THREE.Quaternion().setFromEuler(new THREE.Euler(...(part.rot ?? [0, 0, 0]))),
+				one
+			);
+			return { geo, color: part.color, local };
+		});
+
+	// Pallet stacking pattern for a product: as many as fit on 1.3 × 1.3, up to ~1 m tall
+	function stackLayout(type) {
+		const [sx, sy, sz] = PRODUCTS[type].size;
+		const nx = Math.max(1, Math.floor(1.3 / (sx + 0.03)));
+		const nz = Math.max(1, Math.floor(1.3 / (sz + 0.03)));
+		const ny = Math.max(1, Math.min(Math.floor(0.95 / (sy + 0.005)), Math.floor(40 / (nx * nz))));
+		const out = [];
+		for (let y = 0; y < ny; y++)
+			for (let ix = 0; ix < nx; ix++)
+				for (let iz = 0; iz < nz; iz++)
+					out.push([(ix - (nx - 1) / 2) * (sx + 0.03), PALLET_TOP + sy / 2 + y * (sy + 0.005), (iz - (nz - 1) / 2) * (sz + 0.03)]);
+		return out;
+	}
+
+	// ---- Static pieces, batched into one InstancedMesh per (geometry, color) ----
+	const instancedPieces = new Map();
+	const addPiece = (key, geo, color, matrix) => {
+		const k = `${key}|${color}`;
+		if (!instancedPieces.has(k)) instancedPieces.set(k, { geo, color, mats: [] });
+		instancedPieces.get(k).mats.push(matrix);
+	};
+	const piece = (line, key, geo, color, local) =>
+		addPiece(key, geo, color, new THREE.Matrix4().multiplyMatrices(line.matrix, local));
+
+	const animated = []; // { update(time) }
+	const flows = []; // running lines' belt items and palletizers
+	const hitTargets = []; // { project, center, size, kind: 'line' | 'slot', line?, slot? }
+
+	function ghostBox(line, w, h, d, x, y, z) {
+		const world = new THREE.Matrix4().multiplyMatrices(line.matrix, at(x, y, z));
+		const m = new THREE.Mesh(boxGeo(w, h, d), ghostMat);
+		const edges = new THREE.LineSegments(new THREE.EdgesGeometry(boxGeo(w, h, d)), ghostEdgeMat);
+		for (const o of [m, edges]) {
+			o.matrixAutoUpdate = false;
+			o.matrix.copy(world);
+			scene.add(o);
 		}
+	}
+
+	function scaffold(line, x, len, h) {
+		for (const dx of [-len / 2, len / 2])
+			for (const dz of [-1.4, 1.4]) piece(line, `scaffold-post-${h}`, boxGeo(0.1, h + 0.6, 0.1), COLORS.steel, at(x + dx, (h + 0.6) / 2, dz));
+		for (const dz of [-1.4, 1.4]) {
+			piece(line, `scaffold-rail-${len}`, boxGeo(len, 0.08, 0.08), COLORS.tape, at(x, h + 0.4, dz));
+			piece(line, `scaffold-rail-${len}`, boxGeo(len, 0.08, 0.08), COLORS.tape, at(x, h / 2, dz));
+		}
+	}
+
+	function cone(line, x, z) {
+		piece(line, 'cone', cylGeo(0.02, 0.22, 0.6, 10), COLORS.cone, at(x, 0.3, z));
+		piece(line, 'cone-band', cylGeo(0.12, 0.15, 0.1, 10), '#ffffff', at(x, 0.32, z));
+	}
+
+	/** One station. Returns its height (for the label). */
+	function buildStation(line, st) {
+		const { x, len, color, kind } = st;
+		if (!st.built) {
+			const h = kind === 'tank' || kind === 'press' ? 3.2 : 2.4;
+			ghostBox(line, len, h, 2.4, x, h / 2, 0);
+			scaffold(line, x, len, h);
+			return h;
+		}
+		const p = (key, geo, c, local) => piece(line, key, geo, c, local);
+		const phase = Math.random() * 6;
+		switch (kind) {
+			case 'tank': {
+				for (const dx of [-0.8, 0.8]) {
+					p('tank', cylGeo(0.7, 0.7, 3, 18), color, at(x + dx, 1.5, -1.05));
+					p('tank-lid', cylGeo(0.5, 0.72, 0.3, 18), COLORS.cap, at(x + dx, 3.15, -1.05));
+					p('tank-pipe', boxGeo(0.14, 1.6, 0.14), COLORS.steel, at(x + dx, 0.8, -0.3));
+				}
+				p(`tank-hood-${len}`, boxGeo(len * 0.5, 1.3, 1.2), color, at(x, 1.35, 0));
+				return 3.3;
+			}
+			case 'press': {
+				for (const dx of [-len / 2 + 0.2, len / 2 - 0.2]) p('press-post', boxGeo(0.3, 3.4, 0.3), COLORS.dark, at(x + dx, 1.7, 0));
+				p(`press-beam-${len}`, boxGeo(len, 0.5, 1.2), color, at(x, 3.35, 0));
+				const head = new THREE.Mesh(boxGeo(1.3, 0.55, 1.0), mat(color));
+				head.position.copy(toWorld(line, x, 2.6, 0));
+				scene.add(head);
+				if (line.running)
+					animated.push({ update: (t) => (head.position.y = 1.55 + Math.pow((Math.sin(t * 2.4 + phase) + 1) / 2, 3) * 1.3) });
+				return 3.6;
+			}
+			case 'arch': {
+				for (const dx of [-0.5, 0.5]) {
+					for (const dz of [-0.8, 0.8]) p('arch-post', boxGeo(0.22, 2.3, 0.22), color, at(x + dx, 1.15, dz));
+					p('arch-top', boxGeo(0.3, 0.3, 1.9), color, at(x + dx, 2.35, 0));
+				}
+				p('arch-roof', boxGeo(1.3, 0.12, 1.9), COLORS.cap, at(x, 2.55, 0));
+				const light = new THREE.Mesh(boxGeo(1.0, 0.06, 1.2), new THREE.MeshBasicMaterial({ color: '#ff5a4f' }));
+				light.position.copy(toWorld(line, x, 2.18, 0));
+				scene.add(light);
+				if (line.running)
+					animated.push({ update: (t) => light.material.color.set((t * 1.5 + phase) % 2 < 1 ? '#ff5a4f' : '#3ddc84') });
+				return 2.6;
+			}
+			case 'robot': {
+				p('robot-base', cylGeo(0.35, 0.45, 1.2, 12), COLORS.dark, at(x, 0.6, -1.25));
+				const arm = new THREE.Group();
+				const upper = new THREE.Mesh(boxGeo(1.7, 0.22, 0.26), mat(color));
+				upper.position.x = 0.85;
+				const grip = new THREE.Mesh(boxGeo(0.2, 0.5, 0.2), mat(COLORS.dark));
+				grip.position.set(1.6, -0.3, 0);
+				arm.add(upper, grip);
+				arm.position.copy(toWorld(line, x, 1.35, -1.25));
+				// local +z → world: the arm reaches toward the belt
+				const toward = yawOf(line) - Math.PI / 2;
+				arm.rotation.y = toward;
+				scene.add(arm);
+				if (line.running) animated.push({ update: (t) => (arm.rotation.y = toward + Math.sin(t * 1.3 + phase) * 0.9) });
+				return 2.2;
+			}
+			case 'oven': {
+				p(`oven-${len}`, boxGeo(len, 1.7, 1.9), color, at(x, 0.85, 0));
+				p(`oven-cap-${len}`, boxGeo(len + 0.05, 0.12, 1.95), COLORS.cap, at(x, 1.74, 0));
+				p('oven-stack', cylGeo(0.22, 0.22, 1.4, 10), COLORS.dark, at(x + len / 2 - 0.6, 2.4, -0.4));
+				const bands = [-len / 3, 0, len / 3].map((dx) => {
+					const band = new THREE.Mesh(boxGeo(0.18, 1.74, 1.96), new THREE.MeshBasicMaterial({ color: '#ff8a3d' }));
+					band.position.copy(toWorld(line, x + dx, 0.86, 0));
+					scene.add(band);
+					return band;
+				});
+				if (line.running)
+					animated.push({ update: (t) => bands.forEach((b, i) => b.material.color.setHSL(0.06, 1, 0.5 + 0.12 * Math.sin(t * 3 + i))) });
+				return 2.4;
+			}
+			case 'screen': {
+				p(`console-${len}`, boxGeo(len * 0.7, 1.2, 1.2), color, at(x, 0.6, -1.25));
+				p('screen-frame', boxGeo(2, 1.3, 0.12), COLORS.dark, at(x, 1.95, -1.3));
+				const screen = new THREE.Mesh(boxGeo(1.8, 1.1, 0.02), new THREE.MeshBasicMaterial({ color: '#7fd3ff' }));
+				screen.position.copy(toWorld(line, x, 1.95, -1.23));
+				screen.rotation.y = yawOf(line);
+				scene.add(screen);
+				p('camera-gantry', boxGeo(0.12, 1.8, 0.12), COLORS.steel, at(x, 0.9, 0.6));
+				p('camera-head', boxGeo(0.4, 0.25, 0.7), COLORS.dark, at(x, 1.75, 0.3));
+				if (line.running)
+					animated.push({ update: (t) => screen.material.color.setHSL(0.55, 0.8, 0.62 + 0.08 * Math.sin(t * 2 + phase)) });
+				return 2.7;
+			}
+			default: {
+				p(`machine-${len}`, boxGeo(len, 2.4, 2.4), color, at(x, 1.2, 0));
+				p(`machine-cap-${len}`, boxGeo(len + 0.04, 0.12, 2.44), COLORS.cap, at(x, 2.44, 0));
+				p(`machine-band-${len}`, boxGeo(len + 0.06, 0.14, 2.46), COLORS.tape, at(x, 0.2, 0));
+				p('machine-window', boxGeo(1.6, 0.8, 0.04), COLORS.glass, at(x, 1.5, 1.22));
+				return 2.6;
+			}
+		}
+	}
+
+	// ---- Build each line ----
+	const ARM_PIVOT = [-1.6, 1.75, -1.5];
+	const angleTo = (x, z) => Math.atan2(-(z - ARM_PIVOT[2]), x - ARM_PIVOT[0]);
+	const ARM_CONVEYOR = angleTo(-2.4, 0);
+	const ARM_PALLET = angleTo(0, 0);
+	const ARM_OFFSET = at(0.95, 0, 0);
+
+	for (const line of lines) {
+		const { recipe, stations } = line;
+		const builtStations = stations.filter((s) => s.built);
+		const builtEnd = line.running
+			? -2.2
+			: Math.max(line.hopperX + 1.5, ...builtStations.map((s) => s.x + s.len / 2)) + 0.6;
+
+		// infeed hopper
+		piece(line, 'hopper', boxGeo(1.8, 1.4, 1.8), COLORS.steel, at(line.hopperX, 0.7, 0));
+		piece(line, 'hopper-top', cylGeo(1.25, 0.8, 0.7, 4), COLORS.cap, at(line.hopperX, 1.75, 0));
+
+		// belt: the built span, then a ghost of the rest
+		const beltStart = line.hopperX + 0.9;
+		const beltLen = +(builtEnd - beltStart).toFixed(2);
+		piece(line, `frame-${beltLen}`, boxGeo(beltLen, 0.86, 0.9), COLORS.steel, at(beltStart + beltLen / 2, 0.43, 0));
+		piece(line, `belt-${beltLen}`, boxGeo(beltLen, 0.08, 0.92), COLORS.dark, at(beltStart + beltLen / 2, 0.9, 0));
+		if (!line.running) {
+			const rest = -2.2 - builtEnd;
+			if (rest > 0.2) ghostBox(line, rest, 0.94, 0.9, builtEnd + rest / 2, 0.47, 0);
+		}
+
+		const heights = stations.map((st) => buildStation(line, st));
+
+		// stage labels above each station
+		stations.forEach((st, s) => {
+			const c = toWorld(line, st.x, 0, 0);
+			const label = sign(drawStationLabel(st.label), 3.2, 0.6, c.x, heights[s] + 0.9, c.z - 1.75);
+			if (!st.built) {
+				label.material.transparent = true;
+				label.material.opacity = 0.55;
+			}
+		});
+
+		if (line.running) {
+			// palletizer cell
+			for (const [px, pz] of [[-4.4, -2], [-4.4, 2], [1.8, -2], [1.8, 2]])
+				piece(line, 'cell-post', boxGeo(0.18, 3.4, 0.18), COLORS.tape, at(px, 1.7, pz));
+			for (const pz of [-2, 2]) piece(line, 'cell-beam', boxGeo(6.4, 0.18, 0.18), COLORS.tape, at(-1.3, 3.4, pz));
+			piece(line, 'cell-back', boxGeo(0.18, 0.18, 4.2), COLORS.tape, at(-4.4, 3.4, 0));
+			piece(line, 'cell-pedestal', cylGeo(0.35, 0.45, 1.6, 12), COLORS.dark, at(-1.6, 0.8, -1.5));
+			for (const pz of [-0.68, 0.68]) piece(line, 'stand-rail', boxGeo(1.5, 0.35, 0.12), COLORS.steel, at(0, 0.175, pz));
+		} else {
+			// construction site: ghost palletizer, cones, hazard tape
+			ghostBox(line, 6.2, 3.4, 4, -1.3, 1.7, 0);
+			for (const [cx, cz] of [[-3.5, 2.6], [0.5, 2.6], [1.5, -2.2], [line.start + 1, 2.6]]) cone(line, cx, cz);
+			const center = toWorld(line, line.start / 2 + 1, 0, 0);
+			const tape = hazardMat(Math.round(line.length / 2));
+			for (const dz of [-3, 3]) flat(line.length, 0.35, tape, center.x, line.z + dz, 0.013);
+		}
+
+		// line banner
+		const mid = toWorld(line, line.start / 2, 0, 0);
+		const signW = Math.min(10, Math.max(7, line.length * 0.35));
+		sign(drawLineSign(line.project.code, line.project.title, !line.running), signW, signW / 8, mid.x, 6.1, line.z - 2.6);
+		poles(mid.x - signW / 2 + 0.1, mid.x + signW / 2 - 0.1, 6.1, line.z - 2.62);
+
+		hitTargets.push({
+			project: line.project,
+			center: toWorld(line, line.start / 2 + 1, 2.75, 0),
+			size: new THREE.Vector3(line.length, 5.5, 5.4),
+			kind: 'line',
+			line
+		});
+
+		if (!line.running) continue;
+
+		// ---- belt flow: raw stock until the last station, then the finished product ----
+		const finalParts = productParts(recipe.product);
+		const rawParts = productParts('raw');
+		const [fsx, fsy] = PRODUCTS[recipe.product].size;
+		const exits = [line.hopperX + 0.9, ...stations.map((s) => s.x + s.len / 2)];
+		const entries = [...stations.map((s) => s.x - s.len / 2), -2.5];
+		const segments = exits.map((from, s) => {
+			const len = entries[s] - from;
+			const last = s === exits.length - 1;
+			return { from, len, last, n: Math.max(1, Math.round(len / (last ? Math.max(0.9, fsx + 0.4) : 1))) };
+		});
+		const rawCount = segments.filter((s) => !s.last).reduce((a, s) => a + s.n, 0);
+		const finalCount = segments[segments.length - 1].n;
+		const rawMeshes = rawParts.map((pt) => new THREE.InstancedMesh(pt.geo, mat(pt.color), Math.max(1, rawCount)));
+		const finalMeshes = finalParts.map((pt) => new THREE.InstancedMesh(pt.geo, mat(pt.color), finalCount));
+
+		const stack = stackLayout(recipe.product);
+		const stackMeshes = finalParts.map((pt) => {
+			const m = new THREE.InstancedMesh(pt.geo, mat(pt.color), stack.length);
+			stack.forEach((pos, k) => m.setMatrixAt(k, tmp.multiplyMatrices(line.matrix, at(...pos)).multiply(pt.local)));
+			m.count = 0;
+			return m;
+		});
+		const pallet = new THREE.Mesh(boxGeo(1.4, 0.15, 1.4), mat(COLORS.wood));
+		pallet.position.copy(toWorld(line, 0, PALLET_Y, 0));
+		const arm = new THREE.Mesh(boxGeo(1.9, 0.22, 0.26), mat(COLORS.dark));
+		arm.matrixAutoUpdate = false;
+		for (const m of [...rawMeshes, ...finalMeshes]) m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+		// instances move or start empty, so a cached bounding sphere would be wrong
+		for (const m of [...rawMeshes, ...finalMeshes, ...stackMeshes]) m.frustumCulled = false;
+		scene.add(pallet, arm, ...rawMeshes, ...finalMeshes, ...stackMeshes);
+
+		line.capacity = stack.length;
+		line.count = Math.floor(Math.random() * stack.length * 0.8);
+		line.interval = Math.max(1.4, 75 / stack.length);
+		line.armSwing = Math.min(1.6, line.interval * 0.85);
+		line.timer = Math.random() * line.interval;
+		line.wrap = PRODUCTS[recipe.product].wrap;
+		const offset = Math.random();
+
+		flows.push({
+			update(time) {
+				let r = 0;
+				for (const seg of segments) {
+					const parts = seg.last ? finalParts : rawParts;
+					const meshes = seg.last ? finalMeshes : rawMeshes;
+					const h = seg.last ? fsy / 2 : 0.15;
+					for (let n = 0; n < seg.n; n++) {
+						const u = ((time * BELT_SPEED) / seg.len + n / seg.n + offset) % 1;
+						tmp.multiplyMatrices(line.matrix, tmp2.makeTranslation(seg.from + u * seg.len, BELT_Y + h, 0));
+						const idx = seg.last ? n : r++;
+						parts.forEach((pt, i) => meshes[i].setMatrixAt(idx, tmp2.multiplyMatrices(tmp, pt.local)));
+					}
+				}
+				for (const m of [...rawMeshes, ...finalMeshes]) m.instanceMatrix.needsUpdate = true;
+
+				const busy = line.placing || (line.pallet && line.count < line.capacity && line.timer < line.armSwing);
+				const phase = busy ? Math.min(1, line.timer / line.armSwing) : 0;
+				const swing = phase < 0.5 ? ease(phase * 2) : ease((1 - phase) * 2);
+				q.setFromAxisAngle(yAxis, ARM_CONVEYOR + (ARM_PALLET - ARM_CONVEYOR) * swing);
+				arm.matrix.multiplyMatrices(line.matrix, tmp.compose(v.set(...ARM_PIVOT), q, one).multiply(ARM_OFFSET));
+
+				pallet.visible = line.pallet;
+				for (const m of stackMeshes) m.count = line.pallet ? line.count : 0;
+			}
+		});
+	}
+
+	// ---- Warehouse racks ----
+	const slots = [];
+	for (const side of [-1, 1]) {
+		for (let bay = 0; bay < baysPerSide; bay++) {
+			const z = W0 + bay * BAY + BAY / 2;
+			for (let level = 0; level < LEVELS.length; level++) {
+				const y = level === 0 ? PALLET_Y : LEVELS[level] + 0.16 + 0.075;
+				slots.push({ side, bay, level, pos: new THREE.Vector3(side * SLOT_X, y, z), occupied: false, age: 0, reserved: -1 });
+			}
+		}
+	}
+	// archived projects fill the upper levels bay by bay, alternating sides
+	const upper = [-1, 1].map((side) => slots.filter((s) => s.side === side && s.level > 0));
+	archived.forEach((project, k) => {
+		const slot = upper[k % 2][Math.floor(k / 2)];
+		if (!slot) return;
+		slot.project = project;
+		slot.occupied = true;
+		slot.product = recipeFor(project).product;
+	});
+	const ground = slots.filter((s) => s.level === 0);
+	// some finished pallets are already in from earlier shifts
+	const wraps = lines.filter((l) => l.running).map((l) => PRODUCTS[l.recipe.product].wrap);
+	ground.forEach((s, i) => {
+		if (wraps.length && i % 3 !== 2) Object.assign(s, { occupied: true, color: wraps[i % wraps.length], age: -i });
+	});
+
+	for (const side of [-1, 1]) {
+		for (let b = 0; b <= baysPerSide; b++) {
+			for (const x of [RACK_FACE, RACK_FACE + 1.6])
+				addPiece('rack-upright', boxGeo(0.12, RACK_H, 0.12), COLORS.rack, at(side * x, RACK_H / 2, W0 + b * BAY));
+		}
+		for (let b = 0; b < baysPerSide; b++) {
+			const z = W0 + b * BAY + BAY / 2;
+			for (const y of LEVELS.slice(1)) {
+				for (const x of [RACK_FACE, RACK_FACE + 1.6]) addPiece('rack-beam', boxGeo(0.1, 0.16, BAY), COLORS.tape, at(side * x, y, z));
+				addPiece('rack-deck', boxGeo(1.5, 0.04, BAY - 0.15), COLORS.steel, at(side * SLOT_X, y + 0.1, z));
+			}
+			for (const dz of [-0.68, 0.68]) addPiece('stand-rail', boxGeo(1.5, 0.35, 0.12), COLORS.steel, at(side * SLOT_X, 0.175, z + dz));
+		}
+	}
+
+	// wrapped loads (pallet + stretch-wrapped block), tinted by product
+	const white = new THREE.Color('#ffffff');
+	const wrapColor = (hex) => new THREE.Color(hex).lerp(white, 0.35);
+	const wrapPallets = new THREE.InstancedMesh(boxGeo(1.4, 0.15, 1.4), mat(COLORS.wood), slots.length);
+	const wrapBlocks = new THREE.InstancedMesh(
+		boxGeo(1.32, 0.9, 1.32),
+		new THREE.MeshToonMaterial({ color: '#ffffff', gradientMap, transparent: true, opacity: 0.92 }),
+		slots.length
+	);
+	const hidden = new THREE.Matrix4().makeScale(0, 0, 0);
+	function drawSlot(slot) {
+		const i = slots.indexOf(slot);
+		if (!slot.occupied) {
+			wrapPallets.setMatrixAt(i, hidden);
+			wrapBlocks.setMatrixAt(i, hidden);
+		} else {
+			wrapPallets.setMatrixAt(i, tmp.makeTranslation(slot.pos.x, slot.pos.y, slot.pos.z));
+			wrapBlocks.setMatrixAt(i, tmp.makeTranslation(slot.pos.x, slot.pos.y + 0.525, slot.pos.z));
+			wrapBlocks.setColorAt(i, wrapColor(slot.color ?? PRODUCTS[slot.product]?.wrap ?? '#d9d6ce'));
+		}
+		wrapPallets.instanceMatrix.needsUpdate = true;
+		wrapBlocks.instanceMatrix.needsUpdate = true;
+		if (wrapBlocks.instanceColor) wrapBlocks.instanceColor.needsUpdate = true;
+	}
+	slots.forEach(drawSlot);
+	wrapPallets.frustumCulled = wrapBlocks.frustumCulled = false;
+	scene.add(wrapPallets, wrapBlocks);
+
+	// archived slots: a sample of the product on top, a beam label, a hit target
+	for (const s of slots) {
+		if (!s.project) continue;
+		const [, sy] = PRODUCTS[s.product].size;
+		for (const pt of productParts(s.product)) {
+			const m = new THREE.Mesh(pt.geo, mat(pt.color));
+			m.matrixAutoUpdate = false;
+			m.matrix.multiplyMatrices(at(s.pos.x, s.pos.y + 0.075 + 0.9 + sy / 2, s.pos.z), pt.local);
+			scene.add(m);
+		}
+		sign(
+			drawSlotLabel(s.project.code, s.project.title),
+			2.1,
+			0.525,
+			s.side * (RACK_FACE - 0.08),
+			LEVELS[s.level] - 0.2,
+			s.pos.z,
+			s.side < 0 ? Math.PI / 2 : -Math.PI / 2
+		);
+		hitTargets.push({
+			project: s.project,
+			center: new THREE.Vector3(s.pos.x, s.pos.y + 0.6, s.pos.z),
+			size: new THREE.Vector3(1.8, 1.8, BAY - 0.1),
+			kind: 'slot',
+			slot: s
+		});
+	}
+
+	// flush the batched static pieces
+	for (const { geo, color: c, mats } of instancedPieces.values()) {
+		const mesh = new THREE.InstancedMesh(geo, mat(c), mats.length);
+		mats.forEach((m, i) => mesh.setMatrixAt(i, m));
 		mesh.instanceMatrix.needsUpdate = true;
 		scene.add(mesh);
-		instanced.push(mesh);
 	}
 
-	// ---- Line banners ----
-	const signGeo = new THREE.PlaneGeometry(8, 1);
-	const signPoleGeo = new THREE.CylinderGeometry(0.05, 0.05, 5.6, 6);
-	const signPoles = new THREE.InstancedMesh(signPoleGeo, mat(COLORS.dark), N * 2);
-	const signs = projects.map((p, i) => {
-		const tex = new THREE.CanvasTexture(drawLineSign(p.code, p.title));
-		tex.colorSpace = THREE.SRGBColorSpace;
-		tex.anisotropy = 4;
-		const sign = new THREE.Mesh(signGeo, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
-		const c = toWorld(i, 15.5, 0, 0);
-		sign.position.set(c.x, 5.1, c.z - 2.4);
-		scene.add(sign);
-		signPoles.setMatrixAt(i * 2, at(c.x - 3.9, 2.8, c.z - 2.4));
-		signPoles.setMatrixAt(i * 2 + 1, at(c.x + 3.9, 2.8, c.z - 2.4));
-		return sign;
-	});
-	signPoles.instanceMatrix.needsUpdate = true;
-	scene.add(signPoles);
+	// ---- Hit boxes (raycast-only layer) + highlights ----
+	const hitMesh = new THREE.InstancedMesh(boxGeo(1, 1, 1), new THREE.MeshBasicMaterial(), hitTargets.length);
+	hitTargets.forEach((t, i) => hitMesh.setMatrixAt(i, tmp.compose(t.center, q.identity(), t.size)));
+	hitMesh.instanceMatrix.needsUpdate = true;
+	hitMesh.computeBoundingSphere();
+	hitMesh.layers.set(1); // the camera renders layer 0 only
+	scene.add(hitMesh);
+	const byProject = new Map(hitTargets.map((t) => [t.project.index, t]));
 
-	// ---- Animated instanced parts ----
-	const hidden = new THREE.Matrix4().makeScale(0, 0, 0);
-	const rolls = new THREE.InstancedMesh(
-		new THREE.CylinderGeometry(0.85, 0.85, 2.4, 20).rotateX(Math.PI / 2),
-		mat(COLORS.paper),
-		N
-	);
-	const arms = new THREE.InstancedMesh(box(1.9, 0.22, 0.26), mat(COLORS.dark), N);
-	const flow = {
-		product: new THREE.InstancedMesh(box(0.3, 0.3, 0.3), mat(COLORS.product), N * SEGMENTS[0].count),
-		carton: new THREE.InstancedMesh(box(0.5, 0.36, 0.4), mat(COLORS.carton), N * SEGMENTS[1].count),
-		case: new THREE.InstancedMesh(box(0.62, 0.45, 0.6), mat(COLORS.kraft), N * SEGMENTS[2].count)
-	};
-	const pallets = new THREE.InstancedMesh(box(1.4, 0.15, 1.4), mat(COLORS.wood), N);
-	const stacks = new THREE.InstancedMesh(box(0.62, 0.45, 0.62), mat(COLORS.kraft), N * CASES_PER_PALLET);
-	for (const m of [rolls, arms, pallets, stacks, ...Object.values(flow)]) {
-		m.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+	const makeHighlight = (opacity) => {
+		const m = new THREE.Mesh(
+			boxGeo(1, 1, 1),
+			new THREE.MeshBasicMaterial({ color: COLORS.tape, transparent: true, opacity, depthWrite: false })
+		);
+		m.visible = false;
 		scene.add(m);
-	}
-
-	const stackOffsets = [];
-	for (let layer = 0; layer < 2; layer++)
-		for (const dx of [-0.33, 0.33]) for (const dz of [-0.33, 0.33]) stackOffsets.push([dx, 0.3 + layer * 0.46, dz]);
-
-	// ---- Hit boxes + highlight ----
-	const hitBoxes = new THREE.InstancedMesh(
-		box(31, 5.5, 5),
-		new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }),
-		N
-	);
-	for (let i = 0; i < N; i++) hitBoxes.setMatrixAt(i, tmp.multiplyMatrices(lineMatrices[i], at(15, 2.75, 0)));
-	hitBoxes.instanceMatrix.needsUpdate = true;
-	hitBoxes.layers.set(1); // raycast-only: the camera renders layer 0
-	scene.add(hitBoxes);
-
-	const highlightGeo = new THREE.PlaneGeometry(31, 5.4).rotateX(-Math.PI / 2);
-	const hoverPad = new THREE.Mesh(
-		highlightGeo,
-		new THREE.MeshBasicMaterial({ color: COLORS.tape, transparent: true, opacity: 0.22, depthWrite: false })
-	);
-	const selectPad = new THREE.Mesh(
-		highlightGeo,
-		new THREE.MeshBasicMaterial({ color: COLORS.tape, transparent: true, opacity: 0.42, depthWrite: false })
-	);
-	hoverPad.visible = selectPad.visible = false;
-	scene.add(hoverPad, selectPad);
-	const placePad = (pad, i) => {
-		pad.visible = i >= 0;
-		if (i < 0) return;
-		const c = toWorld(i, 15, 0.02, 0);
-		pad.position.set(c.x, 0.02, c.z);
+		return m;
 	};
-
-	// ---- Line production state ----
-	const lines = projects.map((_, i) => ({
-		count: Math.floor(Math.random() * CASES_PER_PALLET),
-		timer: Math.random() * 10,
-		interval: 9 + (i % 5) * 1.5,
-		pallet: true, // an empty/partial pallet sits on the stand
-		placing: false,
-		claimed: -1
-	}));
+	const hoverBox = makeHighlight(0.16);
+	const selectBox = makeHighlight(0.3);
+	function placeHighlight(box, target) {
+		box.visible = !!target;
+		if (!target) return;
+		if (target.kind === 'line') {
+			box.position.set(target.center.x, 0.03, target.center.z);
+			box.scale.set(target.size.x, 0.04, target.size.z);
+		} else {
+			box.position.copy(target.center);
+			box.scale.copy(target.size);
+		}
+	}
 
 	// ---- AGVs ----
-	const agvGeo = {
-		body: box(1.6, 0.24, 1),
-		deck: box(1.3, 0.06, 0.86),
-		beacon: new THREE.SphereGeometry(0.1, 8, 6)
-	};
-	const loadedCaseGeo = box(0.62, 0.45, 0.62);
 	const agvs = Array.from({ length: AGV_COUNT }, (_, a) => {
 		const side = a % 2 === 0 ? -1 : 1;
+		const k = Math.floor(a / 2);
 		const group = new THREE.Group();
-		const body = new THREE.Mesh(agvGeo.body, mat(COLORS.dark));
+		const body = new THREE.Mesh(boxGeo(1.6, 0.24, 1), mat(COLORS.dark));
 		body.position.y = 0.14;
-		const deck = new THREE.Mesh(agvGeo.deck, mat(COLORS.tape));
+		const deck = new THREE.Mesh(boxGeo(1.3, 0.06, 0.86), mat(COLORS.tape));
 		deck.position.y = 0.3;
-		const beacon = new THREE.Mesh(agvGeo.beacon, new THREE.MeshBasicMaterial({ color: '#3ddc84' }));
+		const beacon = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 6), new THREE.MeshBasicMaterial({ color: '#3ddc84' }));
 		beacon.position.set(0.6, 0.36, 0);
 		const load = new THREE.Group();
-		const pallet = new THREE.Mesh(pallets.geometry, mat(COLORS.wood));
-		pallet.position.y = 0.1;
-		load.add(pallet);
-		for (const [dx, dy, dz] of stackOffsets) {
-			const c = new THREE.Mesh(loadedCaseGeo, mat(COLORS.kraft));
-			c.position.set(dx, 0.1 + dy, dz);
-			load.add(c);
-		}
+		const loadPallet = new THREE.Mesh(boxGeo(1.4, 0.15, 1.4), mat(COLORS.wood));
+		loadPallet.position.y = 0.1;
+		const loadMat = new THREE.MeshToonMaterial({ color: '#ffffff', gradientMap, transparent: true, opacity: 0.92 });
+		const loadBlock = new THREE.Mesh(boxGeo(1.32, 0.9, 1.32), loadMat);
+		loadBlock.position.y = 0.625;
+		load.add(loadPallet, loadBlock);
 		load.position.y = 0.355;
 		load.visible = false;
 		group.add(body, deck, beacon, load);
-		const lane = side * (1.2 + (Math.floor(a / 2) % 4) * 1.1);
-		const dock = new THREE.Vector3(side * (1.6 + Math.floor(a / 2) * 2.1), 0, DOCK_Z);
-		group.position.copy(dock);
-		group.rotation.y = side < 0 ? 0 : Math.PI;
+		const park = new THREE.Vector3(side * (1.4 + k * 1.3), 0, W0 - 5 - k * 1.8);
+		group.position.copy(park);
+		group.rotation.y = Math.PI / 2;
 		scene.add(group);
-		return { group, deck, beacon, load, side, lane, dock, path: [], state: 'idle', line: -1, wait: 0, onArrive: null };
+		return {
+			group, deck, beacon, load, loadMat, side, park,
+			lane: side * (1.2 + k * 1.2),
+			path: [], state: 'idle', line: null, slot: null, wait: 0, onArrive: null, loadColor: null
+		};
 	});
 
+	const P = (x, z) => new THREE.Vector3(x, 0, z);
 	const go = (agv, points, onArrive) => {
 		agv.path = points;
 		agv.onArrive = onArrive;
 	};
 
 	function dispatch(agv) {
-		let best = -1;
-		let bestDist = Infinity;
-		for (let i = 0; i < N; i++) {
-			const l = lines[i];
-			if (lineSide(i) !== agv.side || l.claimed >= 0 || l.count < CASES_PER_PALLET) continue;
-			const d = Math.abs(lineZ(i) - agv.group.position.z);
-			if (d < bestDist) {
-				bestDist = d;
-				best = i;
-			}
+		let best = null;
+		for (const line of lines) {
+			if (!line.running || line.side !== agv.side || line.claimed >= 0 || line.count < line.capacity) continue;
+			if (!best || Math.abs(line.z - agv.group.position.z) < Math.abs(best.z - agv.group.position.z)) best = line;
 		}
-		if (best < 0) return;
-		const z = lineZ(best);
-		const pick = toWorld(best, PALLET_X, 0, 0);
-		lines[best].claimed = agvs.indexOf(agv);
+		if (!best) return;
+		best.claimed = agvs.indexOf(agv);
 		agv.line = best;
 		agv.state = 'toPick';
-		const p = agv.group.position;
-		go(agv, [new THREE.Vector3(agv.lane, 0, p.z), new THREE.Vector3(agv.lane, 0, z), new THREE.Vector3(pick.x, 0, z)], () => {
+		go(agv, [P(agv.lane, agv.group.position.z), P(agv.lane, best.z), P(agv.side * PICK_X, best.z)], () => {
 			agv.state = 'lifting';
 			agv.wait = 0.8;
 		});
 	}
 
-	function stepAgv(agv, dt) {
+	// A free ground bay on this side; if none, the oldest delivery ships out to make room
+	function claimGroundSlot(side) {
+		const mine = ground.filter((s) => s.side === side && s.reserved < 0);
+		const slot = mine.find((s) => !s.occupied) ?? mine.sort((a, b) => a.age - b.age)[0];
+		if (slot?.occupied) {
+			slot.occupied = false;
+			drawSlot(slot);
+		}
+		return slot;
+	}
+
+	function stepAgv(agv, dt, time) {
 		if (agv.state === 'idle') return dispatch(agv);
 		if (agv.state === 'lifting' || agv.state === 'dropping') {
 			agv.wait -= dt;
@@ -385,28 +786,30 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			agv.deck.position.y = 0.3 + (lifting ? 1 - agv.wait / 0.8 : agv.wait / 0.8) * 0.12;
 			if (agv.wait > 0) return;
 			if (lifting) {
-				const line = lines[agv.line];
+				const line = agv.line;
 				line.pallet = false;
 				line.count = 0;
 				line.timer = 0;
+				line.placing = false;
+				agv.loadColor = line.wrap;
+				agv.loadMat.color.copy(wrapColor(line.wrap));
 				agv.load.visible = true;
-				agv.state = 'toDock';
-				const z = lineZ(agv.line);
-				go(
-					agv,
-					[
-						new THREE.Vector3(agv.lane, 0, z),
-						new THREE.Vector3(agv.lane, 0, DOCK_Z + 4),
-						agv.dock.clone()
-					],
-					() => {
-						agv.state = 'dropping';
-						agv.wait = 0.8;
-					}
-				);
+				const slot = claimGroundSlot(agv.side);
+				slot.reserved = agvs.indexOf(agv);
+				agv.slot = slot;
+				agv.state = 'toStore';
+				go(agv, [P(agv.lane, line.z), P(agv.lane, slot.pos.z), P(slot.pos.x, slot.pos.z)], () => {
+					agv.state = 'dropping';
+					agv.wait = 0.8;
+				});
 			} else {
+				const slot = agv.slot;
+				Object.assign(slot, { occupied: true, color: agv.loadColor, age: time, reserved: -1 });
+				drawSlot(slot);
 				agv.load.visible = false;
-				agv.state = 'idle';
+				agv.slot = null;
+				agv.state = 'returning';
+				go(agv, [P(agv.lane, slot.pos.z), P(agv.lane, agv.park.z), agv.park.clone()], () => (agv.state = 'idle'));
 			}
 			return;
 		}
@@ -415,23 +818,23 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		const target = agv.path[0];
 		if (!target) return agv.onArrive?.();
 		const pos = agv.group.position;
-		const to = new THREE.Vector3().subVectors(target, pos);
+		const to = v.subVectors(target, pos);
 		const dist = to.length();
+		if (dist > 0.05) {
+			let dyaw = Math.atan2(-to.z, to.x) - agv.group.rotation.y;
+			dyaw = Math.atan2(Math.sin(dyaw), Math.cos(dyaw));
+			agv.group.rotation.y += dyaw * Math.min(1, dt * 10);
+			if (Math.abs(dyaw) > 0.6) return; // turn in place before driving
+		}
 		const step = AGV_SPEED * dt;
-		const wantYaw = Math.atan2(-to.z, to.x);
-		let dyaw = wantYaw - agv.group.rotation.y;
-		dyaw = Math.atan2(Math.sin(dyaw), Math.cos(dyaw));
-		agv.group.rotation.y += dyaw * Math.min(1, dt * 10);
-		if (Math.abs(dyaw) > 0.6 && dist > 0.2) return; // turn in place before driving
 		if (dist <= step) {
 			pos.copy(target);
 			agv.path.shift();
-			// leaving the cell: a fresh empty pallet drops onto the stand
-			if (agv.state === 'toDock' && agv.line >= 0 && agv.path.length === 2) {
-				const line = lines[agv.line];
-				line.pallet = true;
-				line.claimed = -1;
-				agv.line = -1;
+			// clear of the cell: a fresh empty pallet drops onto the stand
+			if (agv.state === 'toStore' && agv.line && agv.path.length === 2) {
+				agv.line.pallet = true;
+				agv.line.claimed = -1;
+				agv.line = null;
 			}
 			if (!agv.path.length) agv.onArrive?.();
 		} else {
@@ -439,205 +842,29 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		}
 	}
 
-	// ---- Per-frame instance updates ----
-	const m4 = new THREE.Matrix4();
-	const q = new THREE.Quaternion();
-	const yAxis = new THREE.Vector3(0, 1, 0);
-	const zAxis = new THREE.Vector3(0, 0, 1);
-	const one = new THREE.Vector3(1, 1, 1);
-	const v = new THREE.Vector3();
-	// palletizer arm swings between the conveyor end and the pallet
-	const ARM_PIVOT = [26.2, 1.75, -1.5];
-	const angleTo = (x, z) => Math.atan2(-(z - ARM_PIVOT[2]), x - ARM_PIVOT[0]);
-	const ARM_CONVEYOR = angleTo(25.4, 0);
-	const ARM_PALLET = angleTo(PALLET_X, 0);
-	const ARM_OFFSET = at(0.95, 0, 0);
-
-	function updateInstances(time) {
-		for (let i = 0; i < N; i++) {
-			const L = lineMatrices[i];
-			const line = lines[i];
-			const running = line.count < CASES_PER_PALLET && line.pallet;
-
-			// unwind roll
-			q.setFromAxisAngle(zAxis, -time * 1.5);
-			m4.compose(v.set(1, 1.9, 0), q, one);
-			rolls.setMatrixAt(i, tmp.multiplyMatrices(L, m4));
-
-			// conveyor flow
-			for (const seg of SEGMENTS) {
-				const len = seg.to - seg.from;
-				const mesh = flow[seg.kind];
-				for (let n = 0; n < seg.count; n++) {
-					const u = (time * BELT_SPEED / len + n / seg.count + i * 0.137) % 1;
-					const h = seg.kind === 'case' ? 0.225 : seg.kind === 'carton' ? 0.18 : 0.15;
-					m4.makeTranslation(seg.from + u * len, BELT_Y + h, 0);
-					mesh.setMatrixAt(i * seg.count + n, tmp.multiplyMatrices(L, m4));
-				}
-			}
-
-			// palletizer arm
-			const phase = line.placing || (running && line.timer < ARM_SWING) ? Math.min(1, line.timer / ARM_SWING) : 0;
-			const swing = phase < 0.5 ? ease(phase * 2) : ease((1 - phase) * 2);
-			const angle = ARM_CONVEYOR + (ARM_PALLET - ARM_CONVEYOR) * swing;
-			q.setFromAxisAngle(yAxis, angle);
-			m4.compose(v.set(...ARM_PIVOT), q, one).multiply(ARM_OFFSET);
-			arms.setMatrixAt(i, tmp.multiplyMatrices(L, m4));
-
-			// pallet + stacked cases on the stand
-			pallets.setMatrixAt(i, line.pallet ? tmp.multiplyMatrices(L, m4.makeTranslation(PALLET_X, 0.43, 0)) : hidden);
-			for (let c = 0; c < CASES_PER_PALLET; c++) {
-				const [dx, dy, dz] = stackOffsets[c];
-				stacks.setMatrixAt(
-					i * CASES_PER_PALLET + c,
-					line.pallet && c < line.count
-						? tmp.multiplyMatrices(L, m4.makeTranslation(PALLET_X + dx, 0.43 + dy, dz))
-						: hidden
-				);
-			}
-		}
-		for (const m of [rolls, arms, pallets, stacks, ...Object.values(flow)]) m.instanceMatrix.needsUpdate = true;
-	}
-
 	function stepLines(dt) {
 		for (const line of lines) {
-			if (!line.pallet || line.count >= CASES_PER_PALLET) continue;
+			if (!line.running || !line.pallet || line.count >= line.capacity) continue;
 			line.timer += dt;
 			if (line.timer >= line.interval) {
 				line.timer -= line.interval;
 				line.placing = true;
 			}
-			// the case lands when the arm reaches the pallet, halfway through its swing
-			if (line.placing && line.timer >= ARM_SWING / 2) {
+			// the item lands when the arm reaches the pallet, halfway through its swing
+			if (line.placing && line.timer >= line.armSwing / 2) {
 				line.placing = false;
 				line.count++;
 			}
 		}
 	}
 
-	// ---- Camera views ----
-	let fly = null;
-	function flyTo(position, target, duration = 1.3) {
-		if (reducedMotion || duration === 0) {
-			camera.position.copy(position);
-			controls.target.copy(target);
-			fly = null;
-			return;
-		}
-		fly = {
-			fromPos: camera.position.clone(),
-			fromTarget: controls.target.clone(),
-			toPos: position,
-			toTarget: target,
-			t: 0,
-			duration
-		};
-	}
-	controls.addEventListener('start', () => (fly = null));
-
-	// Distance at which a w×h area fills the part of the canvas the HUD leaves open
-	function fitDistance(w, h) {
-		const { tanH, tanV } = openTan();
-		return Math.max(w / 2 / tanH, h / 2 / tanV);
-	}
-
-	const portrait = () => openTan().tanH < openTan().tanV;
-
-	// Overview: the wall boards with the first rows of lines in front
-	function homeView() {
-		const narrow = portrait();
-		const target = new THREE.Vector3(narrow ? -7 : 0.5, 5, WALL_Z + 6);
-		const dist = fitDistance(narrow ? 28 : 46, 16);
-		const dir = new THREE.Vector3(0, 0.33, 1).normalize();
-		return { position: target.clone().addScaledVector(dir, dist), target };
-	}
-
-	// Straight-on view for reading the boards
-	function wallView() {
-		const narrow = portrait();
-		const target = new THREE.Vector3(narrow ? -7 : 0.3, 8, WALL_Z);
-		const dist = fitDistance(narrow ? 27 : 44, 14) * 1.04;
-		return { position: new THREE.Vector3(target.x, 8.6, WALL_Z + dist), target };
-	}
-
-	function lineView(i) {
-		const c = lineCenter(i);
-		const side = lineSide(i);
-		const target = new THREE.Vector3(c.x, 1.2, c.z);
-		const dist = fitDistance(30, 9) * 0.95;
-		const dir = new THREE.Vector3(-side * 0.25, 0.6, 0.8).normalize();
-		return { position: target.clone().addScaledVector(dir, dist), target };
-	}
-
-	// keep the camera over the floor
-	const bounds = { minX: -OUTER - 4, maxX: OUTER + 4, minZ: WALL_Z + 1, maxZ: lastZ + 12 };
-	function clampTarget() {
-		const t = controls.target;
-		t.x = THREE.MathUtils.clamp(t.x, bounds.minX, bounds.maxX);
-		t.z = THREE.MathUtils.clamp(t.z, bounds.minZ, bounds.maxZ);
-		t.y = THREE.MathUtils.clamp(t.y, 0, 10);
-		if (camera.position.z < WALL_Z + 1) camera.position.z = WALL_Z + 1;
-	}
-
-	// ---- Picking ----
-	const raycaster = new THREE.Raycaster();
-	raycaster.layers.enable(1);
-	const pointer = new THREE.Vector2();
-	let hovered = -1;
-	let selected = -1;
-
-	function pick(clientX, clientY) {
-		const rect = renderer.domElement.getBoundingClientRect();
-		pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
-		raycaster.setFromCamera(pointer, camera);
-		const hits = raycaster.intersectObjects([hitBoxes, ...boards], false);
-		if (!hits.length) return { line: -1, wall: false };
-		const hit = hits[0];
-		return hit.object === hitBoxes ? { line: hit.instanceId, wall: false } : { line: -1, wall: true };
-	}
-
-	let downAt = null;
-	const el = renderer.domElement;
-	const onPointerDown = (e) => (downAt = [e.clientX, e.clientY]);
-	const onPointerMove = (e) => {
-		if (e.pointerType !== 'mouse') return;
-		const { line } = pick(e.clientX, e.clientY);
-		if (line !== hovered) {
-			hovered = line;
-			placePad(hoverPad, line === selected ? -1 : line);
-			el.style.cursor = line >= 0 ? 'pointer' : '';
-		}
-		onHover?.(line, e.clientX, e.clientY);
-	};
-	const onPointerLeave = () => {
-		hovered = -1;
-		placePad(hoverPad, -1);
-		onHover?.(-1);
-	};
-	const onPointerUp = (e) => {
-		if (!downAt) return;
-		const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]);
-		downAt = null;
-		if (moved > 6) return;
-		const { line, wall } = pick(e.clientX, e.clientY);
-		if (line >= 0) onSelect?.(line);
-		else if (wall) api.wall();
-	};
-	el.addEventListener('pointerdown', onPointerDown);
-	el.addEventListener('pointermove', onPointerMove);
-	el.addEventListener('pointerleave', onPointerLeave);
-	el.addEventListener('pointerup', onPointerUp);
-
 	// ---- Theme ----
 	function setTheme() {
-		const css = getComputedStyle(document.documentElement);
-		const get = (name, fallback) => css.getPropertyValue(name).trim() || fallback;
-		const bg = get('--bg', '#ecebe6');
+		const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#ecebe6';
 		const dark = new THREE.Color(bg).getHSL({}).l < 0.3;
 		scene.background = new THREE.Color(bg);
 		scene.fog.color.set(bg);
 		wallMat.color.set(dark ? '#232528' : '#d8d5cc');
-
 		const g = floorCanvas.getContext('2d');
 		g.fillStyle = dark ? '#1b1d20' : '#dedbd3';
 		g.fillRect(0, 0, 128, 128);
@@ -648,13 +875,12 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	}
 	setTheme();
 
-	// ---- Resize / view insets / visibility / loop ----
-	// HUD panels cover parts of the canvas. Widen the virtual frustum by the
-	// covered amount and crop it, so the camera target lands in the open area.
-	// The full frustum's FOV is scaled up so the visible canvas keeps the base FOV.
+	// ---- Resize / view insets ----
+	// HUD panels cover parts of the canvas. The frustum is widened by the covered
+	// amount and cropped, so camera targets land in the open area. The full
+	// frustum's FOV is scaled so the visible canvas keeps the base FOV.
 	const BASE_TAN = Math.tan(THREE.MathUtils.degToRad(25));
 	let insets = { left: 0, right: 0, bottom: 0 };
-	// tan of the half-angles spanned by the area not covered by HUD panels
 	function openTan() {
 		const { clientWidth: w, clientHeight: h } = container;
 		if (!h) return { tanH: BASE_TAN, tanV: BASE_TAN };
@@ -680,14 +906,125 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	ro.observe(container);
 	resize();
 
+	// ---- Camera views ----
+	let fly = null;
+	function flyTo({ position, target }, duration = 1.3) {
+		if (reducedMotion) {
+			camera.position.copy(position);
+			controls.target.copy(target);
+			fly = null;
+			return;
+		}
+		fly = { fromPos: camera.position.clone(), fromTarget: controls.target.clone(), toPos: position, toTarget: target, t: 0, duration };
+	}
+	controls.addEventListener('start', () => (fly = null));
+
+	function fitDistance(w, h) {
+		const { tanH, tanV } = openTan();
+		return Math.max(w / 2 / tanH, h / 2 / tanV);
+	}
+	const portrait = () => openTan().tanH < openTan().tanV;
+	const view = (target, dir, dist) => ({ position: target.clone().addScaledVector(dir.normalize(), dist), target });
+
+	const views = {
+		home() {
+			const narrow = portrait();
+			return view(new THREE.Vector3(narrow ? -7 : 0.5, 5, WALL_Z + 6), new THREE.Vector3(0, 0.33, 1), fitDistance(narrow ? 28 : 46, 16));
+		},
+		wall() {
+			const narrow = portrait();
+			const target = new THREE.Vector3(narrow ? -7 : 0.3, 8, WALL_Z);
+			return { position: new THREE.Vector3(target.x, 8.6, WALL_Z + fitDistance(narrow ? 27 : 44, 14) * 1.04), target };
+		},
+		warehouse() {
+			return view(new THREE.Vector3(0, 2, (W0 + W1) / 2), new THREE.Vector3(0.12, 0.8, -0.9), fitDistance(22, (W1 - W0) * 0.8));
+		},
+		target(t) {
+			if (t.kind === 'line') {
+				const target = new THREE.Vector3(t.center.x, 1.2, t.center.z);
+				return view(target, new THREE.Vector3(-t.line.side * 0.25, 0.6, 0.8), fitDistance(t.size.x + 2, 9) * 0.95);
+			}
+			// rack slot: look across the aisle at the bay
+			return view(t.center.clone(), new THREE.Vector3(-t.slot.side, 0.35, 0.45), fitDistance(6, 4.5));
+		}
+	};
+
+	// keep the view over the floor: clamp the target and carry the camera along
+	const bounds = { minX: -maxOuter - 2, maxX: maxOuter + 2, minZ: WALL_Z + 1, maxZ: W1 + 6 };
+	const clampDelta = new THREE.Vector3();
+	function clampTarget() {
+		const t = controls.target;
+		clampDelta.set(
+			THREE.MathUtils.clamp(t.x, bounds.minX, bounds.maxX) - t.x,
+			THREE.MathUtils.clamp(t.y, 0, 10) - t.y,
+			THREE.MathUtils.clamp(t.z, bounds.minZ, bounds.maxZ) - t.z
+		);
+		if (clampDelta.lengthSq()) {
+			t.add(clampDelta);
+			camera.position.add(clampDelta);
+		}
+		if (camera.position.z < WALL_Z + 1) camera.position.z = WALL_Z + 1;
+	}
+
+	// ---- Picking ----
+	const raycaster = new THREE.Raycaster();
+	raycaster.layers.enable(1);
+	const pointer = new THREE.Vector2();
+	let hovered = -1;
+	let selected = -1;
+
+	function pick(clientX, clientY) {
+		const rect = renderer.domElement.getBoundingClientRect();
+		pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
+		raycaster.setFromCamera(pointer, camera);
+		const hit = raycaster.intersectObjects([hitMesh, ...boards], false)[0];
+		if (!hit) return { project: -1, wall: false };
+		return hit.object === hitMesh
+			? { project: hitTargets[hit.instanceId].project.index, wall: false }
+			: { project: -1, wall: true };
+	}
+
+	let downAt = null;
+	const el = renderer.domElement;
+	const onPointerDown = (e) => (downAt = [e.clientX, e.clientY]);
+	const onPointerMove = (e) => {
+		if (e.pointerType !== 'mouse' || e.buttons) return;
+		const { project } = pick(e.clientX, e.clientY);
+		if (project !== hovered) {
+			hovered = project;
+			placeHighlight(hoverBox, project === selected ? null : byProject.get(project));
+			el.style.cursor = project >= 0 ? 'pointer' : '';
+		}
+		onHover?.(project, e.clientX, e.clientY);
+	};
+	const onPointerLeave = () => {
+		hovered = -1;
+		placeHighlight(hoverBox, null);
+		onHover?.(-1);
+	};
+	const onPointerUp = (e) => {
+		if (!downAt) return;
+		const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]);
+		downAt = null;
+		if (moved > 6) return;
+		const { project, wall } = pick(e.clientX, e.clientY);
+		if (project >= 0) onSelect?.(project);
+		else if (wall) flyTo(views.wall());
+	};
+	el.addEventListener('pointerdown', onPointerDown);
+	el.addEventListener('pointermove', onPointerMove);
+	el.addEventListener('pointerleave', onPointerLeave);
+	el.addEventListener('pointerup', onPointerUp);
+
+	// ---- Loop ----
 	let visible = true;
 	const io = new IntersectionObserver(([entry]) => (visible = entry.isIntersecting));
 	io.observe(container);
 
-	const home = homeView();
-	camera.position.copy(home.position);
-	controls.target.copy(home.target);
-	updateInstances(0);
+	const start = views.home();
+	camera.position.copy(start.position);
+	controls.target.copy(start.target);
+	for (const f of flows) f.update(0);
 
 	const clock = new THREE.Clock();
 	let simTime = 0;
@@ -701,10 +1038,11 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			simTime += dt;
 			stepLines(dt);
 			for (const agv of agvs) {
-				stepAgv(agv, dt);
+				stepAgv(agv, dt, simTime);
 				agv.beacon.visible = agv.state === 'idle' || Math.floor(simTime * 3) % 2 === 0;
 			}
-			updateInstances(simTime);
+			for (const f of flows) f.update(simTime);
+			for (const a of animated) a.update(simTime);
 		}
 
 		if (fly) {
@@ -720,33 +1058,27 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	}
 	frame();
 
-	const api = {
-		select(i) {
-			selected = i;
-			placePad(selectPad, i);
-			if (i === hovered) placePad(hoverPad, -1);
-			if (i >= 0) {
-				const view = lineView(i);
-				flyTo(view.position, view.target);
-			}
+	return {
+		select(index) {
+			selected = index;
+			const target = byProject.get(index);
+			placeHighlight(selectBox, target);
+			if (index === hovered) placeHighlight(hoverBox, null);
+			if (target) flyTo(views.target(target));
 		},
-		home() {
-			const view = homeView();
-			flyTo(view.position, view.target);
-		},
-		wall() {
-			const view = wallView();
-			flyTo(view.position, view.target);
-		},
+		home: () => flyTo(views.home()),
+		wall: () => flyTo(views.wall()),
+		warehouse: () => flyTo(views.warehouse()),
 		setTheme,
-		debug: () => ({
-			agvs: agvs.map((a) => ({ state: a.state, line: a.line, x: +a.group.position.x.toFixed(1), z: +a.group.position.z.toFixed(1), path: a.path.length })),
-			ready: lines.filter((l) => l.count >= CASES_PER_PALLET).length
-		}),
 		setInsets(next) {
 			insets = { left: 0, right: 0, bottom: 0, ...next };
 			resize();
 		},
+		debug: () => ({
+			agvs: agvs.map((a) => `${a.state} ${a.group.position.x.toFixed(1)},${a.group.position.z.toFixed(1)}`),
+			lines: lines.filter((l) => l.running).map((l) => `${l.project.code} ${l.count}/${l.capacity}`),
+			delivered: ground.filter((s) => s.occupied).length
+		}),
 		destroy() {
 			cancelAnimationFrame(raf);
 			ro.disconnect();
@@ -766,5 +1098,4 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 			el.remove();
 		}
 	};
-	return api;
 }

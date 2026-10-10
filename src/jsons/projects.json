@@ -9,7 +9,8 @@
       "skills": ["Electron", "Svelte", "TypeScript", "PostgreSQL", "Drizzle ORM", "ActivityWatch", "LLMs"],
       "links": ["https://github.com/owenstuckman/Workbenched"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/Workbenched",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "construction"
     },
     {
       "title": "Hokie Cart Check-Out",
@@ -20,7 +21,8 @@
       "skills": ["Next.js", "TypeScript", "PostgreSQL", "PGlite", "Vercel"],
       "links": ["https://github.com/owenstuckman/MoveInCarts", "https://move-in-carts.vercel.app"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/MoveInCarts",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "A Reasonable WMS",
@@ -31,7 +33,8 @@
       "skills": ["Python", "Reinforcement Learning", "MARL", "Docker"],
       "links": ["https://github.com/owenstuckman/AReasonableWMS"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/AReasonableWMS",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "AutoShowTracker",
@@ -42,7 +45,8 @@
       "skills": ["Python", "SQLite", "TMDb API", "ActivityWatch", "OCR", "Fuzzy Matching"],
       "links": ["https://github.com/owenstuckman/AutoShowTracker"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/AutoShowTracker",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "PredictPEV",
@@ -53,7 +57,8 @@
       "skills": ["Python", "Logistic Regression", "TimescaleDB", "Grafana", "Docker", "Kalshi API"],
       "links": ["Private Repo"],
       "image": "",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "FICO Score Simulator",
@@ -64,7 +69,8 @@
       "skills": ["Next.js", "React", "TypeScript", "Tailwind CSS", "shadcn/ui", "Recharts"],
       "links": ["https://github.com/owenstuckman/montecarlo-fico"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/montecarlo-fico",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "TapCap Bot",
@@ -75,7 +81,8 @@
       "skills": ["Python", "Playwright", "JavaScript", "Gymnasium", "Stable-Baselines3"],
       "links": ["https://github.com/owenstuckman/tapcap-bot"],
       "image": "https://playwright.dev/img/playwright-logo.svg",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "LUMA v2",
@@ -86,7 +93,8 @@
       "skills": ["SvelteKit", "TypeScript", "Supabase", "PostgreSQL", "Bootstrap", "Schedule-X"],
       "links": ["https://github.com/owenstuckman/luma", "https://github.com/ArchimedesVT/luma"],
       "image": "/LUMA_logo.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "construction"
     },
     {
       "title": "SipSafe",
@@ -97,7 +105,8 @@
       "skills": ["Swift", "SwiftUI", "Kotlin", "ESP32", "BLE", "Supabase", "IoT"],
       "links": ["https://github.com/owenstuckman/SipSafe"],
       "image": "https://raw.githubusercontent.com/owenstuckman/SipSafe/main/Esp32Files/product_design.svg",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "WikiArena",
@@ -108,7 +117,8 @@
       "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "Selenium", "Docker", "Vercel", "xAI Grok"],
       "links": ["https://github.com/owenstuckman/WikiArena", "https://wikiarena.dev", "https://github.com/owenstuckman/WikiArenaSelenium"],
       "image": "https://wikiarena.dev/logo.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "Orbit",
@@ -119,7 +129,8 @@
       "skills": ["SvelteKit", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Python", "scikit-learn", "FastAPI"],
       "links": ["https://github.com/owenstuckman/Orbit", "https://github.com/owenstuckman/OrbitQCML", "https://github.com/owenstuckman/Orbit-MonteCarlo"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/Orbit",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "Archimedes Snipe Bot",
@@ -130,7 +141,8 @@
       "skills": ["JavaScript", "Cybrancee", "Discord.js"],
       "links": ["https://github.com/ArchimedesVT/archimedes-snipe-bot"],
       "image": "https://www.ravbug.com/tutorials/discordjs/discordjs.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "HomeLab v1",
@@ -141,7 +153,8 @@
       "skills": ["Ubuntu", "Supabase", "n8n", "self-host"],
       "links": ["https://supabase.com/docs/guides/self-hosting", "https://docs.n8n.io/hosting/"],
       "image": "https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "Archimedes Website",
@@ -152,7 +165,8 @@
       "skills": ["Svelte", "TypeScript", "Vercel", "Email.js"],
       "links": ["https://github.com/ArchimedesVT/ArchimedesWebsite", "https://archimedesvt.org/"],
       "image": "https://archimedesvt.org/logoheader.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "Second Student",
@@ -163,7 +177,8 @@
       "skills": ["Flutter", "Dart", "Supabase", "Full Stack", "AppFlowy", "MD", "RTF", "Gemini"],
       "links": ["https://github.com/owenstuckman/SecondStudentVTHACKS13"],
       "image": "/SecondStudent.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "HTMLToMD",
@@ -174,7 +189,8 @@
       "skills": ["Scala", "Backend"],
       "links": ["https://github.com/owenstuckman/HtmlToMD"],
       "image": "https://avatars.githubusercontent.com/u/57059?s=280&v=4",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "LUMA",
@@ -185,7 +201,8 @@
       "skills": ["Svelte", "TypeScript", "Supabase", "Full Stack"],
       "links": ["https://github.com/ArchimedesVT/luma"],
       "image": "/LUMA_logo.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "Sparkli Dev App",
@@ -196,7 +213,8 @@
       "skills": ["Svelte", "TypeScript", "Supabase"],
       "links": ["Private Repo"],
       "image": "https://media.licdn.com/dms/image/v2/D560BAQFkNhpOqP8khg/company-logo_200_200/company-logo_200_200/0/1733370242815?e=2147483647&v=beta&t=YtqGDRgGC-QKG6fTReD2g0_fBXLmyuoML5CaSDc2f8c",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "Customer Onboarding App",
@@ -207,7 +225,8 @@
       "skills": ["React", "JavaScript", "Express", "Node.js"],
       "links": ["Private Repo"],
       "image": "https://teamplanes.com/wp-content/uploads/2022/09/planes-logo.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "Supabase-Flutter Quickstart",
@@ -218,7 +237,8 @@
       "skills": ["Flutter", "Supabase", "Dart", "Edge Functions", "Authentication", "Serverless"],
       "links": ["https://github.com/owenstuckman/Flutter-Supabase-Quickstart"],
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHfvJQdTD8IFAUS4jNkFrVYGai1NknAbHAMA&s",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "Portfolio Website Revamp",
@@ -229,7 +249,8 @@
       "skills": ["SvelteKit", "Markdown", "TailwindCSS", "TypeScript", "svmdex"],
       "links": ["https://owenstuckman.lol"],
       "image": "/os-logo.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "running"
     },
     {
       "title": "SteerClear",
@@ -240,7 +261,8 @@
       "skills": ["Expo", "React Native", "Supabase", "nativewind", "OpenAI", "Google-Places API", "MapBox API", "Serverless"],
       "links": ["https://github.com/owenstuckman/SteerClear", "https://www.youtube.com/watch?v=P3OlZBgFtGw", "https://devpost.com/software/safewalk-gh3dk8?_gl=1*1qp7krw*_gcl_au*NDkxMzY2NjY0LjE3Mzg1MDM1NDc.*_ga*OTgzODc4MjM5LjE3Mzg1MDM1NDc.*_ga_0YHJK3Y10M*MTczOTc0MzU3Mi4xOC4xLjE3Mzk3NDM2ODIuMC4wLjA."],
       "image": "/steercleer.png",
-      "additionalImages": ["hackvwin.png"]
+      "additionalImages": ["hackvwin.png"],
+      "status": "archived"
     },
     {
       "title": "Automated Voicemail Transcription",
@@ -251,7 +273,8 @@
       "skills": ["Azure", "Azure Speech Service", "Python"],
       "links": ["Private Repo"],
       "image": "https://teamplanes.com/wp-content/uploads/2022/09/planes-logo.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "Apple Canada Remittance",
@@ -262,7 +285,8 @@
       "skills": ["Power Automate"],
       "links": ["Private Repo"],
       "image": "https://news.macgasm.net/wp-content/uploads/2011/12/canadaApple.png",
-      "additionalImages": []
+      "additionalImages": [],
+      "status": "archived"
     },
     {
       "title": "TrashCash",
@@ -274,7 +298,8 @@
       "links": ["https://github.com/owenstuckman/TrashCashEsp32", "https://github.com/owenstuckman/TrashCashApp"],
       "image": "/trashcash.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "RoomReady",
@@ -286,7 +311,8 @@
       "links": ["https://devpost.com/software/roomready-c2m1gq"],
       "image": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/074/131/datas/gallery.jpg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Inflectors Project",
@@ -298,7 +324,8 @@
       "links": ["Archived"],
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Seal_of_the_Central_Intelligence_Agency.svg/1200px-Seal_of_the_Central_Intelligence_Agency.svg.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Website Creation",
@@ -310,7 +337,8 @@
       "links": ["https://github.com/owenstuckman/owenstuckman.github.io"],
       "image": "https://www.markdownguide.org/assets/images/markdown-guide-og.jpg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "AdaptiveSpec Logistics",
@@ -322,7 +350,8 @@
       "links": ["https://github.com/owenstuckman/AdaptiveSpec-Logistics", "https://www.youtube.com/watch?v=V1gkJ94yNnk"],
       "image": "/adaptivespec.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Student Health Tracker",
@@ -334,7 +363,8 @@
       "links": ["https://github.com/Infinitum-Archimedes/MobileAppUserSide"],
       "image": "https://opengraph.githubassets.com/1/Infinitum-Archimedes/MobileAppUserSide",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Symptom2Disease",
@@ -346,7 +376,8 @@
       "links": ["https://github.com/owenstuckman/Symptom2Disease"],
       "image": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/doc/logos/scikit-learn-logo.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "SeeFood",
@@ -358,7 +389,8 @@
       "links": ["https://github.com/JacobMartinage/SeeFood"],
       "image": "/seefood.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Harvard's CS50",
@@ -370,7 +402,8 @@
       "links": ["https://submit.cs50.io/users/owenstuckman"],
       "image": "data:image/png;base64,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",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Sprklii MVP",
@@ -382,7 +415,8 @@
       "links": ["https://apps.apple.com/app/apple-store/id6472749814?pt=126720051&ct=owenportfolio&mt=8"],
       "image": "https://sparkli.com/cdn/shop/files/Red_Sparkli_Logo_1.png?v=1734396591&width=255",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Mover's Suite API",
@@ -394,7 +428,8 @@
       "links": ["https://github.com/owenstuckman/PlanesReferences/tree/main/References-24/References-24/MSAPI"],
       "image": "https://www.ewsgroup.com/assets/EWS-Group-MoversSuite-223-%C3%97-62-px-1.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Mover's Suite RPA Status Updates",
@@ -406,7 +441,8 @@
       "links": ["On Physical Device"],
       "image": "https://www.starwindsoftware.com/blog/wp-content/uploads/2021/06/workflows-erstellen-mit-microsoft-power-automate-.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Employee Technology Education",
@@ -418,7 +454,8 @@
       "links": ["Contact me for the particular presentations."],
       "image": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "XPM to Smartsheet Data Connection",
@@ -430,7 +467,8 @@
       "links": ["https://github.com/owenstuckman/PlanesReferences/blob/main/References-24/References-24/Screenshot%202024-08-12%20145246.png"],
       "image": "https://www.smartsheet.com/sites/default/files/smartsheet-logo-blue-new.svg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Project Manager Time Tracking",
@@ -442,7 +480,8 @@
       "links": ["https://github.com/owenstuckman/PlanesReferences/blob/main/References-24/References-24/PMTimeTracking_20240731185821.zip"],
       "image": "https://oneplan.ai/wp-content/uploads/2019/07/Power-Apps-Icons.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "SmartSheet Supplier Information",
@@ -454,7 +493,8 @@
       "links": ["https://github.com/owenstuckman/PlanesReferences/blob/main/References-24/References-24/SupplierInformationDashboard_20240731185711.zip"],
       "image": "https://blog.nashtechglobal.com/wp-content/uploads/2024/07/power.jpeg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Apple Remittance Automation",
@@ -466,7 +506,8 @@
       "links": ["https://github.com/owenstuckman/PlanesReferences/blob/main/References-24/References-24/AppleExtract_20240812163255.zip"],
       "image": "https://wallpapersok.com/images/hd/apple-logo-scenery-y6hr6uenmn8eru5o.jpg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Warehouse Time Tracking App",
@@ -478,7 +519,8 @@
       "links": [],
       "image": "https://teamplanes.com/wp-content/uploads/2022/08/storage-facility-racks.jpg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "SOP SharePoint",
@@ -490,7 +532,8 @@
       "links": [],
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT22iB5t3WegsRmXagULwbpL_eA1cCD1naqcg&s",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "GolfBot MVP",
@@ -502,7 +545,8 @@
       "links": ["https://github.com/owenstuckman/GolfBot"],
       "image": "https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-and-season-info/ftc-into-the-deep-sm.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "FictileBot",
@@ -514,7 +558,8 @@
       "links": ["https://github.com/owenstuckman/FictileBot"],
       "image": "/fictilebot.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Robot-X Computer Vision",
@@ -526,7 +571,8 @@
       "links": ["Repo is private."],
       "image": "https://opencv.org/wp-content/uploads/2020/07/OpenCV_logo_black-2.png",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Robot-X Software Lead",
@@ -538,7 +584,8 @@
       "links": ["All repos are private, some samples are on my GitHub."],
       "image": "https://pbs.twimg.com/profile_images/836326974557683712/3xIG-1vA_400x400.jpg",
       "additionalImages": [],
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Automatic Garage Door Closer",
@@ -549,7 +596,8 @@
       "skills": ["Arduino IDE", "C++", "Basic Circuitry", "Radio Communication"],
       "links": ["Contact me for the specific files"],
       "image": "https://cdn.arduino.cc/header-footer/prod/assets/headerLogo-arduino.svg",
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     },
     {
       "title": "Kids Like Food 2",
@@ -560,7 +608,8 @@
       "skills": ["HTML", "CSS", "JS"],
       "links": ["Lost in old Google accounts"],
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/512px-HTML5_logo_and_wordmark.svg.png",
-      "size": "small"
+      "size": "small",
+      "status": "archived"
     }
   ]
 }

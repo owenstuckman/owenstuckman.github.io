@@ -6,6 +6,7 @@
 <script>
 	import { onMount, tick } from 'svelte';
 	import ProjectDetails from './ProjectDetails.svelte';
+	import { ZONES } from '$lib/projects.js';
 
 	let { projects, about, onfallback } = $props();
 
@@ -19,6 +20,15 @@
 	let panelEl = $state();
 
 	let project = $derived(selected >= 0 ? projects[selected] : null);
+
+	// Floor order: running lines, construction sites, then the warehouse
+	const groups = [
+		{ status: 'running', title: 'Running lines' },
+		{ status: 'construction', title: 'Under construction' },
+		{ status: 'archived', title: 'Warehouse' }
+	].map((g) => ({ ...g, items: projects.filter((p) => p.status === g.status) }));
+	const ordered = groups.flatMap((g) => g.items);
+	let position = $derived(project ? ordered.indexOf(project) : -1);
 
 	// Camera views are framed to the uncovered canvas, so update the HUD (and the
 	// scene's insets) before asking for a view.
@@ -38,6 +48,13 @@
 		await select(-1);
 		factory?.wall();
 	}
+
+	async function warehouse() {
+		await select(-1);
+		factory?.warehouse();
+	}
+
+	const step = (d) => select(ordered[Math.min(ordered.length - 1, Math.max(0, position + d))].index);
 
 	// Tell the scene which parts of the canvas the HUD covers
 	async function syncInsets() {
@@ -118,29 +135,35 @@
 			<div class="loading label" role="status">Powering up the floor…</div>
 		{/if}
 
-		<nav class="lines" class:open={listOpen} aria-label="Production lines" bind:this={listEl}>
+		<nav class="lines" class:open={listOpen} aria-label="Floor index" bind:this={listEl}>
 			<button class="lines-toggle" type="button" aria-expanded={listOpen} onclick={() => (listOpen = !listOpen)}>
-				<span>Production lines</span>
+				<span>Floor index</span>
 				<span class="count">{projects.length}</span>
 				<span class="chev" aria-hidden="true">{listOpen ? '−' : '+'}</span>
 			</button>
 			{#if listOpen}
-				<ol>
-					{#each projects as p, i}
-						<li>
-							<button
-								type="button"
-								class:active={selected === i}
-								class:hot={hover.line === i}
-								aria-current={selected === i ? 'true' : undefined}
-								onclick={() => select(i)}
-							>
-								<span class="code">{p.code}</span>
-								<span class="name">{p.title}</span>
-							</button>
-						</li>
+				<div class="groups">
+					{#each groups as group}
+						<p class="group label">{group.title} · {group.items.length}</p>
+						<ol>
+							{#each group.items as p (p.index)}
+								<li>
+									<button
+										type="button"
+										class:active={selected === p.index}
+										class:hot={hover.line === p.index}
+										class:muted={p.status === 'archived'}
+										aria-current={selected === p.index ? 'true' : undefined}
+										onclick={() => select(p.index)}
+									>
+										<span class="code" class:uc={p.status === 'construction'}>{p.code}</span>
+										<span class="name">{p.title}</span>
+									</button>
+								</li>
+							{/each}
+						</ol>
 					{/each}
-				</ol>
+				</div>
 			{/if}
 		</nav>
 
@@ -154,24 +177,16 @@
 		{#if project}
 			<aside class="panel" aria-label="Selected project" bind:this={panelEl}>
 				<div class="panel-bar">
-					<span class="label">Line {project.code} · running</span>
+					<span class="label">{ZONES[project.status].label} · {project.code}</span>
 					<button type="button" class="close" onclick={home} aria-label="Close and return to the overview">✕</button>
 				</div>
 				<div class="panel-body">
 					<ProjectDetails {project} compact />
 				</div>
 				<div class="panel-foot">
-					<button type="button" onclick={() => select(Math.max(0, selected - 1))} disabled={selected === 0}>
-						← Prev line
-					</button>
+					<button type="button" onclick={() => step(-1)} disabled={position <= 0}>← Prev</button>
 					<a href="/projects#{project.slug}">Open in projects</a>
-					<button
-						type="button"
-						onclick={() => select(Math.min(projects.length - 1, selected + 1))}
-						disabled={selected === projects.length - 1}
-					>
-						Next line →
-					</button>
+					<button type="button" onclick={() => step(1)} disabled={position >= ordered.length - 1}>Next →</button>
 				</div>
 			</aside>
 		{/if}
@@ -179,7 +194,8 @@
 		<div class="hud-bottom">
 			<button type="button" class="chip" onclick={home}>↺ Overview</button>
 			<button type="button" class="chip" onclick={readWall}>Read the wall</button>
-			<span class="hint label">Drag to look around · Scroll or pinch to zoom · Click a line</span>
+			<button type="button" class="chip" onclick={warehouse}>Warehouse</button>
+			<span class="hint label">Drag to move · Right-drag to rotate · Scroll to zoom · Click any line or pallet</span>
 		</div>
 	</div>
 {/if}
@@ -276,12 +292,31 @@
 		font-family: var(--font-mono);
 	}
 
+	.groups {
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		padding-bottom: 0.3rem;
+	}
+
+	.group {
+		margin: 0;
+		padding: 0.6rem 0.8rem 0.2rem;
+		font-size: 0.64rem;
+	}
+
 	.lines ol {
 		list-style: none;
 		margin: 0;
-		padding: 0.3rem;
-		overflow-y: auto;
-		overscroll-behavior: contain;
+		padding: 0 0.3rem;
+	}
+
+	.muted .name {
+		color: var(--muted);
+	}
+
+	.code.uc {
+		background: repeating-linear-gradient(-45deg, var(--tape) 0 5px, #ffd75e 5px 10px);
 	}
 
 	.lines li {

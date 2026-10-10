@@ -143,29 +143,100 @@ export function drawToolingBoard(about, lineCount) {
 	ctx.fillRect(0, 960 - 92, 1024, 92);
 	ctx.fillStyle = INK;
 	ctx.font = `700 40px ${HEAD}`;
-	ctx.fillText(`${lineCount} LINES ON THE FLOOR · EACH ONE IS A PROJECT`, x, 960 - 34);
+	ctx.fillText(`${lineCount} PROJECTS ON THE FLOOR · CLICK ANY OF THEM`, x, 960 - 34);
 	return c;
 }
 
-/** Banner hung over each line. 1024×128. */
-export function drawLineSign(code, title) {
-	const [c, ctx] = canvas(1024, 128);
-	ctx.fillStyle = TAPE;
-	ctx.fillRect(0, 0, 1024, 128);
-	ctx.fillStyle = INK;
-	ctx.fillRect(0, 0, 190, 128);
-	ctx.fillStyle = TAPE;
-	ctx.font = `400 46px ${MONO}`;
-	ctx.textBaseline = 'middle';
-	ctx.fillText(code, 26, 66);
-
-	ctx.fillStyle = INK;
-	let size = 84;
-	const text = title.toUpperCase();
+function fitText(ctx, text, weight, family, maxSize, minSize, maxWidth) {
+	let size = maxSize;
 	do {
-		ctx.font = `700 ${size}px ${HEAD}`;
-		size -= 4;
-	} while (ctx.measureText(text).width > 1024 - 230 && size > 30);
-	ctx.fillText(text, 216, 68);
+		ctx.font = `${weight} ${size}px ${family}`;
+		size -= 2;
+	} while (ctx.measureText(text).width > maxWidth && size > minSize);
+}
+
+/** Banner hung over each line. 1024×128. Construction lines get hazard stripes. */
+export function drawLineSign(code, title, construction = false) {
+	const [c, ctx] = canvas(1024, 128);
+	if (construction) hazard(ctx, 0, 0, 1024, 128, 40);
+	else {
+		ctx.fillStyle = TAPE;
+		ctx.fillRect(0, 0, 1024, 128);
+	}
+	const left = 190;
+	ctx.fillStyle = INK;
+	ctx.fillRect(0, 0, left, 128);
+	ctx.fillStyle = TAPE;
+	ctx.textBaseline = 'middle';
+	fitText(ctx, code, 400, MONO, 46, 24, left - 30);
+	ctx.fillText(code, 20, 66);
+
+	const text = title.toUpperCase();
+	if (construction) {
+		ctx.fillStyle = PAPER;
+		ctx.fillRect(left + 14, 12, 1024 - left - 28, 104);
+		ctx.fillStyle = INK;
+		fitText(ctx, text, 700, HEAD, 62, 28, 1024 - left - 60);
+		ctx.fillText(text, left + 30, 50);
+		ctx.font = `400 26px ${MONO}`;
+		ctx.fillStyle = MUTED;
+		ctx.fillText('UNDER CONSTRUCTION', left + 30, 96);
+	} else {
+		ctx.fillStyle = INK;
+		fitText(ctx, text, 700, HEAD, 84, 30, 1024 - left - 40);
+		ctx.fillText(text, left + 26, 68);
+	}
+	return c;
+}
+
+/** Small plate above each station naming the stage. 512×96. */
+export function drawStationLabel(label) {
+	const [c, ctx] = canvas(512, 96);
+	ctx.fillStyle = INK;
+	ctx.fillRect(0, 0, 512, 96);
+	ctx.fillStyle = TAPE;
+	ctx.fillRect(0, 88, 512, 8);
+	ctx.fillStyle = PAPER;
+	ctx.textBaseline = 'middle';
+	const text = label.toUpperCase();
+	fitText(ctx, text, 700, HEAD, 58, 24, 470);
+	ctx.textAlign = 'center';
+	ctx.fillText(text, 256, 48);
+	return c;
+}
+
+/** Rack beam label for an archived project. 512×128. */
+export function drawSlotLabel(code, title) {
+	const [c, ctx] = canvas(512, 128);
+	ctx.fillStyle = PAPER;
+	ctx.fillRect(0, 0, 512, 128);
+	ctx.fillStyle = INK;
+	ctx.fillRect(0, 0, 116, 128);
+	ctx.fillStyle = TAPE;
+	ctx.textBaseline = 'middle';
+	fitText(ctx, code, 400, MONO, 34, 18, 100);
+	ctx.fillText(code, 12, 66);
+	ctx.fillStyle = INK;
+	const text = title.toUpperCase();
+	fitText(ctx, text, 700, HEAD, 52, 22, 512 - 140);
+	ctx.fillText(text, 130, 66);
+	return c;
+}
+
+/** Overhead zone banner, e.g. WAREHOUSE. 1024×192. */
+export function drawZoneBanner(title, subtitle) {
+	const [c, ctx] = canvas(1024, 192);
+	ctx.fillStyle = INK;
+	ctx.fillRect(0, 0, 1024, 192);
+	hazard(ctx, 0, 0, 1024, 22, 22);
+	hazard(ctx, 0, 170, 1024, 22, 22);
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
+	ctx.fillStyle = TAPE;
+	ctx.font = `700 92px ${HEAD}`;
+	ctx.fillText(title.toUpperCase(), 512, 84);
+	ctx.fillStyle = PAPER;
+	ctx.font = `400 26px ${MONO}`;
+	ctx.fillText(subtitle.toUpperCase(), 512, 142);
 	return c;
 }
