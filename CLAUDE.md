@@ -20,7 +20,11 @@ npm run format   # Auto-format code with Prettier
 
 **Framework:** SvelteKit with static adapter for GitHub Pages deployment
 
-**Pages:** `/` (about), `/projects` (current and past projects, infinite scroll), and `/blog` (password protected, see `docs/blog.md`). There is no header or footer. `Dock.svelte` is the minimal nav: an AGV parks under the active station, plus the light/default/dark `ThemeSwitch`.
+**Pages:** `/` (about), `/projects` (current and past projects), and `/blog` (password protected, see `docs/blog.md`). There is no header or footer. `Dock.svelte` is the minimal nav: an AGV parks under the active station, plus the light/default/dark `ThemeSwitch`.
+
+**Factory (about page):** `src/lib/factory/scene.js` builds a three.js factory floor (lazy-loaded from `Factory.svelte`). The about info is drawn onto the back wall (`signage.js`, content in `src/lib/about.js`). Every project in `projects.json` becomes a production line: unwind → converter → cartoner → casepacker → palletizer, with AGVs carrying full pallets to the dock. Machine parts are InstancedMeshes shared across all lines. The HUD tells the scene which parts of the canvas it covers (`setInsets`) so camera views frame the open area.
+
+**Projects page:** list view (default, searchable) or grid view (infinite scroll). One `ProjectDialog`; `/projects#<slug>` opens a project directly. Slugs and line codes come from `src/lib/projects.js`.
 
 **Content System:** mdsvex preprocessor allows markdown files (`.md`) to be used as Svelte components/pages. Blog posts live in `src/lib/posts/*.md` and are encrypted at build time, so the build needs `BLOG_PASSWORD` set.
 

@@ -1,132 +1,94 @@
 <script>
-	const stack = [
-		{ name: 'Flutter + Dart', note: 'mobile apps' },
-		{ name: 'Supabase', note: 'Postgres, auth, storage, edge functions' },
-		{ name: 'Svelte', note: 'and React, for web apps' },
-		{ name: 'TypeScript', note: 'most things on the web' },
-		{ name: 'Python', note: 'automation, ML, CV' },
-		{ name: 'Java, C++, C#', note: 'across a wide range of projects' },
-		{ name: 'Power Platform', note: 'Microsoft RPA' },
-		{ name: 'OpenCV', note: 'computer vision' }
-	];
+	import Factory from '$lib/components/Factory.svelte';
+	import { about } from '$lib/about.js';
+	import { projects } from '$lib/projects.js';
+
+	let showText = $state(false);
 </script>
 
 <svelte:head>
 	<title>Owen Stuckman</title>
 </svelte:head>
 
-<section class="hero">
-	<div class="intro">
-		<p class="label">Station 01 · About</p>
-		<h1>Owen<br />Stuckman</h1>
-		<p class="lede">
-			I'm an undergraduate studying computer science with a minor in cybersecurity at Virginia
-			Tech.
-		</p>
-	</div>
-	<figure class="photo">
-		<img src="/headshot.webp" alt="Owen Stuckman" width="291" height="250" />
-		<figcaption class="label">ID · VT-CS</figcaption>
-	</figure>
-</section>
+<h1 class="sr-only">{about.name}</h1>
 
-<div class="body">
-	<section>
-		<p>
-			My professional interest is currently focused on automation, whether that's cloud-based or
-			desktop robotic process automation. I enjoy creating and improving systems so people can
-			spend time on things that matter rather than on inefficiencies or manual analog processes.
-		</p>
-		<p>
-			I've worked across multiple industries including moving and storage, consumer packaged
-			goods, small business food, hospitality, and more.
-		</p>
-		<p>
-			In my free time I like to run, play spikeball and pickleball, work on my personal projects
-			and businesses, and backpack.
-		</p>
-		<p class="links">
-			<a href="/projects">See my projects →</a>
-			<a href="https://github.com/owenstuckman" target="_blank" rel="noopener">GitHub ↗</a>
-		</p>
-	</section>
-
-	<aside>
-		<h2>Tooling</h2>
-		<ul class="stack">
-			{#each stack as item}
-				<li>
-					<span class="name">{item.name}</span>
-					<span class="note">{item.note}</span>
-				</li>
-			{/each}
-			<li>
-				<span class="name">Whatever the job needs</span>
-				<span class="note">I'll learn it</span>
-			</li>
-		</ul>
-	</aside>
+<div class="bleed">
+	<Factory {projects} {about} onfallback={() => (showText = true)} />
 </div>
 
+<div class="below">
+	<button type="button" class="text-toggle" aria-expanded={showText} onclick={() => (showText = !showText)}>
+		{showText ? 'Hide' : 'Read'} the wall as text
+	</button>
+	<a href="/projects">All projects as a list →</a>
+</div>
+
+<section class="text" class:sr-only={!showText} aria-label="About">
+	<p class="label">Station 01 · About</p>
+	<div class="cols">
+		<div>
+			<h2>{about.name}</h2>
+			<p class="lede">{about.lede}</p>
+			{#each about.paragraphs as p}
+				<p>{p}</p>
+			{/each}
+			<p><a href={about.github} target="_blank" rel="noopener">GitHub ↗</a></p>
+		</div>
+		<div>
+			<h2>Tooling</h2>
+			<ul class="stack">
+				{#each about.tooling as item}
+					<li><strong>{item.name}</strong> <span>{item.note}</span></li>
+				{/each}
+			</ul>
+		</div>
+	</div>
+</section>
+
 <style>
-	.hero {
-		display: grid;
-		grid-template-columns: 1fr auto;
-		gap: 2rem;
-		align-items: end;
-		margin-bottom: 3rem;
+	.bleed {
+		width: 100vw;
+		margin: -2rem 0 0 calc(50% - 50vw);
 	}
 
-	h1 {
-		margin-bottom: 1rem;
+	.below {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-top: 1.25rem;
 	}
 
-	.lede {
-		font-size: 1.25rem;
-		max-width: 32rem;
-		color: var(--muted);
-		margin: 0;
-	}
-
-	.photo {
-		margin: 0;
-		padding: 6px 6px 0;
+	.text-toggle {
+		padding: 0.45rem 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--ink);
 		background: var(--surface);
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
-		box-shadow: var(--shadow);
+		cursor: pointer;
 	}
 
-	.photo img {
-		display: block;
-		width: 180px;
-		height: auto;
-		border-radius: 3px;
-		filter: grayscale(0.35) contrast(1.05);
+	.text {
+		margin-top: 2.5rem;
 	}
 
-	.photo figcaption {
-		padding: 0.35rem 0.2rem;
-		font-size: 0.65rem;
-	}
-
-	.body {
+	.cols {
 		display: grid;
 		grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
 		gap: 3rem;
-		max-width: 56rem;
 	}
 
-	.links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1.25rem;
-		margin-top: 1.5rem;
-	}
-
-	aside h2 {
+	.cols h2 {
 		margin-top: 0;
-		font-size: 1.25rem;
+	}
+
+	.lede {
+		font-size: 1.2rem;
 		color: var(--muted);
 	}
 
@@ -134,38 +96,23 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		border-top: 1px solid var(--line);
 	}
 
 	.stack li {
 		display: flex;
 		flex-direction: column;
-		padding: 0.6rem 0;
+		padding: 0.5rem 0;
 		margin: 0;
 		border-bottom: 1px solid var(--line);
 	}
 
-	.name {
-		font-weight: 700;
-	}
-
-	.note {
+	.stack span {
 		font-size: 0.875rem;
 		color: var(--muted);
 	}
 
 	@media (max-width: 44rem) {
-		.hero {
-			grid-template-columns: 1fr;
-		}
-		.photo {
-			order: -1;
-			justify-self: start;
-		}
-		.photo img {
-			width: 120px;
-		}
-		.body {
+		.cols {
 			grid-template-columns: 1fr;
 			gap: 1rem;
 		}
