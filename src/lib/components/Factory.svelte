@@ -249,7 +249,7 @@
 					<button type="button" class="close" onclick={() => jump('timeline')} aria-label="Close and return to the timeline">✕</button>
 				</div>
 				<div class="panel-body" bind:this={panelBody}>
-					<p class="label">{job.dates}</p>
+					<p class="label">{job.dates}{job.location ? ` · ${job.location}` : ''}</p>
 					<h2 class="job-org">{job.org}</h2>
 					<p class="job-role">{job.role ?? 'Role to come'}</p>
 					{#if job.summary}<p>{job.summary}</p>{/if}
@@ -274,7 +274,7 @@
 						</section>
 					{/if}
 					{#if draft}
-						<p class="draft-note label">Draft from project notes · LinkedIn details coming</p>
+						<p class="draft-note label">Draft from project notes · import LinkedIn with npm run import:linkedin</p>
 					{/if}
 				</div>
 				<div class="panel-foot">

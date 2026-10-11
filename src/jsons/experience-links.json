@@ -1,0 +1,63 @@
+{
+  "_help": "Which projects light up for each job. Matched to LinkedIn positions by company name and a start date within 6 months (omit \"start\" to match every position at that company). Project slugs are the lowercase-hyphenated project titles.",
+  "links": [
+    {
+      "org": "Robot-X (FTC Team 4969)",
+      "start": "2021-08",
+      "projects": [
+        "robot-x-software-lead",
+        "robot-x-computer-vision",
+        "golfbot-mvp",
+        "fictilebot"
+      ]
+    },
+    {
+      "org": "Planes Moving and Storage",
+      "start": "2022-06",
+      "projects": [
+        "warehouse-time-tracking-app",
+        "sop-sharepoint"
+      ]
+    },
+    {
+      "org": "Sparklii LLC",
+      "start": "2023-01",
+      "projects": [
+        "sprklii-mvp",
+        "sparkli-dev-app"
+      ]
+    },
+    {
+      "org": "Planes Moving and Storage",
+      "start": "2024-06",
+      "projects": [
+        "mover-s-suite-api",
+        "mover-s-suite-rpa-status-updates",
+        "xpm-to-smartsheet-data-connection",
+        "project-manager-time-tracking",
+        "smartsheet-supplier-information",
+        "apple-remittance-automation",
+        "employee-technology-education"
+      ]
+    },
+    {
+      "org": "Planes Moving and Storage",
+      "start": "2025-01",
+      "projects": [
+        "apple-canada-remittance",
+        "automated-voicemail-transcription",
+        "customer-onboarding-app"
+      ]
+    },
+    {
+      "org": "Archimedes Society at Virginia Tech",
+      "start": "2025-05",
+      "projects": [
+        "luma",
+        "luma-v2",
+        "archimedes-website",
+        "archimedes-snipe-bot"
+      ]
+    }
+  ]
+}

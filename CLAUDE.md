@@ -14,6 +14,7 @@ npm run build    # Build static site to build/
 npm run preview  # Preview production build
 npm run lint     # Check formatting and linting
 npm run format   # Auto-format code with Prettier
+npm run import:linkedin -- <export folder or Positions.csv>   # Rebuild experience.json from a LinkedIn data export
 ```
 
 ## Architecture
@@ -22,7 +23,7 @@ npm run format   # Auto-format code with Prettier
 
 **Pages:** `/` (about), `/projects` (current and past projects), and `/blog` (password protected, see `docs/blog.md`). There is no header or footer. `Dock.svelte` is the minimal nav: an AGV parks under the active station, plus the light/default/dark `ThemeSwitch`.
 
-**Factory (about page):** `src/lib/factory/scene.js` builds a three.js factory floor (lazy-loaded from `Factory.svelte`). The about info is drawn onto the back wall (`signage.js`, content in `src/lib/about.js`). Each project's `status` in `projects.json` places it: `running` → a working production line, `construction` → a half-built line (current projects), anything else → a labeled pallet in the warehouse racks. Each project's `phases` in `projects.json` become its stations (on a line) or pallets (in the warehouse); `recipes.js` only picks the machine type/color per phase and the output product, and products are defined in `products.js`. Work history lives in `src/jsons/experience.json` (dates `YYYY-MM`, linked project slugs) and is drawn as a timeline rail on the wall; selecting a job lights up its projects. AGVs carry full pallets from the lines to the warehouse. Controls are `MapControls`: drag pans, right-drag rotates. The HUD tells the scene which parts of the canvas it covers (`setInsets`) so camera views frame the open area.
+**Factory (about page):** `src/lib/factory/scene.js` builds a three.js factory floor (lazy-loaded from `Factory.svelte`). The about info is drawn onto the back wall (`signage.js`, content in `src/lib/about.js`). Each project's `status` in `projects.json` places it: `running` → a working production line, `construction` → a half-built line (current projects), anything else → a labeled pallet in the warehouse racks. Each project's `phases` in `projects.json` become its stations (on a line) or pallets (in the warehouse); `recipes.js` only picks the machine type/color per phase and the output product, and products are defined in `products.js`. Work history lives in `src/jsons/experience.json`, generated from a LinkedIn export by `scripts/import-linkedin.js` (project links per job come from `src/jsons/experience-links.json`, matched by company + start date) and is drawn as a timeline rail on the wall; selecting a job lights up its projects. AGVs carry full pallets from the lines to the warehouse. Controls are `MapControls`: drag pans, right-drag rotates. The HUD tells the scene which parts of the canvas it covers (`setInsets`) so camera views frame the open area.
 
 **Projects page:** card grid (default, infinite scroll, grayscale until hover) or list view, both searchable. "On the line now" lists `construction` projects. One `ProjectDialog`; `/projects#<slug>` opens a project directly. Slugs and line codes come from `src/lib/projects.js`.
 
