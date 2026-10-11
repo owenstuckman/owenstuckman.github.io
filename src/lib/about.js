@@ -1,5 +1,9 @@
 // About content — drawn onto the factory wall and rendered as the text version.
+// `headline` comes from LinkedIn via `npm run import:linkedin` (src/jsons/profile.json).
+import profile from '../jsons/profile.json';
+
 export const about = {
+	headline: profile.headline ?? '',
 	name: 'Owen Stuckman',
 	lede: "I'm an undergraduate studying computer science with a minor in cybersecurity at Virginia Tech.",
 	paragraphs: [

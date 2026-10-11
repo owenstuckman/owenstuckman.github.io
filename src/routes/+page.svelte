@@ -29,6 +29,7 @@
 	<div class="cols">
 		<div>
 			<h2>{about.name}</h2>
+			{#if about.headline}<p class="label">{about.headline}</p>{/if}
 			<p class="lede">{about.lede}</p>
 			{#each about.paragraphs as p}
 				<p>{p}</p>

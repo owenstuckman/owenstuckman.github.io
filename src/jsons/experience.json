@@ -13,7 +13,12 @@
         "Introduced agile practices and saw efficiency gains",
         "Worked as PM while writing some of the most challenging code, including the dual-channel OpenCV vision system"
       ],
-      "projects": ["robot-x-software-lead", "robot-x-computer-vision", "golfbot-mvp", "fictilebot"]
+      "projects": [
+        "robot-x-software-lead",
+        "robot-x-computer-vision",
+        "golfbot-mvp",
+        "fictilebot"
+      ]
     },
     {
       "org": "Planes Moving and Storage",
@@ -25,20 +30,26 @@
         "Built a warehouse time tracking app that increased billable warehouse time",
         "Created and managed an SOP system in SharePoint"
       ],
-      "projects": ["warehouse-time-tracking-app", "sop-sharepoint"]
+      "projects": [
+        "warehouse-time-tracking-app",
+        "sop-sharepoint"
+      ]
     },
     {
       "org": "Sparklii LLC",
-      "role": "Founder & Developer",
+      "role": "Co-founder",
       "start": "2023-01",
-      "end": null,
+      "end": "present",
       "summary": "Founded an LLC to bring personalization to date ideas.",
       "bullets": [
         "Sole developer through the MVP and alpha releases",
         "Led two other developers into the beta phase",
         "Built an internal Svelte tool for editing the date-ideas database and images"
       ],
-      "projects": ["sprklii-mvp", "sparkli-dev-app"]
+      "projects": [
+        "sprklii-mvp",
+        "sparkli-dev-app"
+      ]
     },
     {
       "org": "Planes Moving and Storage",
@@ -73,7 +84,11 @@
         "Built voicemail transcription in Azure into Dataverse",
         "Built a React and Express customer onboarding app"
       ],
-      "projects": ["apple-canada-remittance", "automated-voicemail-transcription", "customer-onboarding-app"]
+      "projects": [
+        "apple-canada-remittance",
+        "automated-voicemail-transcription",
+        "customer-onboarding-app"
+      ]
     },
     {
       "org": "Archimedes Society at Virginia Tech",
@@ -86,7 +101,12 @@
         "Rebuilt the society website from Squarespace",
         "Maintain the snipe Discord bot"
       ],
-      "projects": ["luma", "luma-v2", "archimedes-website", "archimedes-snipe-bot"]
+      "projects": [
+        "luma",
+        "luma-v2",
+        "archimedes-website",
+        "archimedes-snipe-bot"
+      ]
     }
   ]
 }

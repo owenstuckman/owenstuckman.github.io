@@ -97,15 +97,26 @@ export async function drawAboutBoard(about) {
 	ctx.font = `700 150px ${HEAD}`;
 	ctx.fillText(about.name.toUpperCase(), x, 250);
 
+	let y = 330;
+	if (about.headline) {
+		// LinkedIn headline on a strip of floor tape
+		ctx.font = `400 30px ${MONO}`;
+		const w = Math.min(width, ctx.measureText(about.headline).width + 32);
+		ctx.fillStyle = TAPE;
+		ctx.fillRect(x, 278, w, 46);
+		ctx.fillStyle = INK;
+		ctx.fillText(about.headline, x + 16, 311, width - 32);
+		y = 382;
+	}
 	ctx.fillStyle = MUTED;
 	ctx.font = `400 42px ${BODY}`;
-	let y = wrap(ctx, about.lede, x, 330, width, 56);
+	y = wrap(ctx, about.lede, x, y, width, 54);
 
 	ctx.fillStyle = INK;
-	ctx.font = `400 34px ${BODY}`;
-	y += 18;
+	ctx.font = `400 33px ${BODY}`;
+	y += 14;
 	for (const p of about.paragraphs) {
-		y = wrap(ctx, p, x, y, width, 48) + 14;
+		y = wrap(ctx, p, x, y, width, 46) + 12;
 	}
 	return c;
 }

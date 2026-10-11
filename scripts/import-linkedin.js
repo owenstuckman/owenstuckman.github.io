@@ -4,10 +4,13 @@
  *   npm run import:linkedin -- <Positions.csv | export folder>
  *
  * Get the export at LinkedIn → Settings → Data privacy → Get a copy of your
- * data (make sure "Positions" is included). This rewrites
- * src/jsons/experience.json from Positions.csv. Which projects light up for
- * each job comes from src/jsons/experience-links.json, so re-importing never
- * loses those links.
+ * data (make sure "Positions" is included).
+ *
+ *   Profile.csv   → src/jsons/profile.json (headline)
+ *   Positions.csv → src/jsons/experience.json
+ *
+ * Which projects light up for each job comes from
+ * src/jsons/experience-links.json, so re-importing never loses those links.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,26 +19,27 @@ const root = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const OUT = path.join(root, 'src/jsons/experience.json');
 const LINKS = path.join(root, 'src/jsons/experience-links.json');
 const PROJECTS = path.join(root, 'src/jsons/projects.json');
+const PROFILE = path.join(root, 'src/jsons/profile.json');
 
 function fail(msg) {
 	console.error(`\n✖ ${msg}\n`);
 	process.exit(1);
 }
 
-// ---- find Positions.csv ----
+// ---- find the CSVs ----
 const arg = process.argv[2];
-if (!arg) fail('Pass the path to Positions.csv or the unzipped export folder.');
-let csvPath = path.resolve(arg);
-if (!fs.existsSync(csvPath)) fail(`Not found: ${csvPath}`);
-if (fs.statSync(csvPath).isDirectory()) {
-	const hit = fs.readdirSync(csvPath).find((f) => f.toLowerCase() === 'positions.csv');
-	if (!hit)
-		fail(
-			`No Positions.csv in ${csvPath}.\n  Request the export again with "Positions" selected (or the full archive).`
-		);
-	csvPath = path.join(csvPath, hit);
-}
-if (csvPath.toLowerCase().endsWith('.zip')) fail('Unzip the export first, then pass the folder.');
+if (!arg) fail('Pass the unzipped export folder (or a Positions.csv / Profile.csv).');
+const input = path.resolve(arg);
+if (!fs.existsSync(input)) fail(`Not found: ${input}`);
+if (input.toLowerCase().endsWith('.zip') && !fs.statSync(input).isDirectory()) fail('Unzip the export first, then pass the folder.');
+const find = (name) => {
+	if (!fs.statSync(input).isDirectory()) return path.basename(input).toLowerCase() === name ? input : null;
+	const hit = fs.readdirSync(input).find((f) => f.toLowerCase() === name);
+	return hit ? path.join(input, hit) : null;
+};
+const profilePath = find('profile.csv');
+const csvPath = find('positions.csv');
+if (!profilePath && !csvPath) fail(`No Profile.csv or Positions.csv in ${input}.`);
 
 // ---- CSV (quoted fields, embedded commas and newlines) ----
 function parseCsv(text) {
@@ -98,7 +102,23 @@ const months = (ym) => {
 	return y * 12 + m;
 };
 
-// ---- read everything ----
+// ---- profile ----
+if (profilePath) {
+	const [p] = parseCsv(fs.readFileSync(profilePath, 'utf8'));
+	// only what the site shows: this repo is public, so contact details and location stay out
+	const profile = { headline: p?.['Headline'] ?? '', importedOn: new Date().toISOString().slice(0, 10) };
+	fs.writeFileSync(PROFILE, JSON.stringify(profile, null, 2) + '\n');
+	console.log(`\n✔ Profile → src/jsons/profile.json\n  Headline: ${profile.headline}`);
+}
+
+if (!csvPath) {
+	console.log(
+		'\n  No Positions.csv, so work history was left as is.\n  Request the export with "Positions" selected to import jobs.\n'
+	);
+	process.exit(0);
+}
+
+// ---- positions ----
 const positions = parseCsv(fs.readFileSync(csvPath, 'utf8'));
 if (!positions.length) fail('Positions.csv has no rows.');
 const links = fs.existsSync(LINKS) ? JSON.parse(fs.readFileSync(LINKS, 'utf8')).links ?? [] : [];
