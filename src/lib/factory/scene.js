@@ -18,6 +18,9 @@ import {
 	drawStationLabel,
 	drawSlotLabel,
 	drawZoneBanner,
+	drawExperienceCard,
+	drawYearTick,
+	drawRailTitle,
 	loadFonts
 } from './signage.js';
 import { PRODUCTS } from './products.js';
@@ -40,6 +43,12 @@ const RACK_FACE = 6.2; // |x| of the rack face on the aisle
 const SLOT_X = 7.0; // |x| of a pallet in a bay
 const LEVELS = [0, 2.1, 4.0, 5.9]; // beam heights; level 0 is the AGV drop level
 const RACK_H = 7.7;
+
+// Back wall
+const WALL_H = 20;
+const BOARD_Y = 13.3; // about boards
+const RAIL_Y = 5.8; // work-history rail
+const CARD_H = 2.1;
 
 const AGV_COUNT = 6;
 const AGV_SPEED = 9;
@@ -66,7 +75,7 @@ function toonGradient() {
 	return tex;
 }
 
-export async function createFactory(container, { projects, about, onSelect, onHover, onMove }) {
+export async function createFactory(container, { projects, about, experience = [], draft = false, onSelect, onSelectExperience, onHover, onMove }) {
 	const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 	// ---- Renderer / scene / camera / controls ----
@@ -252,8 +261,8 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	flat(2 * RACK_FACE, 0.6, hazardMat(6), 0, W0 - 2, 0.012);
 
 	const wallMat = new THREE.MeshLambertMaterial({ color: '#d8d5cc' });
-	const wall = new THREE.Mesh(new THREE.BoxGeometry(floorW, 18, 0.6), wallMat);
-	wall.position.set(0, 9, WALL_Z - 0.3);
+	const wall = new THREE.Mesh(new THREE.BoxGeometry(floorW, WALL_H, 0.6), wallMat);
+	wall.position.set(0, WALL_H / 2, WALL_Z - 0.3);
 	scene.add(wall);
 
 	// ---- Signs ----
@@ -284,9 +293,10 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 
 	const maxAniso = renderer.capabilities.getMaxAnisotropy();
 	const boards = [
-		sign(await drawAboutBoard(about), 26, 13, -7, 8, WALL_Z + 0.02, 0, maxAniso),
-		sign(drawToolingBoard(about, projects.length), 13.6, 12.75, 14, 7.9, WALL_Z + 0.02, 0, maxAniso)
+		sign(await drawAboutBoard(about), 26, 13, -7, BOARD_Y, WALL_Z + 0.02, 0, maxAniso),
+		sign(drawToolingBoard(about, projects.length), 13.6, 12.75, 14, BOARD_Y - 0.1, WALL_Z + 0.02, 0, maxAniso)
 	];
+
 
 	// Zone banner over the aisle, back to back so it reads from both directions
 	const banner = drawZoneBanner('Warehouse', `${archived.length} archived projects · ${palletCount} pallets`);
@@ -329,6 +339,44 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	};
 	const piece = (line, key, geo, color, local) =>
 		addPiece(key, geo, color, new THREE.Matrix4().multiplyMatrices(line.matrix, local));
+
+	// ---- Work history: a timeline rail along the wall under the boards ----
+	const expTargets = [];
+	if (experience.length) {
+		const y0 = Math.floor(Math.min(...experience.map((e) => e.startYear)));
+		const y1 = Math.ceil(Math.max(...experience.map((e) => e.endYear)));
+		const X0 = -21;
+		const X1 = 25;
+		const xOf = (year) => X0 + ((year - y0) / (y1 - y0)) * (X1 - X0);
+		const railZ = WALL_Z + 0.12;
+		addPiece('rail', boxGeo(X1 - X0 + 1, 0.16, 0.16), COLORS.tape, at((X0 + X1) / 2, RAIL_Y, railZ));
+		sign(drawRailTitle('Work history'), 5.6, 0.7, X0 - 3.6, RAIL_Y, WALL_Z + 0.03);
+		for (let y = y0; y <= y1; y++) {
+			addPiece('rail-tick', boxGeo(0.06, 0.3, 0.06), COLORS.dark, at(xOf(y), RAIL_Y + 0.15, railZ));
+			sign(drawYearTick(y), 1.2, 0.6, xOf(y), RAIL_Y + 0.55, WALL_Z + 0.04);
+		}
+		// cards hang in lanes so overlapping jobs don't collide
+		const LANES = [RAIL_Y - 1.7, RAIL_Y - 4.1];
+		const laneEnd = LANES.map(() => -Infinity);
+		for (const e of experience) {
+			const x0 = xOf(e.startYear);
+			const x1 = Math.max(xOf(e.endYear), x0 + 4.2);
+			let lane = laneEnd.findIndex((end) => end < x0 - 0.15);
+			if (lane < 0) lane = laneEnd.indexOf(Math.min(...laneEnd));
+			laneEnd[lane] = x1;
+			const w = x1 - x0;
+			const cy = LANES[lane];
+			const card = sign(drawExperienceCard(e, (w / CARD_H) * 256, draft), w, CARD_H, x0 + w / 2, cy, WALL_Z + 0.06);
+			const hang = RAIL_Y - (cy + CARD_H / 2);
+			for (const hx of [x0 + 0.3, x1 - 0.3])
+				addPiece(`hanger-${hang.toFixed(2)}`, boxGeo(0.04, hang, 0.04), COLORS.dark, at(hx, cy + CARD_H / 2 + hang / 2, railZ));
+			// span bar on the rail showing how long the job ran
+			const span = Math.max(0.2, xOf(e.endYear) - x0);
+			addPiece(`span-${span.toFixed(2)}`, boxGeo(span, 0.08, 0.06), COLORS.dark, at(x0 + span / 2, RAIL_Y - 0.13, railZ + 0.06));
+			expTargets.push({ experience: e, mesh: card, center: card.position.clone(), size: new THREE.Vector3(w, CARD_H, 0.2) });
+		}
+	}
+	const expMeshes = expTargets.map((t) => t.mesh);
 
 	const animated = []; // { update(time) }
 	const flows = []; // running lines' belt items and palletizers
@@ -759,6 +807,15 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	};
 	const hoverBox = makeHighlight(0.16);
 	const selectBox = makeHighlight(0.3);
+	// work history → the projects from that job light up
+	const linkBoxes = [];
+	function showLinks(indices) {
+		indices.forEach((index, i) => {
+			if (!linkBoxes[i]) linkBoxes[i] = makeHighlight(0.38);
+			placeHighlight(linkBoxes[i], byProject.get(index) ?? null);
+		});
+		for (let i = indices.length; i < linkBoxes.length; i++) linkBoxes[i].visible = false;
+	}
 	function placeHighlight(box, target) {
 		box.visible = !!target;
 		if (!target) return;
@@ -987,12 +1044,20 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	const views = {
 		home() {
 			const narrow = portrait();
-			return view(new THREE.Vector3(narrow ? -7 : 0.5, 5, WALL_Z + 6), new THREE.Vector3(0, 0.33, 1), fitDistance(narrow ? 28 : 46, 16));
+			return view(new THREE.Vector3(narrow ? -7 : 0.5, 8, WALL_Z + 4), new THREE.Vector3(0, 0.3, 1), fitDistance(narrow ? 28 : 60, 22));
 		},
 		wall() {
 			const narrow = portrait();
-			const target = new THREE.Vector3(narrow ? -7 : 0.3, 8, WALL_Z);
-			return { position: new THREE.Vector3(target.x, 8.6, WALL_Z + fitDistance(narrow ? 27 : 44, 14) * 1.04), target };
+			const target = new THREE.Vector3(narrow ? -7 : 0.3, BOARD_Y, WALL_Z);
+			return { position: new THREE.Vector3(target.x, BOARD_Y + 0.4, WALL_Z + fitDistance(narrow ? 27 : 44, 13.5) * 1.04), target };
+		},
+		timeline() {
+			const target = new THREE.Vector3(0.5, RAIL_Y - 2.4, WALL_Z);
+			return { position: new THREE.Vector3(target.x, RAIL_Y - 1.2, WALL_Z + fitDistance(52, 7)), target };
+		},
+		experience(t) {
+			const target = t.center.clone();
+			return { position: new THREE.Vector3(target.x, target.y + 1.2, WALL_Z + fitDistance(t.size.x + 8, 5)), target };
 		},
 		warehouse() {
 			// from the entrance, looking down the aisle between the racks
@@ -1048,6 +1113,8 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		const rect = renderer.domElement.getBoundingClientRect();
 		pointer.set(((clientX - rect.left) / rect.width) * 2 - 1, -((clientY - rect.top) / rect.height) * 2 + 1);
 		raycaster.setFromCamera(pointer, camera);
+		const card = raycaster.intersectObjects(expMeshes, false)[0];
+		if (card) return { project: -1, station: -1, experience: expMeshes.indexOf(card.object), wall: false };
 		const hit = raycaster.intersectObjects([hitMesh, ...boards], false)[0];
 		// stations sit inside their line's box: a station wins if it's nearer, or inside the line that was hit
 		const st = raycaster.intersectObject(stationHit, false)[0];
@@ -1069,14 +1136,15 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 	const onPointerDown = (e) => (downAt = [e.clientX, e.clientY]);
 	const onPointerMove = (e) => {
 		if (e.pointerType !== 'mouse' || e.buttons) return;
-		const { project, station } = pick(e.clientX, e.clientY);
-		const key = keyOf(project, station);
+		const { project, station, experience: exp = -1 } = pick(e.clientX, e.clientY);
+		const key = exp >= 0 ? `e${exp}` : keyOf(project, station);
 		if (key !== hovered) {
 			hovered = key;
-			placeHighlight(hoverBox, key === selected || project < 0 ? null : targetOf(project, station));
-			el.style.cursor = project >= 0 ? 'pointer' : '';
+			const target = exp >= 0 ? expTargets[exp] : project >= 0 ? targetOf(project, station) : null;
+			placeHighlight(hoverBox, key === selected ? null : target);
+			el.style.cursor = target ? 'pointer' : '';
 		}
-		onHover?.(project, e.clientX, e.clientY, station);
+		onHover?.(project, e.clientX, e.clientY, station, exp);
 	};
 	const onPointerLeave = () => {
 		hovered = '';
@@ -1088,8 +1156,9 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 		const moved = Math.hypot(e.clientX - downAt[0], e.clientY - downAt[1]);
 		downAt = null;
 		if (moved > 6) return;
-		const { project, station, wall } = pick(e.clientX, e.clientY);
-		if (project >= 0) onSelect?.(project, station);
+		const { project, station, wall, experience: exp = -1 } = pick(e.clientX, e.clientY);
+		if (exp >= 0) onSelectExperience?.(exp);
+		else if (project >= 0) onSelect?.(project, station);
 		else if (wall) flyTo(views.wall());
 	};
 	el.addEventListener('pointerdown', onPointerDown);
@@ -1215,12 +1284,22 @@ export async function createFactory(container, { projects, about, onSelect, onHo
 
 	return {
 		select(index, station = -1) {
+			showLinks([]);
 			selected = keyOf(index, station);
 			const target = index >= 0 ? targetOf(index, station) : null;
 			placeHighlight(selectBox, target);
 			if (selected === hovered) placeHighlight(hoverBox, null);
 			if (target) flyTo(views.target(target));
 		},
+		selectExperience(i, linked = []) {
+			const t = expTargets[i];
+			selected = t ? `e${i}` : '';
+			placeHighlight(selectBox, t ?? null);
+			placeHighlight(hoverBox, null);
+			showLinks(linked);
+			if (t) flyTo(views.experience(t));
+		},
+		timeline: () => flyTo(views.timeline()),
 		home: () => flyTo(views.home()),
 		lines: () => flyTo(views.lines()),
 		wall: () => flyTo(views.wall()),

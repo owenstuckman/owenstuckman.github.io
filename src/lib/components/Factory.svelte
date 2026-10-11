@@ -9,6 +9,7 @@
 	import { ZONES } from '$lib/projects.js';
 	import { recipeFor, KIND_NAMES } from '$lib/factory/recipes.js';
 	import { dock } from '$lib/dock.svelte.js';
+	import { experience, draft } from '$lib/experience.js';
 
 	let { projects, about, onfallback } = $props();
 
@@ -17,13 +18,17 @@
 	let status = $state('loading'); // loading | ready | failed
 	let selected = $state(-1);
 	let stageIndex = $state(-1); // selected station on the line, -1 = whole line
-	let hover = $state({ line: -1, station: -1, x: 0, y: 0 });
+	let selectedExp = $state(-1); // selected job on the timeline
+	let hover = $state({ line: -1, station: -1, exp: -1, x: 0, y: 0 });
 	let zone = $state('Wall');
 	let listOpen = $state(true);
 	let listEl = $state();
 	let panelEl = $state();
 
 	let project = $derived(selected >= 0 ? projects[selected] : null);
+	let job = $derived(selectedExp >= 0 ? experience[selectedExp] : null);
+	const bySlug = new Map(projects.map((p) => [p.slug, p]));
+	const linkedProjects = (e) => e.projects.map((slug) => bySlug.get(slug)).filter(Boolean);
 	let recipe = $derived(project ? recipeFor(project) : null);
 	let stored = $derived(project?.status === 'archived');
 	let unit = $derived(stored ? 'Pallet' : 'Stage');
@@ -44,20 +49,33 @@
 	async function select(i, s = -1) {
 		selected = i;
 		stageIndex = s;
+		selectedExp = -1;
 		if (i >= 0 && matchMedia('(max-width: 48rem)').matches) listOpen = false;
 		await syncInsets();
 		factory?.select(i, s);
 		panelBody?.scrollTo({ top: 0 });
 	}
 
+	async function selectExperience(i) {
+		selected = -1;
+		stageIndex = -1;
+		selectedExp = i;
+		if (i >= 0 && matchMedia('(max-width: 48rem)').matches) listOpen = false;
+		await syncInsets();
+		factory?.selectExperience(i, i >= 0 ? linkedProjects(experience[i]).map((p) => p.index) : []);
+		panelBody?.scrollTo({ top: 0 });
+	}
+
 	// Jump-to views: the side rail and the stops on the top-bar tape
 	const JUMPS = [
 		{ view: 'wall', label: 'Wall', short: 'Wall', zone: 'Wall' },
+		{ view: 'timeline', label: 'Work history', short: 'Jobs', zone: null },
 		{ view: 'lines', label: 'Production floor', short: 'Floor', zone: 'Lines' },
 		{ view: 'warehouse', label: 'Warehouse', short: 'Store', zone: 'Warehouse' }
 	];
 
 	async function jump(view) {
+		selectedExp = -1;
 		await select(-1);
 		factory?.[view]();
 	}
@@ -89,6 +107,7 @@
 	});
 
 	function onkeydown(e) {
+		if (e.key === 'Escape' && selectedExp >= 0) return jump('timeline');
 		if (e.key !== 'Escape' || selected < 0) return;
 		if (stageIndex >= 0) select(selected);
 		else home();
@@ -109,10 +128,13 @@
 				const created = await createFactory(stage, {
 					projects,
 					about,
+					experience,
+					draft,
 					onSelect: select,
-					onHover: (line, x = 0, y = 0, station = -1) => {
+					onSelectExperience: selectExperience,
+					onHover: (line, x = 0, y = 0, station = -1, exp = -1) => {
 						const rect = stage.getBoundingClientRect();
-						hover = { line, station, x: x - rect.left, y: y - rect.top };
+						hover = { line, station, exp, x: x - rect.left, y: y - rect.top };
 					},
 					onMove: ({ progress, zone: z }) => {
 						zone = z;
@@ -164,6 +186,24 @@
 			</button>
 			{#if listOpen}
 				<div class="groups">
+					{#if experience.length}
+						<p class="group label">Work history · {experience.length}</p>
+						<ol>
+							{#each experience as e (e.index)}
+								<li>
+									<button
+										type="button"
+										class:active={selectedExp === e.index}
+										class:hot={hover.exp === e.index}
+										onclick={() => selectExperience(e.index)}
+									>
+										<span class="code exp">{e.code}</span>
+										<span class="name">{e.org}</span>
+									</button>
+								</li>
+							{/each}
+						</ol>
+					{/if}
 					{#each groups as group}
 						<p class="group label">{group.title} · {group.items.length}</p>
 						<ol>
@@ -188,7 +228,13 @@
 			{/if}
 		</nav>
 
-		{#if hover.line >= 0 && !(hover.line === selected && hover.station === stageIndex)}
+		{#if hover.exp >= 0 && hover.exp !== selectedExp}
+			<div class="tip" style="transform: translate({hover.x + 14}px, {hover.y + 14}px)" aria-hidden="true">
+				<span class="code exp">{experience[hover.exp].code}</span>
+				{experience[hover.exp].org}
+				<span class="tip-stage">· {experience[hover.exp].dates}</span>
+			</div>
+		{:else if hover.line >= 0 && !(hover.line === selected && hover.station === stageIndex)}
 			<div class="tip" style="transform: translate({hover.x + 14}px, {hover.y + 14}px)" aria-hidden="true">
 				<span class="code">{projects[hover.line].code}</span>
 				{projects[hover.line].title}
@@ -196,7 +242,52 @@
 			</div>
 		{/if}
 
-		{#if project}
+		{#if job}
+			<aside class="panel" aria-label="Selected job" bind:this={panelEl}>
+				<div class="panel-bar">
+					<span class="label">Work history · {job.code}</span>
+					<button type="button" class="close" onclick={() => jump('timeline')} aria-label="Close and return to the timeline">✕</button>
+				</div>
+				<div class="panel-body" bind:this={panelBody}>
+					<p class="label">{job.dates}</p>
+					<h2 class="job-org">{job.org}</h2>
+					<p class="job-role">{job.role ?? 'Role to come'}</p>
+					{#if job.summary}<p>{job.summary}</p>{/if}
+					{#if job.bullets?.length}
+						<ul class="job-bullets">
+							{#each job.bullets as b}<li>{b}</li>{/each}
+						</ul>
+					{/if}
+					{#if linkedProjects(job).length}
+						<section class="stages" aria-label="Projects from this job">
+							<p class="label">Projects from this job · lit up on the floor</p>
+							<ol>
+								{#each linkedProjects(job) as p}
+									<li>
+										<button type="button" onclick={() => select(p.index)}>
+											<span class="code" class:uc={p.status === 'construction'}>{p.code}</span>
+											<span class="st-name">{p.title}</span>
+										</button>
+									</li>
+								{/each}
+							</ol>
+						</section>
+					{/if}
+					{#if draft}
+						<p class="draft-note label">Draft from project notes · LinkedIn details coming</p>
+					{/if}
+				</div>
+				<div class="panel-foot">
+					<button type="button" onclick={() => selectExperience(selectedExp - 1)} disabled={selectedExp <= 0}>← Earlier</button>
+					<button type="button" onclick={() => jump('timeline')}>Timeline</button>
+					<button
+						type="button"
+						onclick={() => selectExperience(selectedExp + 1)}
+						disabled={selectedExp >= experience.length - 1}>Later →</button
+					>
+				</div>
+			</aside>
+		{:else if project}
 			<aside class="panel" aria-label="Selected project" bind:this={panelEl}>
 				<div class="panel-bar">
 					<span class="label">{ZONES[project.status].label} · {project.code}</span>
@@ -255,7 +346,7 @@
 			</aside>
 		{/if}
 
-		<nav class="rail" class:shifted={!!project} aria-label="Jump to">
+		<nav class="rail" class:shifted={!!project || !!job} aria-label="Jump to">
 			{#each JUMPS as j, i}
 				<button type="button" class:here={zone === j.zone} data-short={j.short} onclick={() => jump(j.view)}>
 					<span class="rail-num">{String(i + 1).padStart(2, '0')}</span>
@@ -515,6 +606,32 @@
 	.panel-foot button:disabled {
 		opacity: 0.4;
 		cursor: default;
+	}
+
+	.code.exp {
+		color: var(--bg);
+		background: var(--ink);
+	}
+
+	.job-org {
+		margin: 0.1rem 0 0.1rem;
+		font-size: 1.8rem;
+	}
+
+	.job-role {
+		margin: 0 0 0.9rem;
+		color: var(--muted);
+		font-size: 1.05rem;
+	}
+
+	.job-bullets {
+		margin: 0 0 1rem;
+		padding-left: 1.1rem;
+	}
+
+	.draft-note {
+		margin-top: 1.25rem;
+		font-size: 0.64rem;
 	}
 
 	.tip-stage {

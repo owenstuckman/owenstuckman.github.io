@@ -2,6 +2,7 @@
 	import Factory from '$lib/components/Factory.svelte';
 	import { about } from '$lib/about.js';
 	import { projects } from '$lib/projects.js';
+	import { experience } from '$lib/experience.js';
 
 	let showText = $state(false);
 </script>
@@ -35,7 +36,16 @@
 			<p><a href={about.github} target="_blank" rel="noopener">GitHub ↗</a></p>
 		</div>
 		<div>
-			<h2>Tooling</h2>
+			<h2>Work history</h2>
+			<ul class="stack">
+				{#each [...experience].reverse() as e}
+					<li>
+						<strong>{e.org}</strong>
+						<span>{e.role ? `${e.role} · ` : ''}{e.dates}</span>
+					</li>
+				{/each}
+			</ul>
+			<h2 class="spaced">Tooling</h2>
 			<ul class="stack">
 				{#each about.tooling as item}
 					<li><strong>{item.name}</strong> <span>{item.note}</span></li>
@@ -85,6 +95,10 @@
 
 	.cols h2 {
 		margin-top: 0;
+	}
+
+	.cols h2.spaced {
+		margin-top: 2rem;
 	}
 
 	.lede {

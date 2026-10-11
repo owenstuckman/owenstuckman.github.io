@@ -1,0 +1,92 @@
+{
+  "draft": true,
+  "note": "DRAFT built from the project descriptions in projects.json. Replace with LinkedIn data. Dates are YYYY-MM; end: null means unknown, \"present\" means current.",
+  "experience": [
+    {
+      "org": "Robot-X (FTC Team 4969)",
+      "role": "Software Lead",
+      "start": "2021-08",
+      "end": "2024-05",
+      "summary": "Led the robotics software subteam for three years.",
+      "bullets": [
+        "Led a software subteam of around three people",
+        "Introduced agile practices and saw efficiency gains",
+        "Worked as PM while writing some of the most challenging code, including the dual-channel OpenCV vision system"
+      ],
+      "projects": ["robot-x-software-lead", "robot-x-computer-vision", "golfbot-mvp", "fictilebot"]
+    },
+    {
+      "org": "Planes Moving and Storage",
+      "role": "IT Intern",
+      "start": "2022-06",
+      "end": "2022-08",
+      "summary": "First internship at Planes.",
+      "bullets": [
+        "Built a warehouse time tracking app that increased billable warehouse time",
+        "Created and managed an SOP system in SharePoint"
+      ],
+      "projects": ["warehouse-time-tracking-app", "sop-sharepoint"]
+    },
+    {
+      "org": "Sparklii LLC",
+      "role": "Founder & Developer",
+      "start": "2023-01",
+      "end": null,
+      "summary": "Founded an LLC to bring personalization to date ideas.",
+      "bullets": [
+        "Sole developer through the MVP and alpha releases",
+        "Led two other developers into the beta phase",
+        "Built an internal Svelte tool for editing the date-ideas database and images"
+      ],
+      "projects": ["sprklii-mvp", "sparkli-dev-app"]
+    },
+    {
+      "org": "Planes Moving and Storage",
+      "role": "Intern",
+      "start": "2024-06",
+      "end": "2024-08",
+      "summary": "Automation and integration work across Planes' systems.",
+      "bullets": [
+        "Built API connections and RPA for Mover's Suite",
+        "Connected XPM to Smartsheet and centralized supplier information",
+        "Replaced PM time tracking with a mobile app and automated Apple remittance parsing",
+        "Led training on Power Platform and helped migrate the dev team from Visual SourceSafe to Git"
+      ],
+      "projects": [
+        "mover-s-suite-api",
+        "mover-s-suite-rpa-status-updates",
+        "xpm-to-smartsheet-data-connection",
+        "project-manager-time-tracking",
+        "smartsheet-supplier-information",
+        "apple-remittance-automation",
+        "employee-technology-education"
+      ]
+    },
+    {
+      "org": "Planes Moving and Storage",
+      "role": null,
+      "start": "2025-01",
+      "end": "2025-04",
+      "summary": "Continued automation work at Planes.",
+      "bullets": [
+        "Automated Apple Canada remittance parsing",
+        "Built voicemail transcription in Azure into Dataverse",
+        "Built a React and Express customer onboarding app"
+      ],
+      "projects": ["apple-canada-remittance", "automated-voicemail-transcription", "customer-onboarding-app"]
+    },
+    {
+      "org": "Archimedes Society at Virginia Tech",
+      "role": null,
+      "start": "2025-05",
+      "end": null,
+      "summary": "Software for the Archimedes Society.",
+      "bullets": [
+        "Built LUMA, an ATS that processed 400+ applicants and scheduled 250+ interviews",
+        "Rebuilt the society website from Squarespace",
+        "Maintain the snipe Discord bot"
+      ],
+      "projects": ["luma", "luma-v2", "archimedes-website", "archimedes-snipe-bot"]
+    }
+  ]
+}

@@ -10,7 +10,13 @@
       "links": ["https://github.com/owenstuckman/Workbenched"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/Workbenched",
       "additionalImages": [],
-      "status": "construction"
+      "status": "construction",
+      "phases": [
+        {"name": "Capture activity", "detail": "ActivityWatch passively records windows, apps, and artifacts while I work."},
+        {"name": "Attribute to projects", "detail": "Each piece of activity is filed to a project by rules, then previously seen artifacts, then LLM inference, with a confidence score; anything uncertain goes to a filing queue."},
+        {"name": "Write the work log", "detail": "Time, artifacts, tasks, and blockers are kept per project in an embedded Postgres, and the work log writes itself."},
+        {"name": "Focus HUD", "detail": "An overlay to set the current project or task on demand and show what to focus on now."}
+      ]
     },
     {
       "title": "Hokie Cart Check-Out",
@@ -22,7 +28,12 @@
       "links": ["https://github.com/owenstuckman/MoveInCarts", "https://move-in-carts.vercel.app"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/MoveInCarts",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Badge scan", "detail": "Staff scan a student's Hokie Passport with any keyboard-wedge scanner, and the ledger decides whether it's a return, a pick from several carts, or a new check-out."},
+        {"name": "Cart check-out", "detail": "Carts are picked from a live list of only what's actually available, with returning students' details prefilled."},
+        {"name": "Ledger & export", "detail": "Every action lands in an append-only ledger that exports to CSV; development runs on embedded PGlite and production on Vercel."}
+      ]
     },
     {
       "title": "A Reasonable WMS",
@@ -34,7 +45,13 @@
       "links": ["https://github.com/owenstuckman/AReasonableWMS"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/AReasonableWMS",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Problem framing", "detail": "AGVs and fork trucks are rarely fully utilized; which internal transfers should they make while idle to lower average loading time?"},
+        {"name": "Approach evaluation", "detail": "Compared multi-agent reinforcement learning, regression, and decision trees."},
+        {"name": "Agent design", "detail": "MARL with pretrained agents tuned for different factors and a final arbiter that picks the highest-value move."},
+        {"name": "Service design", "detail": "A containerized, independently scalable service that plugs in alongside any existing WMS."}
+      ]
     },
     {
       "title": "AutoShowTracker",
@@ -46,7 +63,14 @@
       "links": ["https://github.com/owenstuckman/AutoShowTracker"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/AutoShowTracker",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Detection", "detail": "Watching is detected via a browser extension, OS media sessions (SMTC/MPRIS), VLC/mpv IPC, ActivityWatch window titles, and an OCR fallback."},
+        {"name": "Parsing", "detail": "Titles and filenames are parsed with guessit and URL patterns for nine streaming platforms."},
+        {"name": "Identification", "detail": "Shows and episodes are fuzzy-matched against TMDb with rapidfuzz."},
+        {"name": "Routing & review", "detail": "Confidence decides whether an event is auto-logged, flagged for review, or queued for manual resolution."},
+        {"name": "Dashboard", "detail": "A local web dashboard for watch history, show progress, and stats."}
+      ]
     },
     {
       "title": "PredictPEV",
@@ -58,7 +82,14 @@
       "links": ["Private Repo"],
       "image": "",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Data ingest", "detail": "Equity and crypto market data feeds two bots for Kalshi binary contracts."},
+        {"name": "Signals & models", "detail": "P/E z-scores and volatility risk premium for stocks; momentum, volatility, funding rate, and open interest for crypto; each into a logistic regression."},
+        {"name": "Edge & execution", "detail": "Mispricings are detected against Kalshi prices and traded, paper mode by default."},
+        {"name": "Risk & backtesting", "detail": "Risk management and walk-forward backtesting."},
+        {"name": "Monitoring", "detail": "TimescaleDB, Grafana, and Prometheus running in Docker."}
+      ]
     },
     {
       "title": "FICO Score Simulator",
@@ -70,7 +101,13 @@
       "links": ["https://github.com/owenstuckman/montecarlo-fico"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/montecarlo-fico",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Credit profile", "detail": "Users enter their profile across the five FICO factors."},
+        {"name": "Score estimate", "detail": "A real-time score estimate from those factors."},
+        {"name": "Monte Carlo projection", "detail": "1,000 probabilistic scenarios over 12, 24, or 36 months, all computed locally in the browser."},
+        {"name": "Visualization", "detail": "Recharts shows the range of possible future score trajectories."}
+      ]
     },
     {
       "title": "TapCap Bot",
@@ -82,7 +119,13 @@
       "links": ["https://github.com/owenstuckman/tapcap-bot"],
       "image": "https://playwright.dev/img/playwright-logo.svg",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Reconnaissance", "detail": "Catalog global JS variables and detect the game engine (Phaser, PIXI, Unity)."},
+        {"name": "Game-loop control", "detail": "Hook requestAnimationFrame to control the game loop and test input injection."},
+        {"name": "State diffing", "detail": "Diff frame-by-frame snapshots to find the variables for player state, position, and score."},
+        {"name": "Agent training", "detail": "Planned: wrap the state in window.getState() to train a Gymnasium / Stable-Baselines3 agent to play."}
+      ]
     },
     {
       "title": "LUMA v2",
@@ -94,7 +137,14 @@
       "links": ["https://github.com/owenstuckman/luma", "https://github.com/ArchimedesVT/luma"],
       "image": "/LUMA_logo.png",
       "additionalImages": [],
-      "status": "construction"
+      "status": "construction",
+      "phases": [
+        {"name": "Form builder", "detail": "A dynamic form builder so each organization can design its own application questionnaire."},
+        {"name": "Recruiter dashboard", "detail": "Filtering and bulk updates for working through applicants."},
+        {"name": "Interview scheduling", "detail": "Calendar-based scheduling with Schedule-X, building on the original deployment that scheduled 250+ interviews for 400+ applicants."},
+        {"name": "Multi-tenancy & roles", "detail": "Refactoring into a multi-tenant platform with Owner, Admin, Recruiter, and Viewer roles so any org can self-deploy."},
+        {"name": "Open-source release", "detail": "Released under the MIT license for other clubs and design teams."}
+      ]
     },
     {
       "title": "SipSafe",
@@ -106,7 +156,13 @@
       "links": ["https://github.com/owenstuckman/SipSafe"],
       "image": "https://raw.githubusercontent.com/owenstuckman/SipSafe/main/Esp32Files/product_design.svg",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Tamper sensing", "detail": "An ESP32 with capacitive touch sensing detects when a drink lid is removed while armed."},
+        {"name": "BLE link", "detail": "A custom BLE GATT service connects the device to the phone, with offline event queuing."},
+        {"name": "Mobile apps", "detail": "Native iOS (SwiftUI) and Android (Kotlin/Compose) apps."},
+        {"name": "Alerts", "detail": "Local buzzer, phone notification, and push plus SMS alerts to emergency contacts via Supabase edge functions."}
+      ]
     },
     {
       "title": "WikiArena",
@@ -118,7 +174,14 @@
       "links": ["https://github.com/owenstuckman/WikiArena", "https://wikiarena.dev", "https://github.com/owenstuckman/WikiArenaSelenium"],
       "image": "https://wikiarena.dev/logo.png",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Scrape sources", "detail": "Articles are pulled from Wikipedia, Grokipedia, Britannica, Citizendium, and New World Encyclopedia by a Selenium scraper running as its own Dockerized service."},
+        {"name": "Match topics", "detail": "Articles on the same topic from different sources are stored and paired up in Supabase."},
+        {"name": "Blind voting", "detail": "Visitors compare two articles side by side without knowing the source and pick the better one."},
+        {"name": "Rank & leaderboard", "detail": "Votes feed a Glicko-2 rating (the system used for chess) to produce a real-time leaderboard of which sources people prefer."},
+        {"name": "Knowledge blending", "detail": "The Knowledge Blender uses xAI's Grok to combine the best parts of several sources into one article."}
+      ]
     },
     {
       "title": "Orbit",
@@ -130,7 +193,13 @@
       "links": ["https://github.com/owenstuckman/Orbit", "https://github.com/owenstuckman/OrbitQCML", "https://github.com/owenstuckman/Orbit-MonteCarlo"],
       "image": "https://opengraph.githubassets.com/1/owenstuckman/Orbit",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Task intake", "detail": "Work comes in on a Kanban board with urgency multipliers, with views for sales, project managers, QC reviewers, employees, and contractors."},
+        {"name": "QC prediction", "detail": "OrbitQCML predicts first-pass QC approval from GitHub PR data with a Random Forest served over FastAPI."},
+        {"name": "Payout tuning", "detail": "Orbit-MonteCarlo simulations tune the confidence-scaling and geometric-decay parameters behind QC payouts."},
+        {"name": "Pay & contracts", "detail": "Base pay mixed with task-based compensation, Shapley-value payouts, and auto-generated contracts with e-signatures."}
+      ]
     },
     {
       "title": "Archimedes Snipe Bot",
@@ -142,7 +211,11 @@
       "links": ["https://github.com/ArchimedesVT/archimedes-snipe-bot"],
       "image": "https://www.ravbug.com/tutorials/discordjs/discordjs.png",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Snipe", "detail": "Members photograph each other without being noticed and post the snipe in a target channel, as a semester-long team-building game."},
+        {"name": "Tally & leaderboard", "detail": "The bot counts snipes and serves a leaderboard and rules, recalculating and caching on restart so it needs no database or 100% uptime."}
+      ]
     },
     {
       "title": "HomeLab v1",
@@ -154,7 +227,12 @@
       "links": ["https://supabase.com/docs/guides/self-hosting", "https://docs.n8n.io/hosting/"],
       "image": "https://assets.ubuntu.com/v1/29985a98-ubuntu-logo32.png",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Server setup", "detail": "An old laptop turned into an Ubuntu server with SSH and basic security, used for remote development in VS Code."},
+        {"name": "Self-hosting", "detail": "Running my own n8n and Supabase instances, with Webmin to keep an eye on server status."},
+        {"name": "Containers & compute", "detail": "Containers, xRDP dev-setup experiments, and spare compute for training models for side projects."}
+      ]
     },
     {
       "title": "Archimedes Website",
@@ -166,7 +244,12 @@
       "links": ["https://github.com/ArchimedesVT/ArchimedesWebsite", "https://archimedesvt.org/"],
       "image": "https://archimedesvt.org/logoheader.png",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Squarespace migration", "detail": "Rebuilt the Archimedes Society site from Squarespace into a fully custom Svelte site."},
+        {"name": "Contact & outreach", "detail": "EmailJS brings back features like the contact form, for engagement with the community, sponsors, and partners."},
+        {"name": "Deploy & iterate", "detail": "Deployed through Vercel, with new features added continuously."}
+      ]
     },
     {
       "title": "Second Student",
@@ -178,7 +261,12 @@
       "links": ["https://github.com/owenstuckman/SecondStudentVTHACKS13"],
       "image": "/SecondStudent.png",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Problem", "detail": "Student information is scattered across platforms like Canvas, with poor formatting."},
+        {"name": "Canvas integration", "detail": "A basic version working at the hackathon, pulling Canvas into one knowledge base with notes and tasks."},
+        {"name": "Wrap-up", "detail": "Shelved after the hackathon: building an original note-taking app to MVP would take too long."}
+      ]
     },
     {
       "title": "HTMLToMD",
@@ -190,7 +278,11 @@
       "links": ["https://github.com/owenstuckman/HtmlToMD"],
       "image": "https://avatars.githubusercontent.com/u/57059?s=280&v=4",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Learn Scala", "detail": "A backend project to start working with Scala."},
+        {"name": "HTML to Markdown", "detail": "Converts files into native Markdown for tools like Obsidian; it worked, though it was not used for VTHacks13."}
+      ]
     },
     {
       "title": "LUMA",
@@ -202,7 +294,13 @@
       "links": ["https://github.com/ArchimedesVT/luma"],
       "image": "/LUMA_logo.png",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Applications", "detail": "Applicants apply through a fully custom ATS built for the Archimedes Society at Virginia Tech."},
+        {"name": "Review", "detail": "The usual ATS features for working through applicants, designed for cyclic rather than rolling recruiting."},
+        {"name": "Interview scheduling", "detail": "A scheduling algorithm pairs recruiters with applicants, the main pain point LUMA was built to solve."},
+        {"name": "Cycle close", "detail": "Each recruiting cycle wraps up, and the system is ready for the next one."}
+      ]
     },
     {
       "title": "Sparkli Dev App",
@@ -214,7 +312,11 @@
       "links": ["Private Repo"],
       "image": "https://media.licdn.com/dms/image/v2/D560BAQFkNhpOqP8khg/company-logo_200_200/company-logo_200_200/0/1733370242815?e=2147483647&v=beta&t=YtqGDRgGC-QKG6fTReD2g0_fBXLmyuoML5CaSDc2f8c",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Editing frontend", "detail": "A simple Svelte app for internal edits to the date-ideas database."},
+        {"name": "Image pipeline", "detail": "Upload the right image with proper compression in one step instead of processing pictures by hand."}
+      ]
     },
     {
       "title": "Customer Onboarding App",
@@ -226,7 +328,11 @@
       "links": ["Private Repo"],
       "image": "https://teamplanes.com/wp-content/uploads/2022/09/planes-logo.png",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Digital onboarding", "detail": "A React app to onboard new clients at Planes Moving and Storage digitally."},
+        {"name": "Secure backend", "detail": "An Express backend on Windows Server 2016, built to store data safely and avoid attacks like SQL injection."}
+      ]
     },
     {
       "title": "Supabase-Flutter Quickstart",
@@ -238,7 +344,12 @@
       "links": ["https://github.com/owenstuckman/Flutter-Supabase-Quickstart"],
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSHfvJQdTD8IFAUS4jNkFrVYGai1NknAbHAMA&s",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Auth setup", "detail": "A guide for wiring Supabase authentication into Flutter."},
+        {"name": "Edge functions", "detail": "Integrating Supabase edge functions with Flutter apps."},
+        {"name": "Starter template", "detail": "An easy starting point for my own projects and hackathons."}
+      ]
     },
     {
       "title": "Portfolio Website Revamp",
@@ -250,7 +361,12 @@
       "links": ["https://owenstuckman.lol"],
       "image": "/os-logo.png",
       "additionalImages": [],
-      "status": "running"
+      "status": "running",
+      "phases": [
+        {"name": "Write content", "detail": "Content written in Markdown and compiled into pages with mdsvex."},
+        {"name": "Build & theme", "detail": "A SvelteKit site with a responsive design and dark/light themes (the floor you are standing on)."},
+        {"name": "Deploy", "detail": "Prerendered to static files and published to GitHub Pages."}
+      ]
     },
     {
       "title": "SteerClear",
@@ -262,7 +378,13 @@
       "links": ["https://github.com/owenstuckman/SteerClear", "https://www.youtube.com/watch?v=P3OlZBgFtGw", "https://devpost.com/software/safewalk-gh3dk8?_gl=1*1qp7krw*_gcl_au*NDkxMzY2NjY0LjE3Mzg1MDM1NDc.*_ga*OTgzODc4MjM5LjE3Mzg1MDM1NDc.*_ga_0YHJK3Y10M*MTczOTc0MzU3Mi4xOC4xLjE3Mzk3NDM2ODIuMC4wLjA."],
       "image": "/steercleer.png",
       "additionalImages": ["hackvwin.png"],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Safety data", "detail": "Crowdsourced threat and safety markers, plus a heat map of reported incidents."},
+        {"name": "Route planning", "detail": "Waze-style safest walking routes with MapBox, Google Places, and OpenAI threat analysis."},
+        {"name": "Safety features", "detail": "Panic button, group walks, college selection, and alternate transportation."},
+        {"name": "Best Startup Hack", "detail": "Won 'Best Startup Hack' at HackViolet."}
+      ]
     },
     {
       "title": "Automated Voicemail Transcription",
@@ -274,7 +396,12 @@
       "links": ["Private Repo"],
       "image": "https://teamplanes.com/wp-content/uploads/2022/09/planes-logo.png",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Voicemail intake", "detail": "Incoming voicemails from Planes are collected for processing."},
+        {"name": "Speech to text", "detail": "Azure Speech Services transcribes each voicemail."},
+        {"name": "Dataverse output", "detail": "Raw text goes to Dataverse so other internal projects can use it."}
+      ]
     },
     {
       "title": "Apple Canada Remittance",
@@ -286,7 +413,12 @@
       "links": ["Private Repo"],
       "image": "https://news.macgasm.net/wp-content/uploads/2011/12/canadaApple.png",
       "additionalImages": [],
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Inbox intake", "detail": "Apple Canada remittance data is received automatically into an inbox."},
+        {"name": "Parsing", "detail": "Critical information and adjustments are parsed out so accounting does not read them by hand."},
+        {"name": "Central data stores", "detail": "Results are added to central data stores."}
+      ]
     },
     {
       "title": "TrashCash",
@@ -299,7 +431,12 @@
       "image": "/trashcash.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Scanner unit", "detail": "An ESP32 scanner unit for each bin."},
+        {"name": "Points & rewards", "detail": "A Flutter app where users scan waste, earn points and achievements, and redeem rewards."},
+        {"name": "Finder & history", "detail": "Wastebin location finder, impact tracking, and scan history."}
+      ]
     },
     {
       "title": "RoomReady",
@@ -312,7 +449,12 @@
       "image": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/074/131/datas/gallery.jpg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Matching", "detail": "Connects travelers with locals, who later become travelers themselves."},
+        {"name": "Trip planning", "detail": "Helps plan trips with features powered by data from conversations."},
+        {"name": "Infrastructure", "detail": "Built with Flutter and Supabase, hosted on Amazon EC2."}
+      ]
     },
     {
       "title": "Inflectors Project",
@@ -325,7 +467,11 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Seal_of_the_Central_Intelligence_Agency.svg/1200px-Seal_of_the_Central_Intelligence_Agency.svg.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Weekly puzzles", "detail": "Ten in-depth cryptography puzzles, each taking multiple hours."},
+        {"name": "Leaderboard", "detail": "Finished in the top ten, scored on completion and speed."}
+      ]
     },
     {
       "title": "Website Creation",
@@ -338,7 +484,11 @@
       "image": "https://www.markdownguide.org/assets/images/markdown-guide-og.jpg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Trying tools", "detail": "Tried Jekyll, Weebly on Porkbun, and considered Hugo."},
+        {"name": "Plain Markdown", "detail": "Settled on plain Markdown, with a theme to come later."}
+      ]
     },
     {
       "title": "AdaptiveSpec Logistics",
@@ -351,7 +501,12 @@
       "image": "/adaptivespec.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Scraper", "detail": "A web scraping tool for specialized logistics."},
+        {"name": "Company database", "detail": "Selected companies saved to a personal or company-wide database and pushed to the top of searches."},
+        {"name": "Learning to rank", "detail": "Planned: an ML model that learns from user interaction to rank results."}
+      ]
     },
     {
       "title": "Student Health Tracker",
@@ -364,7 +519,13 @@
       "image": "https://opengraph.githubassets.com/1/Infinitum-Archimedes/MobileAppUserSide",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Location risk", "detail": "Location-based analysis surfaces health risks for students in dense areas."},
+        {"name": "Symptom diagnosis", "detail": "Users enter symptoms and get likely diagnoses from a Random Forest / XGBoost model deployed on Render."},
+        {"name": "Health education", "detail": "Health information content in the app."},
+        {"name": "Imagine Cup", "detail": "Built for Microsoft's Imagine Cup with a team of four across 65+ commits."}
+      ]
     },
     {
       "title": "Symptom2Disease",
@@ -377,7 +538,12 @@
       "image": "https://raw.githubusercontent.com/scikit-learn/scikit-learn/main/doc/logos/scikit-learn-logo.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Datasets", "detail": "Kaggle symptom datasets."},
+        {"name": "Model training", "detail": "A lightweight Random Forest and a more accurate XGBoost model."},
+        {"name": "Inference API", "detail": "A simple endpoint so the Student Health Tracker app could use the models."}
+      ]
     },
     {
       "title": "SeeFood",
@@ -390,7 +556,12 @@
       "image": "/seefood.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Unity UI", "detail": "I built the UI in Unity for an AI cooking assistant."},
+        {"name": "Voice commands", "detail": "A dictation tool so the assistant can be used hands-free."},
+        {"name": "Cooking feedback", "detail": "The backend answers questions like cooking time and whether food is spoiled."}
+      ]
     },
     {
       "title": "Harvard's CS50",
@@ -403,7 +574,12 @@
       "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAACfCAMAAABX0UX9AAABIFBMVEX///8AAACjHzSkHzPl6elSABKtIDi4uLioqKhdXV21tbXm5ubExMS8vLzAwMBnZ2eQl5ft7e2rq6ujq6vNzc35+fng4OCUlJSgoKDZ2dnw8PCNjY3T09MvLy+Dg4N5eXlXV1d0dHQxMTEYGBhEREQpKSk9PT2KABxra2t/f3+JiYkeHh4TExNQUFBISEhKAACaACWCAB1wAABjAABbAAA5AAB5ABcTAAAeAAAvAACQDylGAABxAA2jAyqfIjWtITpPEhp+FyqLFis0Q0FUY2B0gX+CkI4jEBUADxB/ABN2AABsHCgsREJqdnMYNzPN2thtDCM+ERdfABMrBQxNHiQAHBhKVVZDODp0AR4dKSkdDA04HCEwDxM7JCY9VFO3HzeBsi5EAAAN0klEQVR4nO2cCXvaOBrHZdwxxhdgfGPOELAhkNAcbUhCmjTptjuTubqbmc6xfP9vsbItG/mAQMIOdEe/Z56hsYT9+m/p1ftKMgAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCATC3wz11fpY2zZ6d2AvvlmXQ33bRu8OlR6zJtdXpW0bvTtUerk1oY+IfBGVHr0uRL4567e+HJFvziL5aCLfKiD5aIbxBJsyUDc6x8B/BUe947DgOgc7Lfzz2vsg8s3x5KMnzLvTs8mkN2HGvcnR0eE7XzNYcDP5/NPr8fhsnBuPx0fj03ewKvF9GFA++vb9HaVU7u8/PPzj/sOHDyXx4+j9LWyB1zd3d5QmlUqV+0EJUskP7mABkW+OJ98Z1+jz3h9WwT+msC3hNTOdMpdKva56R8otv0ASG9wnZkLki/DC5tdc1fDlKxf9Y4JchPLRs9yJIjd8+fhAPlFsVv7JkLB5TuXo2+8erL5e9v4oO/4xQW6W776ffHtnlNlWXL5R+cN3Z0S+iMrR6Q8W6OuCqAFba2mSzEP5hkD94cefFM2TjzV0lW8AQ4bySSNgiSck542o9G4P39q6LlAiGIkNtibqXuuT3pwyt8dvbdkB/ZbQ5l3QdDz5mix1SDrvHJi0MZ8Evao6HGhZLbsK/M7Lnc2mDHPsycf2QU2pgzrny2f0yMiL4eW8rxW9rwoFULQc82AkePJVzmDgwhybchEYLc4pu6Dud95CqUfCZgyv9b22jbpl7YlcuaVUVRVIcqEypkP52AEFeCSfUCiNiXwYMO7z5HNVUKRUHsoH4vIVgMw5Ct8HfShfXiiWJkQ+DL/z2gYM7/JNwDeMkT3UBC6Qj/blKxTBwKyCgQsAJzilHknaMGDYPIPyeeGdCuWzBFYAElcs9RiamZ38IDeBaYOyAodjxZOv0e+RsBkj/+mG6mqsE0THDf8YlM9uU7kfvzgaO/SP2EGoJwst+3EwJvJFCL3zV0A1gnRDqwbHOJi8KT9/LgMeyafI/genQH2lc2M7pu4iyuvbP9qmPNRtQVAkVhNszS4aLke9uZ28/U1ha32OZWVDVDjFFoasblBvx/K2jd4dtG+Y2Sep3edc19W7lFttOa7g6ND35ejZpXLQl6vVvtylDL3uVpUmV79iPnHbNnp3UP/F5C5F0TBYljUKYsHQIVWzf+QHLopgeOiuUpQhhsEXr3LHyraN3iH2Gfrm+4f7+3vXfXBAs+RTp6aefN/++9Hj7n2j3HUeHloPD3dvcrPD8rZt3iHurunr6QTS692eU7/2zs7G4/HEm2yG+k29RQ9YdkrdTnpepcl0OnuzbZN3CcPrpv5KkL9eFJBYcosKfE3b2zZ5lxAvl6xJZq5T9rdt8i5hXTDLV3rp2KIvzVxWtm3yTkHN5trgPXeKFiunuJa56eyC7E/D6R/N5Zt6o4Xv6OD/rtEn/GCmUR3ml20bvFtIl1jPvPn1py+Hx8cnhxcn05OLk+PL48Pubz8e3s67L3F9cdTzufObvC9RgmkLiqkJlKgp+bxkq809+21UhTmxt23wjuFchdpcH33osyI6vIc+Ldcwf5+FLpH5Rd2WnTuKF7oE4oyPS81IvgP0abVkhbqcBu2P7pG+m0D9nZ76QfPn+4rVYSVgqqqmAsovU6F8rK3lv9DBDqxDbdvm7hz3R17rg9mYqKgdVuAHw/YBr1ImAPninqk2WFsstf3Bl6YL2zZ299BO/JSNnl6e60NDsCy2qgKBqgJQAxIP5VOo8XTmyceQ2ZYMmihCZsalpiEAoDcAqNtw7GgWVaC6rPLHLHCOs+62Td1FlBM0MIxLBV++FhyPyxQP1AbFQ/nszwyKWkjjy+KR8XMzXz4JgKoL+GK3IAIeSCNQl5F8ND3atqG7iXnhb22+Hhu+fC0XGEpDbFoDW3LVSL7ZKRl2syn6scv1uOLL57bUBj80HVPp10EZyuclJjQ9qW/bzF3F+jyDri13WfF9n88++uShfHDkZXLMnyThWETlkp69+/KozOWroc9yX7aN+uCWOZG2ZdxXwPDqmoK5RtMIB9cwRrF02VRf/edqfL8t074GXp3Pbi+ovKMX3GpV99Z2pVbLrffrhaFuUYe3JORbTv7nGQybOy1J93H2mzLLGizLyRR4O5t9JsuTy7kfM72SYngr5jLHDsE+6/+TNcrq29mp8PQJ/uYMj3IfHx6ch4e7x/dfPiofHx8f30Me33+8OSbrQ0/TvaInk5z/ViB9e36Tm3rQ3mYXsidtBcq/XEWLGjTDhCtszOsP27bs6+DVn957p8HMaLD1AP43I+qtyqta/EXo6yk9OyE9d2XUzgTfdTBlmAsyaqzD3WUwe+V3YJo5F5/+CgHDOEQvk0PxJjVz2+Z8dSh/Tmaw4cGee1kgkyzP4OHw2ttdekr20D8Pu30567XJ5PKz4fZJvEIgEAgEQojpvyxlkJTgeXCUT+bLeWVFWWfzu608L7wrawpEy0pLeBuWmPyzTrsxNC6fjRDJl8/4GusVrPzOqFmDtZ21bbPr7YPAhEGTSxUFJVS3Pu8dUuouuNhTkxqjdrtdNDYXqcvUArrL5JOCkhVXdqxAhNaalu3FDcJyO60TK+kgAdX99G2wmbc63NSKHrdIvs4y+brIitWuYaBTrmOzPUhZVAs7avqRB6/xq90l8qmF2PENrek9Tz5UZ3+1qRIXVV9j3x6baZO5qCx4v1+tLZGvmSjYjH7Pkw85nhVbn45OuXrrq2bb5DcyM33cDb5lLem89VTJRhzg8+RDJSvOEZeD2qtv+M5ue+hy7dTxIvraEvkyNN/I/vPnyRc0qJUn6myv9nDlSVHsXnXv9SKh7/1zEDQXJSxyFS9ugO6uGX7PCvxlW2bnoFEl7Lo1Q3bCE2w0nlXiT9JjiXyAF8U1RgJVENcwNnJh0W/4Qb8fTkkjR3oQns+Y7+VF8uG3gDDxE/Koka4fSS1BSDfpZfL9D4k6BO7do5aOYpasPajW3iL59NjN2ej8m1wj2B35QueW/VMkKKBhM4qQj22kS1DfDUcLJ/14XspS+ZRGu1YbVqMOGOQqXJQxaUaxVquNnHxmDqUGtaO4xRKdTq227xiZ702GHW2Ba0fBdFYMjuRz0wVB3B79PoKQ8A0bYLF8ojoMu1NoNBtrl3gSMMyIB/j4qd157awWFgYtC5xlGBpnND90nZpXpe3k531TS8iVMGgTLJZPHs1vtxmUIPlEvNpiRZC1gU8qx3OxtKNCz2rRPtNG+M1uPum7+LghlB5WQPc2z9GDwWMfbI7F8sVSocAEXD6bipMOBmPyJWKz1BCgItdXXWAndrkDh4s5i6R8UZqHssb5rnN0S6ur8ySL5YsRvL+MyzeKV8jIzHD5jHjttEjIT1ELd9jHs68h1thT8lEHQXClJ01D59jg702sKB/lu3tMPuRX9ji1zO1n57W4fCim65dVpZjZxDT8Olkk51X2I6HT8lFBUIgytrlbRtMHG5wsXCafrAK+Rc0lw+VD0x9BIyhk3jQmHxocm/5xNmvoC+VbnJKqyew/fPc8Q77ArnpSLeepa6zNEvmCFoVcun/LmHwGdngBmHxInCXvH4QaLPsxiHwi70UX1wauZHrDBa9Eo7vf/Lba+tAhMfjLj10w+UKNmzK/KIpPtz5qX7cX5HxP+j4fpRXrwoEw+PX5cMDzJEr5PtQU/hLfhxwUCmf9TDHt+zzahexpcNz3zdvNQbOfOQHYjrWohahKf37ljCBapeaPYasjLxrb8FgTH3njnqiY8URx+eIzxe0MAZ+I+zDUyDnXMkpRkzPAluM+lFvgs3a4fFZiTSKdLcTivmK8dnrSK5xcXemXcJDWBxmeQJxfAPWQaJz/S7OOJ+QDajSDFtxK6tQx+YARlzvV/p7IeTNPnTUISHP5UKZTyyjaFM+XD96E4WCePJW1xeUDltTCkuRmypLQ6cfWQc0Fbj4mn6rJjWi+BdnoO7zEjAvqAX/ZjIvHEvkgFs+GS1mpCaOEfP7JpDC0SC83RR4NO32Zas+dguFix30GqvcMi/4zDPtxBxNWjz2qMO8LT2ILL594foF8Frp6fkF7SsiHuita/T1I97v0bLPi1Q3nWKBZTqg5emRedJfo9EixYAQKwwPf+/FoyhDNNpue6KOXLvy+QL4ucvN8zKw5Cd8XqhIky4N0r8RiIW9KkM8PcdsCQ6veSgcbLgb7Xiz0H13YX5UCXhLJTO3pbDR2mfhttV849fx8+TzTXMEqh3eZ8sgx+bzIZcSVLQWlAp0MWxastPkLHMkJHh8VMzdG6BoyVtrQ0wynF1/4Zsmz5Wsl7Ur1Rlw+KVk7c/jTk7UQZpYOUbcepUui0aGfKuLjX1o0QfY/ls+lEqTTBUy+lHpZjQ8s2WXQyjjsxK+DgQUBhURRKGzYl184c/9c+ZIbTjKWwPApg8TWlf1FaaeZXvLexwdRjHnGxie+FItM4vF6FG6GD/SFsy/oNPi+i3jSVsYq4GsdPP5cO0vm+4Ing++/OFgWuHJxLQ7CgZePZ4mD2NwCfnY9MRpwB1FRAXtqgawvDaHLouSB3z7vHxKRk1CleQUtVmIJfafb6Q4bXHb8hL4ZZmGK0eh2Ot2W8dSWIbPaQRlKrYg3JE0foePtYjL0VYV6E9ri6FknF+pDr4yNe2du2C38n/6IQlmzIenQcNFxAoFAIBAIBAKBQCAQCAQCgUAgEAgEAoFAIBAIBAKBQCAQCH8T/gtLqTuTRJ8PqgAAAABJRU5ErkJggg==",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Lectures", "detail": "David J. Malan's lectures on CS fundamentals."},
+        {"name": "Problem sets", "detail": "Weekly problem sets in C, Python, and SQL."},
+        {"name": "Certificate", "detail": "Working toward the CS50 completion certificate."}
+      ]
     },
     {
       "title": "Sprklii MVP",
@@ -416,7 +592,12 @@
       "image": "https://sparkli.com/cdn/shop/files/Red_Sparkli_Logo_1.png?v=1734396591&width=255",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Founding", "detail": "Founded an LLC to bring personalized date ideas instead of generic search results."},
+        {"name": "MVP & alpha", "detail": "Sole developer through the MVP and alpha releases."},
+        {"name": "Beta team", "detail": "Leading two other developers into the beta phase."}
+      ]
     },
     {
       "title": "Mover's Suite API",
@@ -429,7 +610,11 @@
       "image": "https://www.ewsgroup.com/assets/EWS-Group-MoversSuite-223-%C3%97-62-px-1.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "API connections", "detail": "Connection tools for Mover's Suite, working through thin documentation."},
+        {"name": "Data sync", "detail": "Continuous data transfer between systems that previously did not talk."}
+      ]
     },
     {
       "title": "Mover's Suite RPA Status Updates",
@@ -442,7 +627,11 @@
       "image": "https://www.starwindsoftware.com/blog/wp-content/uploads/2021/06/workflows-erstellen-mit-microsoft-power-automate-.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Status automation", "detail": "Power Automate Desktop simulates the clicks needed to update statuses in Mover's Suite, where the API made it hard."},
+        {"name": "RPA demo", "detail": "Served as an internal demo of RPA alongside legacy systems."}
+      ]
     },
     {
       "title": "Employee Technology Education",
@@ -455,7 +644,11 @@
       "image": "https://git-scm.com/images/logos/downloads/Git-Icon-1788C.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Power Platform training", "detail": "Training on Application Lifecycle Management, Dataverse, and SQL Server as part of the move to Power Platform."},
+        {"name": "Git migration", "detail": "Taught Git and GitHub basics and helped move the dev team off Visual SourceSafe."}
+      ]
     },
     {
       "title": "XPM to Smartsheet Data Connection",
@@ -468,7 +661,12 @@
       "image": "https://www.smartsheet.com/sites/default/files/smartsheet-logo-blue-new.svg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Mapping systems", "detail": "Worked out how data moves between XPM, Smartsheet, and an exchange drive."},
+        {"name": "Data integration", "detail": "Automated a transfer that used to be manual."},
+        {"name": "Cross-team rollout", "detail": "Coordinated across teams and functional groups so it worked for everyone."}
+      ]
     },
     {
       "title": "Project Manager Time Tracking",
@@ -481,7 +679,12 @@
       "image": "https://oneplan.ai/wp-content/uploads/2019/07/Power-Apps-Icons.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Recreate XPM tracking", "detail": "Rebuilt the time tracking that lived inside XPM."},
+        {"name": "Mobile app", "detail": "Made it usable on mobile."},
+        {"name": "Automation", "detail": "Automated and simplified the process along the way."}
+      ]
     },
     {
       "title": "SmartSheet Supplier Information",
@@ -494,7 +697,12 @@
       "image": "https://blog.nashtechglobal.com/wp-content/uploads/2024/07/power.jpeg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Consolidate sheets", "detail": "Supplier information was scattered across Smartsheet files and sheets."},
+        {"name": "Centralize", "detail": "Moved it into one place in the Microsoft ecosystem."},
+        {"name": "Automate entry", "detail": "Automated steps for adding new information."}
+      ]
     },
     {
       "title": "Apple Remittance Automation",
@@ -507,7 +715,11 @@
       "image": "https://wallpapersok.com/images/hd/apple-logo-scenery-y6hr6uenmn8eru5o.jpg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Email parsing", "detail": "Apple remittances arrive as text in email; an automation parses them."},
+        {"name": "CSV for accounting", "detail": "Results are saved as CSV so accountants no longer compile them by hand."}
+      ]
     },
     {
       "title": "Warehouse Time Tracking App",
@@ -520,7 +732,11 @@
       "image": "https://teamplanes.com/wp-content/uploads/2022/08/storage-facility-racks.jpg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Entry rules", "detail": "Better limits and validation on warehouse time entry."},
+        {"name": "Billable time", "detail": "Improved the process and increased billable warehouse time."}
+      ]
     },
     {
       "title": "SOP SharePoint",
@@ -533,7 +749,11 @@
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT22iB5t3WegsRmXagULwbpL_eA1cCD1naqcg&s",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "SOP library", "detail": "Created a SharePoint system for standard operating procedures as IT Intern."},
+        {"name": "Upkeep", "detail": "Managed the SOP system over the internship."}
+      ]
     },
     {
       "title": "GolfBot MVP",
@@ -546,7 +766,12 @@
       "image": "https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-and-season-info/ftc-into-the-deep-sm.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Vision", "detail": "Computer vision to find golf balls and targets."},
+        {"name": "Swing mechanism", "detail": "A mechanical swing that can be triggered remotely."},
+        {"name": "Delivery", "detail": "Built for May We Help, making golf accessible to people with physical impairments."}
+      ]
     },
     {
       "title": "FictileBot",
@@ -559,7 +784,12 @@
       "image": "/fictilebot.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Base configuration", "detail": "A template with the configurations needed for any FTC robot on the REV framework."},
+        {"name": "Helper library", "detail": "Helper functions and standard implementations."},
+        {"name": "Reuse", "detail": "Used by Team 4969 as the starting point for the golf bot."}
+      ]
     },
     {
       "title": "Robot-X Computer Vision",
@@ -572,7 +802,11 @@
       "image": "https://opencv.org/wp-content/uploads/2020/07/OpenCV_logo_black-2.png",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Dual-channel input", "detail": "Rebuilt the OpenCV vision system to use two input channels instead of one."},
+        {"name": "Channel comparison", "detail": "Comparing the channels gave extremely accurate vision, after most of a competition season."}
+      ]
     },
     {
       "title": "Robot-X Software Lead",
@@ -585,7 +819,12 @@
       "image": "https://pbs.twimg.com/profile_images/836326974557683712/3xIG-1vA_400x400.jpg",
       "additionalImages": [],
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Leading the subteam", "detail": "Led software for three years with around three people on the subteam."},
+        {"name": "Agile workflow", "detail": "Introduced agile practices and saw efficiency gains."},
+        {"name": "Hands-on code", "detail": "Worked as PM while writing some of the most challenging software."}
+      ]
     },
     {
       "title": "Automatic Garage Door Closer",
@@ -597,7 +836,12 @@
       "links": ["Contact me for the specific files"],
       "image": "https://cdn.arduino.cc/header-footer/prod/assets/headerLogo-arduino.svg",
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "Open-door sensing", "detail": "An ultrasonic sensor detects when the garage door has been open too long."},
+        {"name": "Radio link", "detail": "Two radio transceivers connect the sensor to the button."},
+        {"name": "Button press", "detail": "A servo physically presses the garage door button."}
+      ]
     },
     {
       "title": "Kids Like Food 2",
@@ -609,7 +853,11 @@
       "links": ["Lost in old Google accounts"],
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/512px-HTML5_logo_and_wordmark.svg.png",
       "size": "small",
-      "status": "archived"
+      "status": "archived",
+      "phases": [
+        {"name": "HTML & CSS basics", "detail": "First steps in HTML and CSS."},
+        {"name": "Food blog", "detail": "A food blog with a friend, using Google Docs as version control."}
+      ]
     }
   ]
 }

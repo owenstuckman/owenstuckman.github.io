@@ -241,3 +241,68 @@ export function drawZoneBanner(title, subtitle) {
 	ctx.fillText(subtitle.toUpperCase(), 512, 142);
 	return c;
 }
+
+/** A job card for the timeline rail. `width`×256. */
+export function drawExperienceCard(e, width, draft = false) {
+	width = Math.max(512, Math.min(2048, Math.round(width)));
+	const [c, ctx] = canvas(width, 256);
+	ctx.fillStyle = PAPER;
+	ctx.fillRect(0, 0, width, 256);
+	ctx.fillStyle = TAPE;
+	ctx.fillRect(0, 0, 14, 256);
+	ctx.strokeStyle = '#cdcac2';
+	ctx.lineWidth = 4;
+	ctx.strokeRect(2, 2, width - 4, 252);
+
+	const x = 40;
+	ctx.textBaseline = 'alphabetic';
+	ctx.fillStyle = INK;
+	ctx.fillRect(x, 26, 120, 46);
+	ctx.fillStyle = TAPE;
+	ctx.font = `400 30px ${MONO}`;
+	ctx.fillText(e.code, x + 12, 60);
+	ctx.fillStyle = MUTED;
+	ctx.font = `400 28px ${MONO}`;
+	ctx.fillText(e.dates.toUpperCase(), x + 140, 60);
+
+	ctx.fillStyle = INK;
+	fitText(ctx, e.org.toUpperCase(), 700, HEAD, 104, 36, width - x - 30);
+	ctx.fillText(e.org.toUpperCase(), x, 164);
+	ctx.fillStyle = MUTED;
+	fitText(ctx, e.role ?? 'Role to come', 400, BODY, 46, 24, width - x - 90);
+	ctx.fillText(e.role ?? 'Role to come', x, 226);
+
+	if (draft) {
+		ctx.font = `400 22px ${MONO}`;
+		ctx.fillStyle = MUTED;
+		ctx.textAlign = 'right';
+		ctx.fillText('DRAFT', width - 24, 236);
+	}
+	return c;
+}
+
+/** Year marker above the timeline rail. 160×80. */
+export function drawYearTick(year) {
+	const [c, ctx] = canvas(160, 80);
+	ctx.fillStyle = INK;
+	ctx.fillRect(0, 0, 160, 80);
+	ctx.fillStyle = TAPE;
+	ctx.font = `700 54px ${HEAD}`;
+	ctx.textAlign = 'center';
+	ctx.textBaseline = 'middle';
+	ctx.fillText(String(year), 80, 44);
+	return c;
+}
+
+/** Header plate at the left end of the rail. 768×96. */
+export function drawRailTitle(text) {
+	const [c, ctx] = canvas(768, 96);
+	hazard(ctx, 0, 0, 768, 96, 24);
+	ctx.fillStyle = INK;
+	ctx.fillRect(12, 12, 744, 72);
+	ctx.fillStyle = TAPE;
+	ctx.font = `700 54px ${HEAD}`;
+	ctx.textBaseline = 'middle';
+	ctx.fillText(text.toUpperCase(), 36, 50);
+	return c;
+}
