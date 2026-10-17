@@ -3,9 +3,18 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ['main']
+    # uploads to linkedin/ deploy after the import below finishes instead
+    paths-ignore: ['linkedin/**']
+  # commits made by an action don't trigger other workflows, so deploy when the import finishes
+  workflow_run:
+    workflows: ['Import LinkedIn']
+    types: [completed]
+    branches: ['main']
+  workflow_dispatch:
 
 jobs:
   build_site:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

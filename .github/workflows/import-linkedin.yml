@@ -1,0 +1,53 @@
+name: Import LinkedIn
+
+# Upload Positions.csv to linkedin/ and this rebuilds the work-history timeline.
+on:
+  push:
+    branches: ['main', 'redesign']
+    paths: ['linkedin/**.csv', 'linkedin/**.CSV']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: import-linkedin-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # The script has no dependencies, so no npm install is needed.
+      # Only Positions.csv is imported: the repo is public, so profile details stay out.
+      - name: Import positions
+        run: |
+          f=$(find linkedin -maxdepth 1 -type f -iname 'positions*.csv' | head -n 1)
+          if [ -z "$f" ]; then
+            echo "::warning::No Positions.csv in linkedin/, nothing to import."
+          else
+            node scripts/import-linkedin.js "$f"
+          fi
+
+      - name: Remove the uploaded CSVs
+        run: find linkedin -type f -iname '*.csv' -print0 | xargs -0 -r git rm -q -f
+
+      - name: Commit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A src/jsons linkedin
+          if git diff --cached --quiet; then
+            echo 'No changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Import LinkedIn positions'
+          git push

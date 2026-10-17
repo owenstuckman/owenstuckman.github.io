@@ -32,13 +32,18 @@ if (!arg) fail('Pass the unzipped export folder (or a Positions.csv / Profile.cs
 const input = path.resolve(arg);
 if (!fs.existsSync(input)) fail(`Not found: ${input}`);
 if (input.toLowerCase().endsWith('.zip') && !fs.statSync(input).isDirectory()) fail('Unzip the export first, then pass the folder.');
-const find = (name) => {
-	if (!fs.statSync(input).isDirectory()) return path.basename(input).toLowerCase() === name ? input : null;
-	const hit = fs.readdirSync(input).find((f) => f.toLowerCase() === name);
+// "Positions.csv", or a browser-renamed copy like "Positions (1).csv"
+const matches = (file, stem) => {
+	const f = file.toLowerCase();
+	return f.startsWith(stem) && f.endsWith('.csv');
+};
+const find = (stem) => {
+	if (!fs.statSync(input).isDirectory()) return matches(path.basename(input), stem) ? input : null;
+	const hit = fs.readdirSync(input).find((f) => matches(f, stem));
 	return hit ? path.join(input, hit) : null;
 };
-const profilePath = find('profile.csv');
-const csvPath = find('positions.csv');
+const profilePath = find('profile');
+const csvPath = find('positions');
 if (!profilePath && !csvPath) fail(`No Profile.csv or Positions.csv in ${input}.`);
 
 // ---- CSV (quoted fields, embedded commas and newlines) ----
