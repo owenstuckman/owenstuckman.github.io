@@ -42,6 +42,8 @@ npm run import:linkedin -- <export folder or Positions.csv>   # Rebuild experien
 
 **Deployment:** Pushes to `main` trigger GitHub Actions workflow that builds and deploys to GitHub Pages. The build needs the `BLOG_PASSWORD` repo secret.
 
+**LinkedIn updates:** uploading `Positions.csv` to `linkedin/` triggers `.github/workflows/import-linkedin.yml`, which rewrites `experience.json`, deletes the CSV, commits, and the deploy workflow runs after it (via `workflow_run`, since bot commits don't trigger pushes). Only Positions is imported because the repo is public. See `linkedin/README.md`. LinkedIn's API has no legal way for a US member to read their own positions (Member Data Portability is EEA/Switzerland only).
+
 ## Configuration
 
 - `svelte.config.js` - SvelteKit config with mdsvex and rehype plugins (slug, autolink-headings)
