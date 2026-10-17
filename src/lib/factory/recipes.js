@@ -61,6 +61,11 @@ const RECIPES = {
 		built: 2,
 		machines: [['tank', C.blue], ['screen', C.purple], ['machine', C.green], ['robot', C.orange]]
 	},
+	'open-bible': {
+		product: 'book',
+		built: 5,
+		machines: [['arch', C.slate], ['press', C.purple], ['machine', C.orange], ['screen', C.green], ['tank', C.blue], ['robot', C.red]]
+	},
 	'luma-v2': {
 		product: 'folder',
 		built: 3,

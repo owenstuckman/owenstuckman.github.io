@@ -1,6 +1,44 @@
 {
   "projects": [
     {
+      "title": "Open Bible",
+      "shortDescription": "Private Catholic Bible reader with notes and highlights",
+      "description": "Building a private, web-based Catholic Bible reader that only I can sign into, using passkeys only. It scrolls continuously through all 73 books or reads page by page, with inline Markdown notes and four-color highlights that sit right on the text, footnotes, and automatic progress tracking that resumes across devices. Search covers both the text and my notes (with word forms, exact phrases, exclusions, and jump-to-reference), five built-in reading plans track what's due and how far behind I am, notes export to Markdown, and full JSON backups restore by merging. It installs like an app on phones. The text is the public-domain Douay-Rheims until the NABRE license comes through; the tooling to swap it in is built and rehearsed.",
+      "date": "October 2026",
+      "type": "Personal Project",
+      "skills": ["Next.js", "React", "TypeScript", "PostgreSQL", "Drizzle ORM", "WebAuthn", "Tailwind CSS"],
+      "links": ["https://github.com/owenstuckman/open-bible"],
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/open-bible",
+      "additionalImages": [],
+      "status": "construction",
+      "phases": [
+        {"name": "Passkey sign-in", "detail": "Passkey-only authentication, so only I can sign in."},
+        {"name": "Reading", "detail": "Continuous scroll through all 73 books, or page by page, with footnotes."},
+        {"name": "Notes & highlights", "detail": "Inline Markdown notes and four-color highlights on the text, with verse links like [[Jn 3:16]]."},
+        {"name": "Progress & plans", "detail": "Automatic progress tracking with cross-device resume, plus five built-in reading plans."},
+        {"name": "Search & backups", "detail": "Search across text and notes, a notes index, Markdown export, and merge-only JSON backups."},
+        {"name": "NABRE text", "detail": "Swapping the Douay-Rheims placeholder for the NABRE, waiting only on the license; the tooling is built and rehearsed."}
+      ]
+    },
+    {
+      "title": "OpenAir",
+      "shortDescription": "Phone-first HRV and recovery dashboard for the Fitbit Air",
+      "description": "Planned a phone-first dashboard for the Google Fitbit Air: live heart rate and beat-to-beat intervals over Bluetooth for real-time HRV and stress, plus sleep, nightly HRV, SpO₂, skin temperature, and steps from the Google Health API, in a native iOS app with a small Next.js and Postgres backend on Vercel. When the goal shifted to talking to the band directly over Bluetooth with no Google cloud, the research showed it isn't feasible today: only the standard heart rate service is open, everything else is locked behind Fitbit's doubly encrypted proprietary sync, firmware is almost certainly signed, and pairing still requires Google. Shelved in October 2026, with clear conditions for revisiting.",
+      "date": "October 2026",
+      "type": "Personal Project",
+      "skills": ["Swift", "SwiftUI", "CoreBluetooth", "Next.js", "PostgreSQL", "Vercel"],
+      "links": ["https://github.com/owenstuckman/open-air"],
+      "image": "https://opengraph.githubassets.com/1/owenstuckman/open-air",
+      "additionalImages": [],
+      "status": "archived",
+      "phases": [
+        {"name": "Plan", "detail": "Architecture, data model, metrics, alerts, roadmap, and wireframes for an iPhone dashboard."},
+        {"name": "Health API research", "detail": "Feasibility of pulling sleep, HRV, SpO₂, temperature, and steps from the Google Health API."},
+        {"name": "Bluetooth research", "detail": "Direct-Bluetooth feasibility: only the standard heart rate service is open; everything else is behind encrypted proprietary sync."},
+        {"name": "Shelved", "detail": "Not feasible for now. Revisit if the Air's sync encryption is broken or with open hardware like a Polar H10 or Bangle.js 2."}
+      ]
+    },
+    {
       "title": "Workbenched",
       "shortDescription": "Project-focused command center with a self-writing work log",
       "description": "Built a local-first desktop app that tracks what I work on, files it to the right project automatically, and keeps a work log that writes itself. Passive activity capture comes from ActivityWatch; Workbenched attributes each window and artifact to a project — first by rules, then by previously seen artifacts, then by LLM inference — tagging every guess with a confidence score so anything uncertain lands in a filing queue instead of getting lost. Time, artifacts, tasks, and blockers are kept per project, and a HUD overlay lets me set the current project or task on demand. Everything runs locally on an embedded PostgreSQL database; the only outbound traffic is to a bring-your-own LLM provider (Anthropic, OpenAI, Google, or xAI) whose key is stored in the OS keychain.",
@@ -208,7 +246,7 @@
       "date": "November 2025",
       "type": "",
       "skills": ["JavaScript", "Cybrancee", "Discord.js"],
-      "links": ["https://github.com/ArchimedesVT/archimedes-snipe-bot"],
+      "links": ["https://github.com/ArchimedesVT/archimedes-snipe-bot", "https://github.com/owenstuckman/gdg-snipe-bot"],
       "image": "https://www.ravbug.com/tutorials/discordjs/discordjs.png",
       "additionalImages": [],
       "status": "running",
@@ -309,7 +347,7 @@
       "date": "May 2025",
       "type": "Professional",
       "skills": ["Svelte", "TypeScript", "Supabase"],
-      "links": ["Private Repo"],
+      "links": ["Private Repo", "https://github.com/Sprklii/ImageProcessorManual"],
       "image": "https://media.licdn.com/dms/image/v2/D560BAQFkNhpOqP8khg/company-logo_200_200/company-logo_200_200/0/1733370242815?e=2147483647&v=beta&t=YtqGDRgGC-QKG6fTReD2g0_fBXLmyuoML5CaSDc2f8c",
       "additionalImages": [],
       "status": "archived",
@@ -445,7 +483,7 @@
       "date": "October 2024",
       "type": "Hackathon Project",
       "skills": ["Flutter", "Dart", "Supabase", "EC2"],
-      "links": ["https://devpost.com/software/roomready-c2m1gq"],
+      "links": ["https://devpost.com/software/roomready-c2m1gq", "https://github.com/owenstuckman/RoomReady", "https://github.com/owenstuckman/RoomReadyBackend"],
       "image": "https://d112y698adiu2z.cloudfront.net/photos/production/software_photos/003/074/131/datas/gallery.jpg",
       "additionalImages": [],
       "size": "small",
@@ -762,7 +800,7 @@
       "date": "August 2023 - January 2024",
       "type": "Robotics Project",
       "skills": ["OpenCV", "Java"],
-      "links": ["https://github.com/owenstuckman/GolfBot"],
+      "links": ["https://github.com/owenstuckman/GolfBot", "https://github.com/Robot-X-4969/GolfBotRev"],
       "image": "https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/game-and-season-info/ftc-into-the-deep-sm.png",
       "additionalImages": [],
       "size": "small",
