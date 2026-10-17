@@ -158,6 +158,14 @@ export function drawToolingBoard(about, lineCount) {
 	return c;
 }
 
+// Trim text with an ellipsis until it fits maxWidth at the current font
+function ellipsize(ctx, text, maxWidth) {
+	if (ctx.measureText(text).width <= maxWidth) return text;
+	let t = text;
+	while (t.length > 1 && ctx.measureText(t + '…').width > maxWidth) t = t.slice(0, -1);
+	return t.trimEnd() + '…';
+}
+
 function fitText(ctx, text, weight, family, maxSize, minSize, maxWidth) {
 	let size = maxSize;
 	do {
@@ -335,8 +343,11 @@ export function drawOrgLabel(org) {
 
 /** One role as a bar on its organization's row. `width`×128. */
 export function drawRoleBar(e, width, draft = false) {
-	width = Math.max(128, Math.min(2048, Math.round(width)));
-	const [c, ctx] = canvas(width, 128);
+	// Very wide bars exceed the max texture width; draw in the bar's own units and
+	// squeeze horizontally so the text isn't stretched when the texture is mapped.
+	width = Math.max(128, Math.round(width));
+	const [c, ctx] = canvas(Math.min(2048, width), 128);
+	ctx.scale(c.width / width, 1);
 	ctx.fillStyle = PAPER;
 	ctx.fillRect(0, 0, width, 128);
 	ctx.fillStyle = TAPE;
@@ -346,15 +357,19 @@ export function drawRoleBar(e, width, draft = false) {
 	ctx.lineWidth = 4;
 	ctx.strokeRect(2, 2, width - 4, 124);
 	const room = width - 40 - (e.end === 'present' ? 28 : 0);
-	if (room < 60) return c;
-	ctx.fillStyle = INK;
+	if (room < 40) return c;
 	ctx.textBaseline = 'alphabetic';
-	const role = e.role ?? 'Role to come';
-	fitText(ctx, role, 700, HEAD, 58, 18, room);
-	ctx.fillText(role, 26, 62);
+
+	// company first, as large as the bar allows
+	const company = e.org.toUpperCase();
+	ctx.fillStyle = INK;
+	fitText(ctx, company, 700, HEAD, 62, 16, room);
+	ctx.fillText(ellipsize(ctx, company, room), 22, 62);
+
+	// role underneath, shortened if it doesn't fit
+	const role = (draft ? 'DRAFT · ' : '') + (e.role ?? 'Role to come');
 	ctx.fillStyle = MUTED;
-	const dates = (draft ? 'DRAFT · ' : '') + e.dates.toUpperCase();
-	fitText(ctx, dates, 400, MONO, 30, 12, room);
-	ctx.fillText(dates, 26, 106);
+	fitText(ctx, role, 400, BODY, 36, 20, room);
+	ctx.fillText(ellipsize(ctx, role, room), 22, 108);
 	return c;
 }

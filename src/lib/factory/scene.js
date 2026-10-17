@@ -227,6 +227,12 @@ export async function createFactory(container, { projects, about, experience = [
 			const x1 = Math.max(TL_X0 + ((e.endYear - tl.y0) / (tl.y1 - tl.y0)) * (TL_X1 - TL_X0), x0 + MIN_BAR_W);
 			tl.items.push({ e, x0, x1, row: tl.orgs.indexOf(e.org) });
 		}
+		// a minimum-width bar mustn't run into the next role on the same row
+		const byRow = [...tl.items].sort((a, b) => a.row - b.row || a.x0 - b.x0);
+		for (let i = 0; i < byRow.length - 1; i++) {
+			const [cur, next] = [byRow[i], byRow[i + 1]];
+			if (cur.row === next.row && cur.x1 > next.x0 - 0.06) cur.x1 = Math.max(next.x0 - 0.06, cur.x0 + 0.3);
+		}
 	}
 	const xOf = (year) => TL_X0 + ((year - tl.y0) / (tl.y1 - tl.y0)) * (TL_X1 - TL_X0);
 	const RAIL_Y = tl.orgs.length ? 0.6 + tl.orgs.length * ROW_H + 0.35 : 0; // the year axis, above the rows
