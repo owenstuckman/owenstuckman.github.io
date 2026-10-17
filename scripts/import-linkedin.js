@@ -88,9 +88,14 @@ function toYm(s) {
 	return null;
 }
 
-// Description → a summary paragraph plus bullet lines (-, •, *, –)
+// Description → a summary paragraph, bullet lines (-, •, *, –), and any links
 function splitDescription(text) {
-	const lines = text.split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+	const links = text.match(/https?:\/\/\S+/g) ?? [];
+	const lines = text
+		.replace(/[^\n]*https?:\/\/\S+[^\n]*/g, (line) => line.replace(/https?:\/\/\S+/g, '').replace(/[\s:,-]+$/, ''))
+		.split(/\r?\n/)
+		.map((l) => l.trim())
+		.filter(Boolean);
 	const bullets = [];
 	const summary = [];
 	for (const l of lines) {
@@ -98,7 +103,7 @@ function splitDescription(text) {
 		if (b) bullets.push(b[1]);
 		else summary.push(l);
 	}
-	return { summary: summary.join(' '), bullets };
+	return { summary: summary.join(' '), bullets, links };
 }
 
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
@@ -138,7 +143,7 @@ const experience = positions.map((p) => {
 	const org = p['Company Name'];
 	const start = toYm(p['Started On']);
 	const end = p['Finished On'] ? toYm(p['Finished On']) : 'present';
-	const { summary, bullets } = splitDescription(p['Description'] ?? '');
+	const { summary, bullets, links: urls } = splitDescription(p['Description'] ?? '');
 
 	// link: same org, closest start date within 6 months (or a link with no start)
 	let best = null;
@@ -160,6 +165,7 @@ const experience = positions.map((p) => {
 		...(p['Location'] ? { location: p['Location'] } : {}),
 		summary,
 		bullets,
+		links: urls,
 		projects
 	};
 }).filter((e) => e.start);

@@ -1,68 +1,193 @@
 {
-  "draft": true,
-  "note": "DRAFT built from the project descriptions in projects.json. Replace with LinkedIn data. Dates are YYYY-MM; end: null means unknown, \"present\" means current.",
+  "draft": false,
+  "note": "From LinkedIn Experience (pasted 2026-10-17). Upload Positions.csv to linkedin/ to refresh; project links live in experience-links.json.",
   "experience": [
     {
-      "org": "Robot-X (FTC Team 4969)",
-      "role": "Software Lead",
-      "start": "2021-08",
-      "end": "2024-05",
-      "summary": "Led the robotics software subteam for three years.",
+      "org": "GDG on Campus | Virginia Tech",
+      "role": "Senior Tech Lead",
+      "start": "2026-05",
+      "end": "present",
+      "location": "Blacksburg, Virginia · On-site",
+      "summary": "Leading the technical workshops team as we pass leadership on.",
+      "bullets": [],
+      "links": [],
+      "projects": []
+    },
+    {
+      "org": "GDG on Campus | Virginia Tech",
+      "role": "Co-Founder, Vice President",
+      "start": "2025-09",
+      "end": "2026-05",
+      "location": "Blacksburg, Virginia · On-site",
+      "summary": "VP for 2025–26, built from the ground up.",
       "bullets": [
-        "Led a software subteam of around three people",
-        "Introduced agile practices and saw efficiency gains",
-        "Worked as PM while writing some of the most challenging code, including the dual-channel OpenCV vision system"
+        "Helped build the exec board and a community of 100+ tech-focused students",
+        "Ran a hackathon"
+      ],
+      "links": [
+        "https://gdg-vt-spring.devpost.com/"
+      ],
+      "projects": []
+    },
+    {
+      "org": "Virginia Tech",
+      "role": "Residential Well-Being Student Leader (Resident Advisor)",
+      "start": "2025-08",
+      "end": "present",
+      "location": "Blacksburg, Virginia · On-site · Part-time",
+      "summary": "Engage with residents through programs focused on overall student well-being.",
+      "bullets": [],
+      "links": [],
+      "projects": []
+    },
+    {
+      "org": "Archimedes at Virginia Tech",
+      "role": "Webmaster",
+      "start": "2025-05",
+      "end": "present",
+      "location": "Blacksburg, Virginia · On-site · Part-time",
+      "summary": "Before this role, organized and ran recruiting for the most competitive design team at VT: 400+ interviews scheduled at a ~6% acceptance rate.",
+      "bullets": [
+        "Built LUMA, a brand-new ATS from scratch (Svelte + Supabase)",
+        "Rebuilt the society website from scratch, migrating off Squarespace (Svelte)"
+      ],
+      "links": [
+        "https://luma.archimedesvt.org/"
       ],
       "projects": [
-        "robot-x-software-lead",
-        "robot-x-computer-vision",
-        "golfbot-mvp",
-        "fictilebot"
+        "luma",
+        "luma-v2",
+        "archimedes-website",
+        "archimedes-snipe-bot"
       ]
     },
     {
-      "org": "Planes Moving and Storage",
-      "role": "IT Intern",
-      "start": "2022-06",
-      "end": "2022-08",
-      "summary": "First internship at Planes.",
+      "org": "Archimedes at Virginia Tech",
+      "role": "Software Engineer · Team Infinitum",
+      "start": "2024-09",
+      "end": "2025-05",
+      "location": "Blacksburg, Virginia · On-site · Part-time",
+      "summary": "Team Infinitum is an all-freshman subdivision of the Archimedes Society that competes in the Microsoft Imagine Cup.",
       "bullets": [
-        "Built a warehouse time tracking app that increased billable warehouse time",
-        "Created and managed an SOP system in SharePoint"
+        "Team of eight building full-stack software for the competition",
+        "My subteam built a student health tracker, with a vision for a nationwide solution"
       ],
+      "links": [],
       "projects": [
-        "warehouse-time-tracking-app",
-        "sop-sharepoint"
+        "student-health-tracker",
+        "symptom2disease"
       ]
     },
     {
-      "org": "Sparklii LLC",
-      "role": "Co-founder",
+      "org": "Sprklii",
+      "role": "Co-Founder, CTO",
       "start": "2023-01",
       "end": "present",
-      "summary": "Founded an LLC to bring personalization to date ideas.",
+      "location": "Cincinnati, Ohio · Hybrid · Self-employed",
+      "summary": "Developed a date ideas app with 1k+ users.",
       "bullets": [
-        "Sole developer through the MVP and alpha releases",
-        "Led two other developers into the beta phase",
-        "Built an internal Svelte tool for editing the date-ideas database and images"
+        "Led three developers to build the beta version"
       ],
+      "links": [],
       "projects": [
         "sprklii-mvp",
         "sparkli-dev-app"
       ]
     },
     {
-      "org": "Planes Moving and Storage",
-      "role": "Intern",
-      "start": "2024-06",
-      "end": "2024-08",
-      "summary": "Automation and integration work across Planes' systems.",
+      "org": "Procter & Gamble",
+      "role": "Digital Intern",
+      "start": "2026-05",
+      "end": "2026-08",
+      "location": "Martinsburg, West Virginia · On-site",
+      "summary": "Automated and digitized existing processes across three separate businesses.",
       "bullets": [
-        "Built API connections and RPA for Mover's Suite",
-        "Connected XPM to Smartsheet and centralized supplier information",
-        "Replaced PM time tracking with a mobile app and automated Apple remittance parsing",
-        "Led training on Power Platform and helped migrate the dev team from Visual SourceSafe to Git"
+        "Six figures saved in one summer; >$1.75M at full rollout",
+        "16 projects, 3–5× a typical intern load"
       ],
+      "links": [],
+      "projects": []
+    },
+    {
+      "org": "Project Torch",
+      "role": "Software Engineer",
+      "start": "2024-10",
+      "end": "2026-04",
+      "location": "Blacksburg, Virginia · Hybrid · Part-time",
+      "summary": "Project Torch is a non-profit that builds websites for free for local Blacksburg businesses.",
+      "bullets": [
+        "Built sites for Hamro's, The Burg, and Namaste Kitchen",
+        "Helped build the framework for quick site creation that lets owners update their own menus and items, with no recurring Shopify-style cost",
+        "Built backend tools for clients and helped delegate the team's workload"
+      ],
+      "links": [],
+      "projects": []
+    },
+    {
+      "org": "Procter & Gamble",
+      "role": "Power, Controls, and Information Systems Intern",
+      "start": "2025-05",
+      "end": "2025-08",
+      "location": "Inwood, West Virginia · On-site",
+      "summary": "Swiffer operations (Dry, Dusters, Palletizing).",
+      "bullets": [
+        "Process automation and improvement, leading visibility and fixes for six-figure problems"
+      ],
+      "links": [],
+      "projects": []
+    },
+    {
+      "org": "Planes",
+      "role": "Software Engineer",
+      "start": "2025-01",
+      "end": "2025-05",
+      "location": "West Chester, Ohio · Remote · Part-time",
+      "summary": "Project work on company-wide technology changes.",
+      "bullets": [
+        "Built free-standing internal systems",
+        "Built intermediaries and data exchanges between company systems",
+        "Kept legacy systems running while driving the move to new software"
+      ],
+      "links": [],
+      "projects": []
+    },
+    {
+      "org": "Planes",
+      "role": "Software Engineer",
+      "start": "2024-12",
+      "end": "2025-01",
+      "location": "West Chester, Ohio · On-site · Full-time",
+      "summary": "Automation and integration projects across the company.",
+      "bullets": [
+        "Converted call recordings to text with Azure Speech Services",
+        "Extended the Apple remittance automation to Apple Canada invoices",
+        "Automated file distribution for the internal wellness challenge",
+        "Key role in the company's move to Power Platform: architecture, strategy, and the migration framework",
+        "Built a React skeleton app for client onboarding",
+        "Updated the WTT app and deployed it with proper ALM"
+      ],
+      "links": [],
+      "projects": [
+        "automated-voicemail-transcription",
+        "apple-canada-remittance",
+        "customer-onboarding-app"
+      ]
+    },
+    {
+      "org": "Planes",
+      "role": "Software Engineer | Power Platform Specialist",
+      "start": "2024-05",
+      "end": "2024-08",
+      "location": "West Chester, Ohio · On-site · Full-time",
+      "summary": "The company's functioning Power Platform consultant.",
+      "bullets": [
+        "RPA saving at least 64 hours of manual work a month, and centralizing processes like finding rates",
+        "Earned PL-900 alongside the internal training I led",
+        "Integrated legacy moving-industry software with APIs and RPA",
+        "Integrated large relational databases into business apps and automations",
+        "Earned a Lean Six Sigma White Belt"
+      ],
+      "links": [],
       "projects": [
         "mover-s-suite-api",
         "mover-s-suite-rpa-status-updates",
@@ -74,39 +199,34 @@
       ]
     },
     {
-      "org": "Planes Moving and Storage",
-      "role": null,
-      "start": "2025-01",
-      "end": "2025-04",
-      "summary": "Continued automation work at Planes.",
+      "org": "Planes",
+      "role": "Information Technology Intern",
+      "start": "2023-05",
+      "end": "2023-08",
+      "location": "Cincinnati, Ohio · On-site",
+      "summary": "Automation and app solutions, plus hands-on IT.",
       "bullets": [
-        "Automated Apple Canada remittance parsing",
-        "Built voicemail transcription in Azure into Dataverse",
-        "Built a React and Express customer onboarding app"
+        "Led learning initiatives for automation and standard operating procedures",
+        "Documented and improved processes with cross-functional groups",
+        "SharePoint administration and day-to-day help desk and networking",
+        "Maintained a physical production server"
       ],
+      "links": [],
       "projects": [
-        "apple-canada-remittance",
-        "automated-voicemail-transcription",
-        "customer-onboarding-app"
+        "warehouse-time-tracking-app",
+        "sop-sharepoint"
       ]
     },
     {
-      "org": "Archimedes Society at Virginia Tech",
-      "role": null,
-      "start": "2025-05",
-      "end": null,
-      "summary": "Software for the Archimedes Society.",
-      "bullets": [
-        "Built LUMA, an ATS that processed 400+ applicants and scheduled 250+ interviews",
-        "Rebuilt the society website from Squarespace",
-        "Maintain the snipe Discord bot"
-      ],
-      "projects": [
-        "luma",
-        "luma-v2",
-        "archimedes-website",
-        "archimedes-snipe-bot"
-      ]
+      "org": "The Web Extreme Entertainment",
+      "role": "Party Host",
+      "start": "2022-05",
+      "end": "2022-08",
+      "location": "West Chester, Ohio · On-site · Part-time",
+      "summary": "Greeted parties and served them through their whole visit, keeping itineraries on time.",
+      "bullets": [],
+      "links": [],
+      "projects": []
     }
   ]
 }

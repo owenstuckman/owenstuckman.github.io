@@ -6,7 +6,7 @@
 <script>
 	import { onMount, tick } from 'svelte';
 	import ProjectDetails from './ProjectDetails.svelte';
-	import { ZONES } from '$lib/projects.js';
+	import { ZONES, linkName } from '$lib/projects.js';
 	import { recipeFor, KIND_NAMES } from '$lib/factory/recipes.js';
 	import { dock } from '$lib/dock.svelte.js';
 	import { experience, draft } from '$lib/experience.js';
@@ -24,6 +24,7 @@
 	let listOpen = $state(true);
 	let listEl = $state();
 	let panelEl = $state();
+	let railEl = $state();
 
 	let project = $derived(selected >= 0 ? projects[selected] : null);
 	let job = $derived(selectedExp >= 0 ? experience[selectedExp] : null);
@@ -96,7 +97,9 @@
 			if (panelEl) insets.bottom = s.bottom - panelEl.getBoundingClientRect().top;
 		} else {
 			if (listEl && listOpen) insets.left = listEl.getBoundingClientRect().right - s.left;
-			if (panelEl) insets.right = s.right - panelEl.getBoundingClientRect().left;
+			// the panel, or else the jump rail, covers the right side
+			const right = panelEl ?? railEl;
+			if (right) insets.right = s.right - right.getBoundingClientRect().left + 8;
 		}
 		factory.setInsets(insets);
 	}
@@ -198,7 +201,7 @@
 										onclick={() => selectExperience(e.index)}
 									>
 										<span class="code exp">{e.code}</span>
-										<span class="name">{e.org}</span>
+										<span class="name">{e.org}<span class="role">&nbsp;· {e.role ?? 'Role to come'}</span></span>
 									</button>
 								</li>
 							{/each}
@@ -257,6 +260,11 @@
 						<ul class="job-bullets">
 							{#each job.bullets as b}<li>{b}</li>{/each}
 						</ul>
+					{/if}
+					{#if job.links?.length}
+						<p class="job-links">
+							{#each job.links as l}<a href={l} target="_blank" rel="noopener">{linkName(l)} ↗</a>{/each}
+						</p>
 					{/if}
 					{#if linkedProjects(job).length}
 						<section class="stages" aria-label="Projects from this job">
@@ -346,7 +354,7 @@
 			</aside>
 		{/if}
 
-		<nav class="rail" class:shifted={!!project || !!job} aria-label="Jump to">
+		<nav class="rail" class:shifted={!!project || !!job} aria-label="Jump to" bind:this={railEl}>
 			{#each JUMPS as j, i}
 				<button type="button" class:here={zone === j.zone} data-short={j.short} onclick={() => jump(j.view)}>
 					<span class="rail-num">{String(i + 1).padStart(2, '0')}</span>
@@ -627,6 +635,16 @@
 	.job-bullets {
 		margin: 0 0 1rem;
 		padding-left: 1.1rem;
+	}
+
+	.name .role {
+		color: var(--muted);
+	}
+
+	.job-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem 1rem;
 	}
 
 	.draft-note {

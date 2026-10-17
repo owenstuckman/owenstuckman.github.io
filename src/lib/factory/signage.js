@@ -317,3 +317,44 @@ export function drawRailTitle(text) {
 	ctx.fillText(text.toUpperCase(), 36, 50);
 	return c;
 }
+
+/** Organization label at the left of a timeline row. 1024×128. */
+export function drawOrgLabel(org) {
+	const [c, ctx] = canvas(1024, 128);
+	ctx.fillStyle = INK;
+	ctx.fillRect(0, 0, 1024, 128);
+	ctx.fillStyle = TAPE;
+	ctx.fillRect(1004, 0, 20, 128);
+	ctx.fillStyle = PAPER;
+	ctx.textBaseline = 'middle';
+	const text = org.toUpperCase();
+	fitText(ctx, text, 700, HEAD, 72, 28, 940);
+	ctx.fillText(text, 32, 68);
+	return c;
+}
+
+/** One role as a bar on its organization's row. `width`×128. */
+export function drawRoleBar(e, width, draft = false) {
+	width = Math.max(128, Math.min(2048, Math.round(width)));
+	const [c, ctx] = canvas(width, 128);
+	ctx.fillStyle = PAPER;
+	ctx.fillRect(0, 0, width, 128);
+	ctx.fillStyle = TAPE;
+	ctx.fillRect(0, 0, 12, 128);
+	if (e.end === 'present') hazard(ctx, width - 28, 0, 28, 128, 14);
+	ctx.strokeStyle = '#cdcac2';
+	ctx.lineWidth = 4;
+	ctx.strokeRect(2, 2, width - 4, 124);
+	const room = width - 40 - (e.end === 'present' ? 28 : 0);
+	if (room < 60) return c;
+	ctx.fillStyle = INK;
+	ctx.textBaseline = 'alphabetic';
+	const role = e.role ?? 'Role to come';
+	fitText(ctx, role, 700, HEAD, 58, 18, room);
+	ctx.fillText(role, 26, 62);
+	ctx.fillStyle = MUTED;
+	const dates = (draft ? 'DRAFT · ' : '') + e.dates.toUpperCase();
+	fitText(ctx, dates, 400, MONO, 30, 12, room);
+	ctx.fillText(dates, 26, 106);
+	return c;
+}
